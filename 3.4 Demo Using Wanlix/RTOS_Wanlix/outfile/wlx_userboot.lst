@@ -1,0 +1,658 @@
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cckHUiem.s 			page 1
+
+
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 2
+   9              		.eabi_attribute 30, 2
+  10              		.eabi_attribute 18, 4
+  11              		.file	"wlx_userboot.c"
+  12              		.section	.debug_abbrev,"",%progbits
+  13              	.Ldebug_abbrev0:
+  14              		.section	.debug_info,"",%progbits
+  15              	.Ldebug_info0:
+  16              		.section	.debug_line,"",%progbits
+  17              	.Ldebug_line0:
+  18 0000 6F000000 		.text
+  18      02005200 
+  18      00000201 
+  18      FB0E0D00 
+  18      01010101 
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              		.align	2
+  22              		.global	WLX_RootTask
+  23              		.type	WLX_RootTask, %function
+  24              	WLX_RootTask:
+  25              		.fnstart
+  26              	.LFB0:
+  27              		.file 1 "../srccode/wlx_userboot.c"
+   1:../srccode/wlx_userboot.c **** 
+   2:../srccode/wlx_userboot.c **** #include "wlx_userboot.h"
+   3:../srccode/wlx_userboot.c **** 
+   4:../srccode/wlx_userboot.c **** 
+   5:../srccode/wlx_userboot.c **** /***********************************************************************************
+   6:../srccode/wlx_userboot.c **** 函数功能: 根任务, 用户代码从这个函数开始执行.
+   7:../srccode/wlx_userboot.c **** 入口参数: none.
+   8:../srccode/wlx_userboot.c **** 返 回 值: none.
+   9:../srccode/wlx_userboot.c **** ***********************************************************************************/
+  10:../srccode/wlx_userboot.c **** void WLX_RootTask(void)
+  11:../srccode/wlx_userboot.c **** {
+  28              		.loc 1 11 0
+  29              		.cfi_startproc
+  30              		@ Function supports interworking.
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 1, uses_anonymous_args = 0
+  33              		.movsp ip
+  34 0000 0DC0A0E1 		mov	ip, sp
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_register 12
+  37 0004 18D82DE9 		stmfd	sp!, {r3, r4, fp, ip, lr, pc}
+  38              		.pad #4
+  39              		.save {r3, r4, fp, ip, lr}
+  40              		.setfp fp, ip, #-4
+  41 0008 04B04CE2 		sub	fp, ip, #4
+  42              		.cfi_offset 14, -8
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cckHUiem.s 			page 2
+
+
+  43              		.cfi_offset 13, -12
+  44              		.cfi_offset 11, -16
+  45              		.cfi_offset 4, -20
+  46              		.cfi_offset 3, -24
+  47              	.LCFI1:
+  48              		.cfi_def_cfa 11, 4
+  12:../srccode/wlx_userboot.c ****     /* 初始化软件 */
+  13:../srccode/wlx_userboot.c ****     DEV_SoftwareInit();
+  49              		.loc 1 13 0
+  50 000c FEFFFFEB 		bl	DEV_SoftwareInit
+  14:../srccode/wlx_userboot.c **** 
+  15:../srccode/wlx_userboot.c ****     /* 初始化硬件 */
+  16:../srccode/wlx_userboot.c ****     DEV_HardwareInit();
+  51              		.loc 1 16 0
+  52 0010 FEFFFFEB 		bl	DEV_HardwareInit
+  17:../srccode/wlx_userboot.c **** 
+  18:../srccode/wlx_userboot.c ****     /* 创建任务 */
+  19:../srccode/wlx_userboot.c ****     gpstrCrossStateTcb = WLX_TaskCreate((VFUNC)TEST_CrossStateTask,
+  53              		.loc 1 19 0
+  54 0014 3C109FE5 		ldr	r1, .L2
+  55 0018 192EA0E3 		mov	r2, #400
+  56 001c 38009FE5 		ldr	r0, .L2+4
+  57 0020 FEFFFFEB 		bl	WLX_TaskCreate
+  58 0024 34409FE5 		ldr	r4, .L2+8
+  20:../srccode/wlx_userboot.c ****                                         gaucCrossStateStack, TASKSTACK);
+  21:../srccode/wlx_userboot.c ****     gpstrLedDisplayTcb = WLX_TaskCreate((VFUNC)TEST_LedDisplayTask,
+  59              		.loc 1 21 0
+  60 0028 34109FE5 		ldr	r1, .L2+12
+  19:../srccode/wlx_userboot.c ****     gpstrCrossStateTcb = WLX_TaskCreate((VFUNC)TEST_CrossStateTask,
+  61              		.loc 1 19 0
+  62 002c 000084E5 		str	r0, [r4, #0]
+  63              		.loc 1 21 0
+  64 0030 192EA0E3 		mov	r2, #400
+  65 0034 2C009FE5 		ldr	r0, .L2+16
+  66 0038 FEFFFFEB 		bl	WLX_TaskCreate
+  67 003c 28309FE5 		ldr	r3, .L2+20
+  68 0040 000083E5 		str	r0, [r3, #0]
+  22:../srccode/wlx_userboot.c ****                                         gaucLedDisplayStack, TASKSTACK);
+  23:../srccode/wlx_userboot.c **** 
+  24:../srccode/wlx_userboot.c ****     WLX_TaskSwitch(gpstrCrossStateTcb);      /* 任务切换 */
+  69              		.loc 1 24 0
+  70 0044 000094E5 		ldr	r0, [r4, #0]
+  71 0048 FEFFFFEB 		bl	WLX_TaskSwitch
+  25:../srccode/wlx_userboot.c **** }
+  72              		.loc 1 25 0
+  73 004c 14D04BE2 		sub	sp, fp, #20
+  74 0050 18689DE8 		ldmfd	sp, {r3, r4, fp, sp, lr}
+  75 0054 1EFF2FE1 		bx	lr
+  76              	.L3:
+  77              		.align	2
+  78              	.L2:
+  79 0058 00000000 		.word	gaucCrossStateStack
+  80 005c 00000000 		.word	TEST_CrossStateTask
+  81 0060 00000000 		.word	gpstrCrossStateTcb
+  82 0064 00000000 		.word	gaucLedDisplayStack
+  83 0068 00000000 		.word	TEST_LedDisplayTask
+  84 006c 00000000 		.word	gpstrLedDisplayTcb
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cckHUiem.s 			page 3
+
+
+  85              		.cfi_endproc
+  86              	.LFE0:
+  87              		.fnend
+  88              		.size	WLX_RootTask, .-WLX_RootTask
+  89              	.Letext0:
+  90              		.section	.debug_loc,"",%progbits
+  91              	.Ldebug_loc0:
+  92              	.LLST0:
+  93 0000 00000000 		.4byte	.LFB0-.Ltext0
+  94 0004 04000000 		.4byte	.LCFI0-.Ltext0
+  95 0008 0200     		.2byte	0x2
+  96 000a 7D       		.byte	0x7d
+  97 000b 00       		.sleb128 0
+  98 000c 04000000 		.4byte	.LCFI0-.Ltext0
+  99 0010 0C000000 		.4byte	.LCFI1-.Ltext0
+ 100 0014 0200     		.2byte	0x2
+ 101 0016 7C       		.byte	0x7c
+ 102 0017 00       		.sleb128 0
+ 103 0018 0C000000 		.4byte	.LCFI1-.Ltext0
+ 104 001c 70000000 		.4byte	.LFE0-.Ltext0
+ 105 0020 0200     		.2byte	0x2
+ 106 0022 7B       		.byte	0x7b
+ 107 0023 04       		.sleb128 4
+ 108 0024 00000000 		.4byte	0x0
+ 109 0028 00000000 		.4byte	0x0
+ 110              		.file 2 "../wanlix/wanlix.h"
+ 111              		.file 3 "../srccode/global.h"
+ 112              		.section	.debug_info
+ 113 0000 35010000 		.4byte	0x135
+ 114 0004 0200     		.2byte	0x2
+ 115 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 116 000a 04       		.byte	0x4
+ 117 000b 01       		.uleb128 0x1
+ 118 000c 00000000 		.4byte	.LASF12
+ 119 0010 01       		.byte	0x1
+ 120 0011 E3000000 		.4byte	.LASF13
+ 121 0015 25000000 		.4byte	.LASF14
+ 122 0019 00000000 		.4byte	.Ltext0
+ 123 001d 70000000 		.4byte	.Letext0
+ 124 0021 00000000 		.4byte	.Ldebug_line0
+ 125 0025 02       		.uleb128 0x2
+ 126 0026 04       		.byte	0x4
+ 127 0027 07       		.byte	0x7
+ 128 0028 58000000 		.4byte	.LASF0
+ 129 002c 02       		.uleb128 0x2
+ 130 002d 04       		.byte	0x4
+ 131 002e 07       		.byte	0x7
+ 132 002f 0C000000 		.4byte	.LASF1
+ 133 0033 03       		.uleb128 0x3
+ 134 0034 04       		.byte	0x4
+ 135 0035 39000000 		.4byte	0x39
+ 136 0039 04       		.uleb128 0x4
+ 137 003a 01       		.byte	0x1
+ 138 003b 05       		.uleb128 0x5
+ 139 003c 553800   		.ascii	"U8\000"
+ 140 003f 02       		.byte	0x2
+ 141 0040 07       		.byte	0x7
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cckHUiem.s 			page 4
+
+
+ 142 0041 45000000 		.4byte	0x45
+ 143 0045 02       		.uleb128 0x2
+ 144 0046 01       		.byte	0x1
+ 145 0047 08       		.byte	0x8
+ 146 0048 89000000 		.4byte	.LASF2
+ 147 004c 02       		.uleb128 0x2
+ 148 004d 02       		.byte	0x2
+ 149 004e 07       		.byte	0x7
+ 150 004f BD000000 		.4byte	.LASF3
+ 151 0053 05       		.uleb128 0x5
+ 152 0054 55333200 		.ascii	"U32\000"
+ 153 0058 02       		.byte	0x2
+ 154 0059 09       		.byte	0x9
+ 155 005a 2C000000 		.4byte	0x2c
+ 156 005e 02       		.uleb128 0x2
+ 157 005f 01       		.byte	0x1
+ 158 0060 08       		.byte	0x8
+ 159 0061 AB000000 		.4byte	.LASF4
+ 160 0065 02       		.uleb128 0x2
+ 161 0066 02       		.byte	0x2
+ 162 0067 05       		.byte	0x5
+ 163 0068 FD000000 		.4byte	.LASF5
+ 164 006c 06       		.uleb128 0x6
+ 165 006d 04       		.byte	0x4
+ 166 006e 05       		.byte	0x5
+ 167 006f 696E7400 		.ascii	"int\000"
+ 168 0073 07       		.uleb128 0x7
+ 169 0074 6A000000 		.4byte	.LASF6
+ 170 0078 02       		.byte	0x2
+ 171 0079 0D       		.byte	0xd
+ 172 007a 33000000 		.4byte	0x33
+ 173 007e 08       		.uleb128 0x8
+ 174 007f 07010000 		.4byte	.LASF15
+ 175 0083 04       		.byte	0x4
+ 176 0084 02       		.byte	0x2
+ 177 0085 22       		.byte	0x22
+ 178 0086 99000000 		.4byte	0x99
+ 179 008a 09       		.uleb128 0x9
+ 180 008b 19000000 		.4byte	.LASF16
+ 181 008f 02       		.byte	0x2
+ 182 0090 24       		.byte	0x24
+ 183 0091 53000000 		.4byte	0x53
+ 184 0095 02       		.byte	0x2
+ 185 0096 23       		.byte	0x23
+ 186 0097 00       		.uleb128 0x0
+ 187 0098 00       		.byte	0x0
+ 188 0099 07       		.uleb128 0x7
+ 189 009a 70000000 		.4byte	.LASF7
+ 190 009e 02       		.byte	0x2
+ 191 009f 25       		.byte	0x25
+ 192 00a0 7E000000 		.4byte	0x7e
+ 193 00a4 0A       		.uleb128 0xa
+ 194 00a5 01       		.byte	0x1
+ 195 00a6 B0000000 		.4byte	.LASF17
+ 196 00aa 01       		.byte	0x1
+ 197 00ab 0A       		.byte	0xa
+ 198 00ac 01       		.byte	0x1
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cckHUiem.s 			page 5
+
+
+ 199 00ad 00000000 		.4byte	.LFB0
+ 200 00b1 70000000 		.4byte	.LFE0
+ 201 00b5 00000000 		.4byte	.LLST0
+ 202 00b9 0B       		.uleb128 0xb
+ 203 00ba 3B000000 		.4byte	0x3b
+ 204 00be CA000000 		.4byte	0xca
+ 205 00c2 0C       		.uleb128 0xc
+ 206 00c3 2C000000 		.4byte	0x2c
+ 207 00c7 8F01     		.2byte	0x18f
+ 208 00c9 00       		.byte	0x0
+ 209 00ca 0D       		.uleb128 0xd
+ 210 00cb 97000000 		.4byte	.LASF8
+ 211 00cf 03       		.byte	0x3
+ 212 00d0 2D       		.byte	0x2d
+ 213 00d1 B9000000 		.4byte	0xb9
+ 214 00d5 01       		.byte	0x1
+ 215 00d6 01       		.byte	0x1
+ 216 00d7 0D       		.uleb128 0xd
+ 217 00d8 44000000 		.4byte	.LASF9
+ 218 00dc 03       		.byte	0x3
+ 219 00dd 2E       		.byte	0x2e
+ 220 00de B9000000 		.4byte	0xb9
+ 221 00e2 01       		.byte	0x1
+ 222 00e3 01       		.byte	0x1
+ 223 00e4 0D       		.uleb128 0xd
+ 224 00e5 76000000 		.4byte	.LASF10
+ 225 00e9 03       		.byte	0x3
+ 226 00ea 30       		.byte	0x30
+ 227 00eb F1000000 		.4byte	0xf1
+ 228 00ef 01       		.byte	0x1
+ 229 00f0 01       		.byte	0x1
+ 230 00f1 03       		.uleb128 0x3
+ 231 00f2 04       		.byte	0x4
+ 232 00f3 99000000 		.4byte	0x99
+ 233 00f7 0D       		.uleb128 0xd
+ 234 00f8 D0000000 		.4byte	.LASF11
+ 235 00fc 03       		.byte	0x3
+ 236 00fd 31       		.byte	0x31
+ 237 00fe F1000000 		.4byte	0xf1
+ 238 0102 01       		.byte	0x1
+ 239 0103 01       		.byte	0x1
+ 240 0104 0D       		.uleb128 0xd
+ 241 0105 97000000 		.4byte	.LASF8
+ 242 0109 03       		.byte	0x3
+ 243 010a 2D       		.byte	0x2d
+ 244 010b B9000000 		.4byte	0xb9
+ 245 010f 01       		.byte	0x1
+ 246 0110 01       		.byte	0x1
+ 247 0111 0D       		.uleb128 0xd
+ 248 0112 44000000 		.4byte	.LASF9
+ 249 0116 03       		.byte	0x3
+ 250 0117 2E       		.byte	0x2e
+ 251 0118 B9000000 		.4byte	0xb9
+ 252 011c 01       		.byte	0x1
+ 253 011d 01       		.byte	0x1
+ 254 011e 0D       		.uleb128 0xd
+ 255 011f 76000000 		.4byte	.LASF10
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cckHUiem.s 			page 6
+
+
+ 256 0123 03       		.byte	0x3
+ 257 0124 30       		.byte	0x30
+ 258 0125 F1000000 		.4byte	0xf1
+ 259 0129 01       		.byte	0x1
+ 260 012a 01       		.byte	0x1
+ 261 012b 0D       		.uleb128 0xd
+ 262 012c D0000000 		.4byte	.LASF11
+ 263 0130 03       		.byte	0x3
+ 264 0131 31       		.byte	0x31
+ 265 0132 F1000000 		.4byte	0xf1
+ 266 0136 01       		.byte	0x1
+ 267 0137 01       		.byte	0x1
+ 268 0138 00       		.byte	0x0
+ 269              		.section	.debug_abbrev
+ 270 0000 01       		.uleb128 0x1
+ 271 0001 11       		.uleb128 0x11
+ 272 0002 01       		.byte	0x1
+ 273 0003 25       		.uleb128 0x25
+ 274 0004 0E       		.uleb128 0xe
+ 275 0005 13       		.uleb128 0x13
+ 276 0006 0B       		.uleb128 0xb
+ 277 0007 03       		.uleb128 0x3
+ 278 0008 0E       		.uleb128 0xe
+ 279 0009 1B       		.uleb128 0x1b
+ 280 000a 0E       		.uleb128 0xe
+ 281 000b 11       		.uleb128 0x11
+ 282 000c 01       		.uleb128 0x1
+ 283 000d 12       		.uleb128 0x12
+ 284 000e 01       		.uleb128 0x1
+ 285 000f 10       		.uleb128 0x10
+ 286 0010 06       		.uleb128 0x6
+ 287 0011 00       		.byte	0x0
+ 288 0012 00       		.byte	0x0
+ 289 0013 02       		.uleb128 0x2
+ 290 0014 24       		.uleb128 0x24
+ 291 0015 00       		.byte	0x0
+ 292 0016 0B       		.uleb128 0xb
+ 293 0017 0B       		.uleb128 0xb
+ 294 0018 3E       		.uleb128 0x3e
+ 295 0019 0B       		.uleb128 0xb
+ 296 001a 03       		.uleb128 0x3
+ 297 001b 0E       		.uleb128 0xe
+ 298 001c 00       		.byte	0x0
+ 299 001d 00       		.byte	0x0
+ 300 001e 03       		.uleb128 0x3
+ 301 001f 0F       		.uleb128 0xf
+ 302 0020 00       		.byte	0x0
+ 303 0021 0B       		.uleb128 0xb
+ 304 0022 0B       		.uleb128 0xb
+ 305 0023 49       		.uleb128 0x49
+ 306 0024 13       		.uleb128 0x13
+ 307 0025 00       		.byte	0x0
+ 308 0026 00       		.byte	0x0
+ 309 0027 04       		.uleb128 0x4
+ 310 0028 15       		.uleb128 0x15
+ 311 0029 00       		.byte	0x0
+ 312 002a 27       		.uleb128 0x27
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cckHUiem.s 			page 7
+
+
+ 313 002b 0C       		.uleb128 0xc
+ 314 002c 00       		.byte	0x0
+ 315 002d 00       		.byte	0x0
+ 316 002e 05       		.uleb128 0x5
+ 317 002f 16       		.uleb128 0x16
+ 318 0030 00       		.byte	0x0
+ 319 0031 03       		.uleb128 0x3
+ 320 0032 08       		.uleb128 0x8
+ 321 0033 3A       		.uleb128 0x3a
+ 322 0034 0B       		.uleb128 0xb
+ 323 0035 3B       		.uleb128 0x3b
+ 324 0036 0B       		.uleb128 0xb
+ 325 0037 49       		.uleb128 0x49
+ 326 0038 13       		.uleb128 0x13
+ 327 0039 00       		.byte	0x0
+ 328 003a 00       		.byte	0x0
+ 329 003b 06       		.uleb128 0x6
+ 330 003c 24       		.uleb128 0x24
+ 331 003d 00       		.byte	0x0
+ 332 003e 0B       		.uleb128 0xb
+ 333 003f 0B       		.uleb128 0xb
+ 334 0040 3E       		.uleb128 0x3e
+ 335 0041 0B       		.uleb128 0xb
+ 336 0042 03       		.uleb128 0x3
+ 337 0043 08       		.uleb128 0x8
+ 338 0044 00       		.byte	0x0
+ 339 0045 00       		.byte	0x0
+ 340 0046 07       		.uleb128 0x7
+ 341 0047 16       		.uleb128 0x16
+ 342 0048 00       		.byte	0x0
+ 343 0049 03       		.uleb128 0x3
+ 344 004a 0E       		.uleb128 0xe
+ 345 004b 3A       		.uleb128 0x3a
+ 346 004c 0B       		.uleb128 0xb
+ 347 004d 3B       		.uleb128 0x3b
+ 348 004e 0B       		.uleb128 0xb
+ 349 004f 49       		.uleb128 0x49
+ 350 0050 13       		.uleb128 0x13
+ 351 0051 00       		.byte	0x0
+ 352 0052 00       		.byte	0x0
+ 353 0053 08       		.uleb128 0x8
+ 354 0054 13       		.uleb128 0x13
+ 355 0055 01       		.byte	0x1
+ 356 0056 03       		.uleb128 0x3
+ 357 0057 0E       		.uleb128 0xe
+ 358 0058 0B       		.uleb128 0xb
+ 359 0059 0B       		.uleb128 0xb
+ 360 005a 3A       		.uleb128 0x3a
+ 361 005b 0B       		.uleb128 0xb
+ 362 005c 3B       		.uleb128 0x3b
+ 363 005d 0B       		.uleb128 0xb
+ 364 005e 01       		.uleb128 0x1
+ 365 005f 13       		.uleb128 0x13
+ 366 0060 00       		.byte	0x0
+ 367 0061 00       		.byte	0x0
+ 368 0062 09       		.uleb128 0x9
+ 369 0063 0D       		.uleb128 0xd
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cckHUiem.s 			page 8
+
+
+ 370 0064 00       		.byte	0x0
+ 371 0065 03       		.uleb128 0x3
+ 372 0066 0E       		.uleb128 0xe
+ 373 0067 3A       		.uleb128 0x3a
+ 374 0068 0B       		.uleb128 0xb
+ 375 0069 3B       		.uleb128 0x3b
+ 376 006a 0B       		.uleb128 0xb
+ 377 006b 49       		.uleb128 0x49
+ 378 006c 13       		.uleb128 0x13
+ 379 006d 38       		.uleb128 0x38
+ 380 006e 0A       		.uleb128 0xa
+ 381 006f 00       		.byte	0x0
+ 382 0070 00       		.byte	0x0
+ 383 0071 0A       		.uleb128 0xa
+ 384 0072 2E       		.uleb128 0x2e
+ 385 0073 00       		.byte	0x0
+ 386 0074 3F       		.uleb128 0x3f
+ 387 0075 0C       		.uleb128 0xc
+ 388 0076 03       		.uleb128 0x3
+ 389 0077 0E       		.uleb128 0xe
+ 390 0078 3A       		.uleb128 0x3a
+ 391 0079 0B       		.uleb128 0xb
+ 392 007a 3B       		.uleb128 0x3b
+ 393 007b 0B       		.uleb128 0xb
+ 394 007c 27       		.uleb128 0x27
+ 395 007d 0C       		.uleb128 0xc
+ 396 007e 11       		.uleb128 0x11
+ 397 007f 01       		.uleb128 0x1
+ 398 0080 12       		.uleb128 0x12
+ 399 0081 01       		.uleb128 0x1
+ 400 0082 40       		.uleb128 0x40
+ 401 0083 06       		.uleb128 0x6
+ 402 0084 00       		.byte	0x0
+ 403 0085 00       		.byte	0x0
+ 404 0086 0B       		.uleb128 0xb
+ 405 0087 01       		.uleb128 0x1
+ 406 0088 01       		.byte	0x1
+ 407 0089 49       		.uleb128 0x49
+ 408 008a 13       		.uleb128 0x13
+ 409 008b 01       		.uleb128 0x1
+ 410 008c 13       		.uleb128 0x13
+ 411 008d 00       		.byte	0x0
+ 412 008e 00       		.byte	0x0
+ 413 008f 0C       		.uleb128 0xc
+ 414 0090 21       		.uleb128 0x21
+ 415 0091 00       		.byte	0x0
+ 416 0092 49       		.uleb128 0x49
+ 417 0093 13       		.uleb128 0x13
+ 418 0094 2F       		.uleb128 0x2f
+ 419 0095 05       		.uleb128 0x5
+ 420 0096 00       		.byte	0x0
+ 421 0097 00       		.byte	0x0
+ 422 0098 0D       		.uleb128 0xd
+ 423 0099 34       		.uleb128 0x34
+ 424 009a 00       		.byte	0x0
+ 425 009b 03       		.uleb128 0x3
+ 426 009c 0E       		.uleb128 0xe
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cckHUiem.s 			page 9
+
+
+ 427 009d 3A       		.uleb128 0x3a
+ 428 009e 0B       		.uleb128 0xb
+ 429 009f 3B       		.uleb128 0x3b
+ 430 00a0 0B       		.uleb128 0xb
+ 431 00a1 49       		.uleb128 0x49
+ 432 00a2 13       		.uleb128 0x13
+ 433 00a3 3F       		.uleb128 0x3f
+ 434 00a4 0C       		.uleb128 0xc
+ 435 00a5 3C       		.uleb128 0x3c
+ 436 00a6 0C       		.uleb128 0xc
+ 437 00a7 00       		.byte	0x0
+ 438 00a8 00       		.byte	0x0
+ 439 00a9 00       		.byte	0x0
+ 440              		.section	.debug_pubnames,"",%progbits
+ 441 0000 1F000000 		.4byte	0x1f
+ 442 0004 0200     		.2byte	0x2
+ 443 0006 00000000 		.4byte	.Ldebug_info0
+ 444 000a 39010000 		.4byte	0x139
+ 445 000e A4000000 		.4byte	0xa4
+ 446 0012 574C585F 		.ascii	"WLX_RootTask\000"
+ 446      526F6F74 
+ 446      5461736B 
+ 446      00
+ 447 001f 00000000 		.4byte	0x0
+ 448              		.section	.debug_pubtypes,"",%progbits
+ 449 0000 3B000000 		.4byte	0x3b
+ 450 0004 0200     		.2byte	0x2
+ 451 0006 00000000 		.4byte	.Ldebug_info0
+ 452 000a 39010000 		.4byte	0x139
+ 453 000e 3B000000 		.4byte	0x3b
+ 454 0012 553800   		.ascii	"U8\000"
+ 455 0015 53000000 		.4byte	0x53
+ 456 0019 55333200 		.ascii	"U32\000"
+ 457 001d 73000000 		.4byte	0x73
+ 458 0021 5646554E 		.ascii	"VFUNC\000"
+ 458      4300
+ 459 0027 7E000000 		.4byte	0x7e
+ 460 002b 775F7463 		.ascii	"w_tcb\000"
+ 460      6200
+ 461 0031 99000000 		.4byte	0x99
+ 462 0035 575F5443 		.ascii	"W_TCB\000"
+ 462      4200
+ 463 003b 00000000 		.4byte	0x0
+ 464              		.section	.debug_aranges,"",%progbits
+ 465 0000 1C000000 		.4byte	0x1c
+ 466 0004 0200     		.2byte	0x2
+ 467 0006 00000000 		.4byte	.Ldebug_info0
+ 468 000a 04       		.byte	0x4
+ 469 000b 00       		.byte	0x0
+ 470 000c 0000     		.2byte	0x0
+ 471 000e 0000     		.2byte	0x0
+ 472 0010 00000000 		.4byte	.Ltext0
+ 473 0014 70000000 		.4byte	.Letext0-.Ltext0
+ 474 0018 00000000 		.4byte	0x0
+ 475 001c 00000000 		.4byte	0x0
+ 476              		.section	.debug_str,"MS",%progbits,1
+ 477              	.LASF12:
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cckHUiem.s 			page 10
+
+
+ 478 0000 474E5520 		.ascii	"GNU C 4.5.2\000"
+ 478      4320342E 
+ 478      352E3200 
+ 479              	.LASF1:
+ 480 000c 756E7369 		.ascii	"unsigned int\000"
+ 480      676E6564 
+ 480      20696E74 
+ 480      00
+ 481              	.LASF16:
+ 482 0019 75695461 		.ascii	"uiTaskCurSp\000"
+ 482      736B4375 
+ 482      72537000 
+ 483              	.LASF14:
+ 484 0025 463A5C77 		.ascii	"F:\\workdir\\RTOS_Wanlix\\project\000"
+ 484      6F726B64 
+ 484      69725C52 
+ 484      544F535F 
+ 484      57616E6C 
+ 485              	.LASF9:
+ 486 0044 67617563 		.ascii	"gaucLedDisplayStack\000"
+ 486      4C656444 
+ 486      6973706C 
+ 486      61795374 
+ 486      61636B00 
+ 487              	.LASF0:
+ 488 0058 6C6F6E67 		.ascii	"long unsigned int\000"
+ 488      20756E73 
+ 488      69676E65 
+ 488      6420696E 
+ 488      7400
+ 489              	.LASF6:
+ 490 006a 5646554E 		.ascii	"VFUNC\000"
+ 490      4300
+ 491              	.LASF7:
+ 492 0070 575F5443 		.ascii	"W_TCB\000"
+ 492      4200
+ 493              	.LASF10:
+ 494 0076 67707374 		.ascii	"gpstrCrossStateTcb\000"
+ 494      7243726F 
+ 494      73735374 
+ 494      61746554 
+ 494      636200
+ 495              	.LASF2:
+ 496 0089 756E7369 		.ascii	"unsigned char\000"
+ 496      676E6564 
+ 496      20636861 
+ 496      7200
+ 497              	.LASF8:
+ 498 0097 67617563 		.ascii	"gaucCrossStateStack\000"
+ 498      43726F73 
+ 498      73537461 
+ 498      74655374 
+ 498      61636B00 
+ 499              	.LASF4:
+ 500 00ab 63686172 		.ascii	"char\000"
+ 500      00
+ 501              	.LASF17:
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cckHUiem.s 			page 11
+
+
+ 502 00b0 574C585F 		.ascii	"WLX_RootTask\000"
+ 502      526F6F74 
+ 502      5461736B 
+ 502      00
+ 503              	.LASF3:
+ 504 00bd 73686F72 		.ascii	"short unsigned int\000"
+ 504      7420756E 
+ 504      7369676E 
+ 504      65642069 
+ 504      6E7400
+ 505              	.LASF11:
+ 506 00d0 67707374 		.ascii	"gpstrLedDisplayTcb\000"
+ 506      724C6564 
+ 506      44697370 
+ 506      6C617954 
+ 506      636200
+ 507              	.LASF13:
+ 508 00e3 2E2E2F73 		.ascii	"../srccode/wlx_userboot.c\000"
+ 508      7263636F 
+ 508      64652F77 
+ 508      6C785F75 
+ 508      73657262 
+ 509              	.LASF5:
+ 510 00fd 73686F72 		.ascii	"short int\000"
+ 510      7420696E 
+ 510      7400
+ 511              	.LASF15:
+ 512 0107 775F7463 		.ascii	"w_tcb\000"
+ 512      6200
+ 513              		.ident	"GCC: (Sourcery G++ Lite 2011.03-41) 4.5.2"
+ 514              		.section	.note.GNU-stack,"",%progbits
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cckHUiem.s 			page 12
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 wlx_userboot.c
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cckHUiem.s:21     .text:00000000 $a
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cckHUiem.s:24     .text:00000000 WLX_RootTask
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cckHUiem.s:79     .text:00000058 $d
+                       .ARM.extab:00000000 $d
+                       .ARM.exidx:00000000 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+DEV_SoftwareInit
+DEV_HardwareInit
+WLX_TaskCreate
+WLX_TaskSwitch
+gaucCrossStateStack
+TEST_CrossStateTask
+gpstrCrossStateTcb
+gaucLedDisplayStack
+TEST_LedDisplayTask
+gpstrLedDisplayTcb
+__aeabi_unwind_cpp_pr1

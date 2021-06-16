@@ -1,0 +1,951 @@
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccdTBE7q.s 			page 1
+
+
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 2
+   9              		.eabi_attribute 30, 2
+  10              		.eabi_attribute 18, 4
+  11              		.file	"interrupt.c"
+  12              		.section	.debug_abbrev,"",%progbits
+  13              	.Ldebug_abbrev0:
+  14              		.section	.debug_info,"",%progbits
+  15              	.Ldebug_info0:
+  16              		.section	.debug_line,"",%progbits
+  17              	.Ldebug_line0:
+  18 0000 8A000000 		.text
+  18      02004F00 
+  18      00000201 
+  18      FB0E0D00 
+  18      01010101 
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              		.align	2
+  22              		.global	ISR_TickIsr
+  23              		.type	ISR_TickIsr, %function
+  24              	ISR_TickIsr:
+  25              		.fnstart
+  26              	.LFB1:
+  27              		.file 1 "../srccode/interrupt.c"
+   1:../srccode/interrupt.c **** 
+   2:../srccode/interrupt.c **** #include "interrupt.h"
+   3:../srccode/interrupt.c **** 
+   4:../srccode/interrupt.c **** 
+   5:../srccode/interrupt.c **** /***********************************************************************************
+   6:../srccode/interrupt.c **** 函数功能: Irq中断服务函数.
+   7:../srccode/interrupt.c **** 入口参数: none.
+   8:../srccode/interrupt.c **** 返 回 值: none.
+   9:../srccode/interrupt.c **** ***********************************************************************************/
+  10:../srccode/interrupt.c **** void ISR_IrqIsr(void)
+  11:../srccode/interrupt.c **** {
+  12:../srccode/interrupt.c ****     U32 uiIrqStatus;
+  13:../srccode/interrupt.c **** 
+  14:../srccode/interrupt.c ****     /* 读取产生中断的IRQ中断源 */
+  15:../srccode/interrupt.c ****     uiIrqStatus = IRQSTA;
+  16:../srccode/interrupt.c **** 
+  17:../srccode/interrupt.c ****     /* Timer中断 */
+  18:../srccode/interrupt.c ****     if(TIME1INTMASK == (TIME1INTMASK & uiIrqStatus))
+  19:../srccode/interrupt.c ****     {
+  20:../srccode/interrupt.c ****         /* Tick中断函数 */
+  21:../srccode/interrupt.c ****         ISR_TickIsr();
+  22:../srccode/interrupt.c **** 
+  23:../srccode/interrupt.c ****         /* 清除tick定时器中断标志 */
+  24:../srccode/interrupt.c ****         T1CLRI = 0;
+  25:../srccode/interrupt.c ****     }
+  26:../srccode/interrupt.c ****     /* 外部Irq0中断 */
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccdTBE7q.s 			page 2
+
+
+  27:../srccode/interrupt.c ****     else //if(EXTIRQ0INTMASK == (EXTIRQ0INTMASK & uiIrqStatus))
+  28:../srccode/interrupt.c ****     {
+  29:../srccode/interrupt.c ****         /* 行人中断函数 */
+  30:../srccode/interrupt.c ****         ISR_PassengerIsr();
+  31:../srccode/interrupt.c ****     }
+  32:../srccode/interrupt.c **** }
+  33:../srccode/interrupt.c **** 
+  34:../srccode/interrupt.c **** /***********************************************************************************
+  35:../srccode/interrupt.c **** 函数功能: Tick中断函数.
+  36:../srccode/interrupt.c **** 入口参数: none.
+  37:../srccode/interrupt.c **** 返 回 值: none.
+  38:../srccode/interrupt.c **** ***********************************************************************************/
+  39:../srccode/interrupt.c **** void ISR_TickIsr(void)
+  40:../srccode/interrupt.c **** {
+  28              		.loc 1 40 0
+  29              		.cfi_startproc
+  30              		@ Function supports interworking.
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  41:../srccode/interrupt.c ****     guiSystemTick++;
+  34              		.loc 1 41 0
+  35 0000 0C309FE5 		ldr	r3, .L2
+  36 0004 000093E5 		ldr	r0, [r3, #0]
+  37 0008 012080E2 		add	r2, r0, #1
+  38 000c 002083E5 		str	r2, [r3, #0]
+  42:../srccode/interrupt.c **** }
+  39              		.loc 1 42 0
+  40 0010 1EFF2FE1 		bx	lr
+  41              	.L3:
+  42              		.align	2
+  43              	.L2:
+  44 0014 00000000 		.word	guiSystemTick
+  45              		.cfi_endproc
+  46              	.LFE1:
+  47              		.fnend
+  48              		.size	ISR_TickIsr, .-ISR_TickIsr
+  49              		.align	2
+  50              		.global	ISR_PassengerIsr
+  51              		.type	ISR_PassengerIsr, %function
+  52              	ISR_PassengerIsr:
+  53              		.fnstart
+  54              	.LFB2:
+  43:../srccode/interrupt.c **** 
+  44:../srccode/interrupt.c **** /***********************************************************************************
+  45:../srccode/interrupt.c **** 函数功能: 行人中断函数.
+  46:../srccode/interrupt.c **** 入口参数: none.
+  47:../srccode/interrupt.c **** 返 回 值: none.
+  48:../srccode/interrupt.c **** ***********************************************************************************/
+  49:../srccode/interrupt.c **** void ISR_PassengerIsr(void)
+  50:../srccode/interrupt.c **** {
+  55              		.loc 1 50 0
+  56              		.cfi_startproc
+  57              		@ Function supports interworking.
+  58              		@ args = 0, pretend = 0, frame = 0
+  59              		@ frame_needed = 0, uses_anonymous_args = 0
+  60              		@ link register save eliminated.
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccdTBE7q.s 			page 3
+
+
+  51:../srccode/interrupt.c ****     /* 将十字路口改变为行人过马路状态 */
+  52:../srccode/interrupt.c ****     if(CROSSSTATE1 == guiCurSta)
+  61              		.loc 1 52 0
+  62 0018 3C309FE5 		ldr	r3, .L9
+  63 001c 002093E5 		ldr	r2, [r3, #0]
+  64 0020 000052E3 		cmp	r2, #0
+  65 0024 0700000A 		beq	.L8
+  53:../srccode/interrupt.c ****     {
+  54:../srccode/interrupt.c ****         /* 状态1下触发行人中断, 置为状态2 */
+  55:../srccode/interrupt.c ****         guiCurSta = CROSSSTATE2;
+  56:../srccode/interrupt.c **** 
+  57:../srccode/interrupt.c ****         /* 置为状态改变 */
+  58:../srccode/interrupt.c ****         guiStaChange = 1;
+  59:../srccode/interrupt.c ****     }
+  60:../srccode/interrupt.c ****     else if((CROSSSTATE3 == guiCurSta) || (CROSSSTATE4 == guiCurSta))
+  66              		.loc 1 60 0
+  67 0028 020042E2 		sub	r0, r2, #2
+  68 002c 010050E3 		cmp	r0, #1
+  61:../srccode/interrupt.c ****     {
+  62:../srccode/interrupt.c ****         /* 状态3和状态4下触发行人中断, 置为状态3 */
+  63:../srccode/interrupt.c ****         guiCurSta = CROSSSTATE3;
+  69              		.loc 1 63 0
+  70 0030 0200A093 		movls	r0, #2
+  71 0034 00008395 		strls	r0, [r3, #0]
+  64:../srccode/interrupt.c **** 
+  65:../srccode/interrupt.c ****         /* 置为状态改变 */
+  66:../srccode/interrupt.c ****         guiStaChange = 1;
+  72              		.loc 1 66 0
+  73 0038 20309F95 		ldrls	r3, .L9+4
+  74 003c 0100A093 		movls	r0, #1
+  75 0040 00008395 		strls	r0, [r3, #0]
+  76 0044 1EFF2FE1 		bx	lr
+  77              	.L8:
+  55:../srccode/interrupt.c ****         guiCurSta = CROSSSTATE2;
+  78              		.loc 1 55 0
+  79 0048 0120A0E3 		mov	r2, #1
+  80 004c 002083E5 		str	r2, [r3, #0]
+  58:../srccode/interrupt.c ****         guiStaChange = 1;
+  81              		.loc 1 58 0
+  82 0050 08309FE5 		ldr	r3, .L9+4
+  83 0054 002083E5 		str	r2, [r3, #0]
+  84 0058 1EFF2FE1 		bx	lr
+  85              	.L10:
+  86              		.align	2
+  87              	.L9:
+  88 005c 00000000 		.word	guiCurSta
+  89 0060 00000000 		.word	guiStaChange
+  90              		.cfi_endproc
+  91              	.LFE2:
+  92              		.fnend
+  93              		.size	ISR_PassengerIsr, .-ISR_PassengerIsr
+  94              		.align	2
+  95              		.global	ISR_IrqIsr
+  96              		.type	ISR_IrqIsr, %function
+  97              	ISR_IrqIsr:
+  98              		.fnstart
+  99              	.LFB0:
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccdTBE7q.s 			page 4
+
+
+  11:../srccode/interrupt.c **** {
+ 100              		.loc 1 11 0
+ 101              		.cfi_startproc
+ 102              		@ Function supports interworking.
+ 103              		@ args = 0, pretend = 0, frame = 0
+ 104              		@ frame_needed = 0, uses_anonymous_args = 0
+ 105              		@ link register save eliminated.
+  15:../srccode/interrupt.c ****     uiIrqStatus = IRQSTA;
+ 106              		.loc 1 15 0
+ 107 0064 0F3AE0E3 		mvn	r3, #61440
+ 108 0068 FF2F13E5 		ldr	r2, [r3, #-4095]
+ 109              	.LVL0:
+  18:../srccode/interrupt.c ****     if(TIME1INTMASK == (TIME1INTMASK & uiIrqStatus))
+ 110              		.loc 1 18 0
+ 111 006c 080012E3 		tst	r2, #8
+ 112 0070 0600000A 		beq	.L12
+ 113              	.LBB4:
+ 114              	.LBB5:
+  41:../srccode/interrupt.c ****     guiSystemTick++;
+ 115              		.loc 1 41 0
+ 116 0074 18C09FE5 		ldr	ip, .L14
+ 117 0078 00209CE5 		ldr	r2, [ip, #0]
+ 118              	.LVL1:
+ 119              	.LBE5:
+ 120              	.LBE4:
+  24:../srccode/interrupt.c ****         T1CLRI = 0;
+ 121              		.loc 1 24 0
+ 122 007c 0000A0E3 		mov	r0, #0
+ 123              	.LBB7:
+ 124              	.LBB6:
+  41:../srccode/interrupt.c ****     guiSystemTick++;
+ 125              		.loc 1 41 0
+ 126 0080 011082E2 		add	r1, r2, #1
+ 127 0084 00108CE5 		str	r1, [ip, #0]
+ 128              	.LBE6:
+ 129              	.LBE7:
+  24:../srccode/interrupt.c ****         T1CLRI = 0;
+ 130              		.loc 1 24 0
+ 131 0088 D30C03E5 		str	r0, [r3, #-3283]
+  32:../srccode/interrupt.c **** }
+ 132              		.loc 1 32 0
+ 133 008c 1EFF2FE1 		bx	lr
+ 134              	.LVL2:
+ 135              	.L12:
+  30:../srccode/interrupt.c ****         ISR_PassengerIsr();
+ 136              		.loc 1 30 0
+ 137 0090 FEFFFFEA 		b	ISR_PassengerIsr
+ 138              	.LVL3:
+ 139              	.L15:
+ 140              		.align	2
+ 141              	.L14:
+ 142 0094 00000000 		.word	guiSystemTick
+ 143              		.cfi_endproc
+ 144              	.LFE0:
+ 145              		.fnend
+ 146              		.size	ISR_IrqIsr, .-ISR_IrqIsr
+ 147              		.align	2
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccdTBE7q.s 			page 5
+
+
+ 148              		.global	ISR_PassengerIntLock
+ 149              		.type	ISR_PassengerIntLock, %function
+ 150              	ISR_PassengerIntLock:
+ 151              		.fnstart
+ 152              	.LFB3:
+  67:../srccode/interrupt.c ****     }
+  68:../srccode/interrupt.c **** }
+  69:../srccode/interrupt.c **** 
+  70:../srccode/interrupt.c **** /***********************************************************************************
+  71:../srccode/interrupt.c **** 函数功能: 锁行人中断函数.
+  72:../srccode/interrupt.c **** 入口参数: none.
+  73:../srccode/interrupt.c **** 返 回 值: none.
+  74:../srccode/interrupt.c **** ***********************************************************************************/
+  75:../srccode/interrupt.c **** void ISR_PassengerIntLock(void)
+  76:../srccode/interrupt.c **** {
+ 153              		.loc 1 76 0
+ 154              		.cfi_startproc
+ 155              		@ Function supports interworking.
+ 156              		@ args = 0, pretend = 0, frame = 0
+ 157              		@ frame_needed = 0, uses_anonymous_args = 0
+ 158              		@ link register save eliminated.
+  77:../srccode/interrupt.c ****     /* 禁止中断 */
+  78:../srccode/interrupt.c ****     IRQEN &= ~EXTIRQ0INTMASK;
+ 159              		.loc 1 78 0
+ 160 0098 0F3AE0E3 		mvn	r3, #61440
+ 161 009c F70F13E5 		ldr	r0, [r3, #-4087]
+ 162 00a0 0229C0E3 		bic	r2, r0, #32768
+ 163 00a4 F72F03E5 		str	r2, [r3, #-4087]
+  79:../srccode/interrupt.c **** }
+ 164              		.loc 1 79 0
+ 165 00a8 1EFF2FE1 		bx	lr
+ 166              		.cfi_endproc
+ 167              	.LFE3:
+ 168              		.fnend
+ 169              		.size	ISR_PassengerIntLock, .-ISR_PassengerIntLock
+ 170              		.align	2
+ 171              		.global	ISR_PassengerIntUnlock
+ 172              		.type	ISR_PassengerIntUnlock, %function
+ 173              	ISR_PassengerIntUnlock:
+ 174              		.fnstart
+ 175              	.LFB4:
+  80:../srccode/interrupt.c **** 
+  81:../srccode/interrupt.c **** /***********************************************************************************
+  82:../srccode/interrupt.c **** 函数功能: 解锁行人中断函数.
+  83:../srccode/interrupt.c **** 入口参数: none.
+  84:../srccode/interrupt.c **** 返 回 值: none.
+  85:../srccode/interrupt.c **** ***********************************************************************************/
+  86:../srccode/interrupt.c **** void ISR_PassengerIntUnlock(void)
+  87:../srccode/interrupt.c **** {
+ 176              		.loc 1 87 0
+ 177              		.cfi_startproc
+ 178              		@ Function supports interworking.
+ 179              		@ args = 0, pretend = 0, frame = 0
+ 180              		@ frame_needed = 0, uses_anonymous_args = 0
+ 181              		@ link register save eliminated.
+  88:../srccode/interrupt.c ****     /* 使能中断 */
+  89:../srccode/interrupt.c ****     IRQEN |= EXTIRQ0INTMASK;
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccdTBE7q.s 			page 6
+
+
+ 182              		.loc 1 89 0
+ 183 00ac 0F3AE0E3 		mvn	r3, #61440
+ 184 00b0 F70F13E5 		ldr	r0, [r3, #-4087]
+ 185 00b4 022980E3 		orr	r2, r0, #32768
+ 186 00b8 F72F03E5 		str	r2, [r3, #-4087]
+  90:../srccode/interrupt.c **** }
+ 187              		.loc 1 90 0
+ 188 00bc 1EFF2FE1 		bx	lr
+ 189              		.cfi_endproc
+ 190              	.LFE4:
+ 191              		.fnend
+ 192              		.size	ISR_PassengerIntUnlock, .-ISR_PassengerIntUnlock
+ 193              	.Letext0:
+ 194              		.section	.debug_loc,"",%progbits
+ 195              	.Ldebug_loc0:
+ 196              	.LLST0:
+ 197 0000 6C000000 		.4byte	.LVL0-.Ltext0
+ 198 0004 7C000000 		.4byte	.LVL1-.Ltext0
+ 199 0008 0100     		.2byte	0x1
+ 200 000a 52       		.byte	0x52
+ 201 000b 90000000 		.4byte	.LVL2-.Ltext0
+ 202 000f 93000000 		.4byte	.LVL3-1-.Ltext0
+ 203 0013 0100     		.2byte	0x1
+ 204 0015 52       		.byte	0x52
+ 205 0016 00000000 		.4byte	0x0
+ 206 001a 00000000 		.4byte	0x0
+ 207              		.file 2 "../srccode/global.h"
+ 208              		.file 3 "../wanlix/wanlix.h"
+ 209              		.section	.debug_info
+ 210 0000 64010000 		.4byte	0x164
+ 211 0004 0200     		.2byte	0x2
+ 212 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 213 000a 04       		.byte	0x4
+ 214 000b 01       		.uleb128 0x1
+ 215 000c 00000000 		.4byte	.LASF17
+ 216 0010 01       		.byte	0x1
+ 217 0011 B0000000 		.4byte	.LASF18
+ 218 0015 10010000 		.4byte	.LASF19
+ 219 0019 00000000 		.4byte	.Ltext0
+ 220 001d C0000000 		.4byte	.Letext0
+ 221 0021 00000000 		.4byte	.Ldebug_line0
+ 222 0025 02       		.uleb128 0x2
+ 223 0026 04       		.byte	0x4
+ 224 0027 07       		.byte	0x7
+ 225 0028 44000000 		.4byte	.LASF0
+ 226 002c 02       		.uleb128 0x2
+ 227 002d 04       		.byte	0x4
+ 228 002e 07       		.byte	0x7
+ 229 002f C7000000 		.4byte	.LASF1
+ 230 0033 02       		.uleb128 0x2
+ 231 0034 01       		.byte	0x1
+ 232 0035 08       		.byte	0x8
+ 233 0036 36000000 		.4byte	.LASF2
+ 234 003a 02       		.uleb128 0x2
+ 235 003b 02       		.byte	0x2
+ 236 003c 07       		.byte	0x7
+ 237 003d 56000000 		.4byte	.LASF3
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccdTBE7q.s 			page 7
+
+
+ 238 0041 03       		.uleb128 0x3
+ 239 0042 55333200 		.ascii	"U32\000"
+ 240 0046 03       		.byte	0x3
+ 241 0047 09       		.byte	0x9
+ 242 0048 2C000000 		.4byte	0x2c
+ 243 004c 02       		.uleb128 0x2
+ 244 004d 01       		.byte	0x1
+ 245 004e 08       		.byte	0x8
+ 246 004f E9000000 		.4byte	.LASF4
+ 247 0053 02       		.uleb128 0x2
+ 248 0054 02       		.byte	0x2
+ 249 0055 05       		.byte	0x5
+ 250 0056 81000000 		.4byte	.LASF5
+ 251 005a 04       		.uleb128 0x4
+ 252 005b 04       		.byte	0x4
+ 253 005c 05       		.byte	0x5
+ 254 005d 696E7400 		.ascii	"int\000"
+ 255 0061 05       		.uleb128 0x5
+ 256 0062 EE000000 		.4byte	.LASF20
+ 257 0066 04       		.byte	0x4
+ 258 0067 02       		.byte	0x2
+ 259 0068 22       		.byte	0x22
+ 260 0069 8C000000 		.4byte	0x8c
+ 261 006d 06       		.uleb128 0x6
+ 262 006e 2F010000 		.4byte	.LASF6
+ 263 0072 00       		.sleb128 0
+ 264 0073 06       		.uleb128 0x6
+ 265 0074 3B010000 		.4byte	.LASF7
+ 266 0078 01       		.sleb128 1
+ 267 0079 06       		.uleb128 0x6
+ 268 007a 47010000 		.4byte	.LASF8
+ 269 007e 02       		.sleb128 2
+ 270 007f 06       		.uleb128 0x6
+ 271 0080 53010000 		.4byte	.LASF9
+ 272 0084 03       		.sleb128 3
+ 273 0085 06       		.uleb128 0x6
+ 274 0086 8B000000 		.4byte	.LASF10
+ 275 008a 04       		.sleb128 4
+ 276 008b 00       		.byte	0x0
+ 277 008c 07       		.uleb128 0x7
+ 278 008d 01       		.byte	0x1
+ 279 008e 75000000 		.4byte	.LASF21
+ 280 0092 01       		.byte	0x1
+ 281 0093 27       		.byte	0x27
+ 282 0094 01       		.byte	0x1
+ 283 0095 01       		.byte	0x1
+ 284 0096 08       		.uleb128 0x8
+ 285 0097 8C000000 		.4byte	0x8c
+ 286 009b 00000000 		.4byte	.LFB1
+ 287 009f 18000000 		.4byte	.LFE1
+ 288 00a3 02       		.byte	0x2
+ 289 00a4 7D       		.byte	0x7d
+ 290 00a5 00       		.sleb128 0
+ 291 00a6 09       		.uleb128 0x9
+ 292 00a7 01       		.byte	0x1
+ 293 00a8 25000000 		.4byte	.LASF11
+ 294 00ac 01       		.byte	0x1
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccdTBE7q.s 			page 8
+
+
+ 295 00ad 31       		.byte	0x31
+ 296 00ae 01       		.byte	0x1
+ 297 00af 18000000 		.4byte	.LFB2
+ 298 00b3 64000000 		.4byte	.LFE2
+ 299 00b7 02       		.byte	0x2
+ 300 00b8 7D       		.byte	0x7d
+ 301 00b9 00       		.sleb128 0
+ 302 00ba 0A       		.uleb128 0xa
+ 303 00bb 01       		.byte	0x1
+ 304 00bc 1A000000 		.4byte	.LASF22
+ 305 00c0 01       		.byte	0x1
+ 306 00c1 0A       		.byte	0xa
+ 307 00c2 01       		.byte	0x1
+ 308 00c3 64000000 		.4byte	.LFB0
+ 309 00c7 98000000 		.4byte	.LFE0
+ 310 00cb 02       		.byte	0x2
+ 311 00cc 7D       		.byte	0x7d
+ 312 00cd 00       		.sleb128 0
+ 313 00ce F1000000 		.4byte	0xf1
+ 314 00d2 0B       		.uleb128 0xb
+ 315 00d3 69000000 		.4byte	.LASF23
+ 316 00d7 01       		.byte	0x1
+ 317 00d8 0C       		.byte	0xc
+ 318 00d9 41000000 		.4byte	0x41
+ 319 00dd 00000000 		.4byte	.LLST0
+ 320 00e1 0C       		.uleb128 0xc
+ 321 00e2 8C000000 		.4byte	0x8c
+ 322 00e6 74000000 		.4byte	.LBB4
+ 323 00ea 00000000 		.4byte	.Ldebug_ranges0+0x0
+ 324 00ee 01       		.byte	0x1
+ 325 00ef 15       		.byte	0x15
+ 326 00f0 00       		.byte	0x0
+ 327 00f1 09       		.uleb128 0x9
+ 328 00f2 01       		.byte	0x1
+ 329 00f3 D4000000 		.4byte	.LASF12
+ 330 00f7 01       		.byte	0x1
+ 331 00f8 4B       		.byte	0x4b
+ 332 00f9 01       		.byte	0x1
+ 333 00fa 98000000 		.4byte	.LFB3
+ 334 00fe AC000000 		.4byte	.LFE3
+ 335 0102 02       		.byte	0x2
+ 336 0103 7D       		.byte	0x7d
+ 337 0104 00       		.sleb128 0
+ 338 0105 09       		.uleb128 0x9
+ 339 0106 01       		.byte	0x1
+ 340 0107 F9000000 		.4byte	.LASF13
+ 341 010b 01       		.byte	0x1
+ 342 010c 56       		.byte	0x56
+ 343 010d 01       		.byte	0x1
+ 344 010e AC000000 		.4byte	.LFB4
+ 345 0112 C0000000 		.4byte	.LFE4
+ 346 0116 02       		.byte	0x2
+ 347 0117 7D       		.byte	0x7d
+ 348 0118 00       		.sleb128 0
+ 349 0119 0D       		.uleb128 0xd
+ 350 011a 0C000000 		.4byte	.LASF14
+ 351 011e 02       		.byte	0x2
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccdTBE7q.s 			page 9
+
+
+ 352 011f 33       		.byte	0x33
+ 353 0120 41000000 		.4byte	0x41
+ 354 0124 01       		.byte	0x1
+ 355 0125 01       		.byte	0x1
+ 356 0126 0D       		.uleb128 0xd
+ 357 0127 99000000 		.4byte	.LASF15
+ 358 012b 02       		.byte	0x2
+ 359 012c 34       		.byte	0x34
+ 360 012d 41000000 		.4byte	0x41
+ 361 0131 01       		.byte	0x1
+ 362 0132 01       		.byte	0x1
+ 363 0133 0D       		.uleb128 0xd
+ 364 0134 A3000000 		.4byte	.LASF16
+ 365 0138 02       		.byte	0x2
+ 366 0139 35       		.byte	0x35
+ 367 013a 41000000 		.4byte	0x41
+ 368 013e 01       		.byte	0x1
+ 369 013f 01       		.byte	0x1
+ 370 0140 0D       		.uleb128 0xd
+ 371 0141 0C000000 		.4byte	.LASF14
+ 372 0145 02       		.byte	0x2
+ 373 0146 33       		.byte	0x33
+ 374 0147 41000000 		.4byte	0x41
+ 375 014b 01       		.byte	0x1
+ 376 014c 01       		.byte	0x1
+ 377 014d 0D       		.uleb128 0xd
+ 378 014e 99000000 		.4byte	.LASF15
+ 379 0152 02       		.byte	0x2
+ 380 0153 34       		.byte	0x34
+ 381 0154 41000000 		.4byte	0x41
+ 382 0158 01       		.byte	0x1
+ 383 0159 01       		.byte	0x1
+ 384 015a 0D       		.uleb128 0xd
+ 385 015b A3000000 		.4byte	.LASF16
+ 386 015f 02       		.byte	0x2
+ 387 0160 35       		.byte	0x35
+ 388 0161 41000000 		.4byte	0x41
+ 389 0165 01       		.byte	0x1
+ 390 0166 01       		.byte	0x1
+ 391 0167 00       		.byte	0x0
+ 392              		.section	.debug_abbrev
+ 393 0000 01       		.uleb128 0x1
+ 394 0001 11       		.uleb128 0x11
+ 395 0002 01       		.byte	0x1
+ 396 0003 25       		.uleb128 0x25
+ 397 0004 0E       		.uleb128 0xe
+ 398 0005 13       		.uleb128 0x13
+ 399 0006 0B       		.uleb128 0xb
+ 400 0007 03       		.uleb128 0x3
+ 401 0008 0E       		.uleb128 0xe
+ 402 0009 1B       		.uleb128 0x1b
+ 403 000a 0E       		.uleb128 0xe
+ 404 000b 11       		.uleb128 0x11
+ 405 000c 01       		.uleb128 0x1
+ 406 000d 12       		.uleb128 0x12
+ 407 000e 01       		.uleb128 0x1
+ 408 000f 10       		.uleb128 0x10
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccdTBE7q.s 			page 10
+
+
+ 409 0010 06       		.uleb128 0x6
+ 410 0011 00       		.byte	0x0
+ 411 0012 00       		.byte	0x0
+ 412 0013 02       		.uleb128 0x2
+ 413 0014 24       		.uleb128 0x24
+ 414 0015 00       		.byte	0x0
+ 415 0016 0B       		.uleb128 0xb
+ 416 0017 0B       		.uleb128 0xb
+ 417 0018 3E       		.uleb128 0x3e
+ 418 0019 0B       		.uleb128 0xb
+ 419 001a 03       		.uleb128 0x3
+ 420 001b 0E       		.uleb128 0xe
+ 421 001c 00       		.byte	0x0
+ 422 001d 00       		.byte	0x0
+ 423 001e 03       		.uleb128 0x3
+ 424 001f 16       		.uleb128 0x16
+ 425 0020 00       		.byte	0x0
+ 426 0021 03       		.uleb128 0x3
+ 427 0022 08       		.uleb128 0x8
+ 428 0023 3A       		.uleb128 0x3a
+ 429 0024 0B       		.uleb128 0xb
+ 430 0025 3B       		.uleb128 0x3b
+ 431 0026 0B       		.uleb128 0xb
+ 432 0027 49       		.uleb128 0x49
+ 433 0028 13       		.uleb128 0x13
+ 434 0029 00       		.byte	0x0
+ 435 002a 00       		.byte	0x0
+ 436 002b 04       		.uleb128 0x4
+ 437 002c 24       		.uleb128 0x24
+ 438 002d 00       		.byte	0x0
+ 439 002e 0B       		.uleb128 0xb
+ 440 002f 0B       		.uleb128 0xb
+ 441 0030 3E       		.uleb128 0x3e
+ 442 0031 0B       		.uleb128 0xb
+ 443 0032 03       		.uleb128 0x3
+ 444 0033 08       		.uleb128 0x8
+ 445 0034 00       		.byte	0x0
+ 446 0035 00       		.byte	0x0
+ 447 0036 05       		.uleb128 0x5
+ 448 0037 04       		.uleb128 0x4
+ 449 0038 01       		.byte	0x1
+ 450 0039 03       		.uleb128 0x3
+ 451 003a 0E       		.uleb128 0xe
+ 452 003b 0B       		.uleb128 0xb
+ 453 003c 0B       		.uleb128 0xb
+ 454 003d 3A       		.uleb128 0x3a
+ 455 003e 0B       		.uleb128 0xb
+ 456 003f 3B       		.uleb128 0x3b
+ 457 0040 0B       		.uleb128 0xb
+ 458 0041 01       		.uleb128 0x1
+ 459 0042 13       		.uleb128 0x13
+ 460 0043 00       		.byte	0x0
+ 461 0044 00       		.byte	0x0
+ 462 0045 06       		.uleb128 0x6
+ 463 0046 28       		.uleb128 0x28
+ 464 0047 00       		.byte	0x0
+ 465 0048 03       		.uleb128 0x3
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccdTBE7q.s 			page 11
+
+
+ 466 0049 0E       		.uleb128 0xe
+ 467 004a 1C       		.uleb128 0x1c
+ 468 004b 0D       		.uleb128 0xd
+ 469 004c 00       		.byte	0x0
+ 470 004d 00       		.byte	0x0
+ 471 004e 07       		.uleb128 0x7
+ 472 004f 2E       		.uleb128 0x2e
+ 473 0050 00       		.byte	0x0
+ 474 0051 3F       		.uleb128 0x3f
+ 475 0052 0C       		.uleb128 0xc
+ 476 0053 03       		.uleb128 0x3
+ 477 0054 0E       		.uleb128 0xe
+ 478 0055 3A       		.uleb128 0x3a
+ 479 0056 0B       		.uleb128 0xb
+ 480 0057 3B       		.uleb128 0x3b
+ 481 0058 0B       		.uleb128 0xb
+ 482 0059 27       		.uleb128 0x27
+ 483 005a 0C       		.uleb128 0xc
+ 484 005b 20       		.uleb128 0x20
+ 485 005c 0B       		.uleb128 0xb
+ 486 005d 00       		.byte	0x0
+ 487 005e 00       		.byte	0x0
+ 488 005f 08       		.uleb128 0x8
+ 489 0060 2E       		.uleb128 0x2e
+ 490 0061 00       		.byte	0x0
+ 491 0062 31       		.uleb128 0x31
+ 492 0063 13       		.uleb128 0x13
+ 493 0064 11       		.uleb128 0x11
+ 494 0065 01       		.uleb128 0x1
+ 495 0066 12       		.uleb128 0x12
+ 496 0067 01       		.uleb128 0x1
+ 497 0068 40       		.uleb128 0x40
+ 498 0069 0A       		.uleb128 0xa
+ 499 006a 00       		.byte	0x0
+ 500 006b 00       		.byte	0x0
+ 501 006c 09       		.uleb128 0x9
+ 502 006d 2E       		.uleb128 0x2e
+ 503 006e 00       		.byte	0x0
+ 504 006f 3F       		.uleb128 0x3f
+ 505 0070 0C       		.uleb128 0xc
+ 506 0071 03       		.uleb128 0x3
+ 507 0072 0E       		.uleb128 0xe
+ 508 0073 3A       		.uleb128 0x3a
+ 509 0074 0B       		.uleb128 0xb
+ 510 0075 3B       		.uleb128 0x3b
+ 511 0076 0B       		.uleb128 0xb
+ 512 0077 27       		.uleb128 0x27
+ 513 0078 0C       		.uleb128 0xc
+ 514 0079 11       		.uleb128 0x11
+ 515 007a 01       		.uleb128 0x1
+ 516 007b 12       		.uleb128 0x12
+ 517 007c 01       		.uleb128 0x1
+ 518 007d 40       		.uleb128 0x40
+ 519 007e 0A       		.uleb128 0xa
+ 520 007f 00       		.byte	0x0
+ 521 0080 00       		.byte	0x0
+ 522 0081 0A       		.uleb128 0xa
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccdTBE7q.s 			page 12
+
+
+ 523 0082 2E       		.uleb128 0x2e
+ 524 0083 01       		.byte	0x1
+ 525 0084 3F       		.uleb128 0x3f
+ 526 0085 0C       		.uleb128 0xc
+ 527 0086 03       		.uleb128 0x3
+ 528 0087 0E       		.uleb128 0xe
+ 529 0088 3A       		.uleb128 0x3a
+ 530 0089 0B       		.uleb128 0xb
+ 531 008a 3B       		.uleb128 0x3b
+ 532 008b 0B       		.uleb128 0xb
+ 533 008c 27       		.uleb128 0x27
+ 534 008d 0C       		.uleb128 0xc
+ 535 008e 11       		.uleb128 0x11
+ 536 008f 01       		.uleb128 0x1
+ 537 0090 12       		.uleb128 0x12
+ 538 0091 01       		.uleb128 0x1
+ 539 0092 40       		.uleb128 0x40
+ 540 0093 0A       		.uleb128 0xa
+ 541 0094 01       		.uleb128 0x1
+ 542 0095 13       		.uleb128 0x13
+ 543 0096 00       		.byte	0x0
+ 544 0097 00       		.byte	0x0
+ 545 0098 0B       		.uleb128 0xb
+ 546 0099 34       		.uleb128 0x34
+ 547 009a 00       		.byte	0x0
+ 548 009b 03       		.uleb128 0x3
+ 549 009c 0E       		.uleb128 0xe
+ 550 009d 3A       		.uleb128 0x3a
+ 551 009e 0B       		.uleb128 0xb
+ 552 009f 3B       		.uleb128 0x3b
+ 553 00a0 0B       		.uleb128 0xb
+ 554 00a1 49       		.uleb128 0x49
+ 555 00a2 13       		.uleb128 0x13
+ 556 00a3 02       		.uleb128 0x2
+ 557 00a4 06       		.uleb128 0x6
+ 558 00a5 00       		.byte	0x0
+ 559 00a6 00       		.byte	0x0
+ 560 00a7 0C       		.uleb128 0xc
+ 561 00a8 1D       		.uleb128 0x1d
+ 562 00a9 00       		.byte	0x0
+ 563 00aa 31       		.uleb128 0x31
+ 564 00ab 13       		.uleb128 0x13
+ 565 00ac 52       		.uleb128 0x52
+ 566 00ad 01       		.uleb128 0x1
+ 567 00ae 55       		.uleb128 0x55
+ 568 00af 06       		.uleb128 0x6
+ 569 00b0 58       		.uleb128 0x58
+ 570 00b1 0B       		.uleb128 0xb
+ 571 00b2 59       		.uleb128 0x59
+ 572 00b3 0B       		.uleb128 0xb
+ 573 00b4 00       		.byte	0x0
+ 574 00b5 00       		.byte	0x0
+ 575 00b6 0D       		.uleb128 0xd
+ 576 00b7 34       		.uleb128 0x34
+ 577 00b8 00       		.byte	0x0
+ 578 00b9 03       		.uleb128 0x3
+ 579 00ba 0E       		.uleb128 0xe
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccdTBE7q.s 			page 13
+
+
+ 580 00bb 3A       		.uleb128 0x3a
+ 581 00bc 0B       		.uleb128 0xb
+ 582 00bd 3B       		.uleb128 0x3b
+ 583 00be 0B       		.uleb128 0xb
+ 584 00bf 49       		.uleb128 0x49
+ 585 00c0 13       		.uleb128 0x13
+ 586 00c1 3F       		.uleb128 0x3f
+ 587 00c2 0C       		.uleb128 0xc
+ 588 00c3 3C       		.uleb128 0x3c
+ 589 00c4 0C       		.uleb128 0xc
+ 590 00c5 00       		.byte	0x0
+ 591 00c6 00       		.byte	0x0
+ 592 00c7 00       		.byte	0x0
+ 593              		.section	.debug_pubnames,"",%progbits
+ 594 0000 76000000 		.4byte	0x76
+ 595 0004 0200     		.2byte	0x2
+ 596 0006 00000000 		.4byte	.Ldebug_info0
+ 597 000a 68010000 		.4byte	0x168
+ 598 000e 96000000 		.4byte	0x96
+ 599 0012 4953525F 		.ascii	"ISR_TickIsr\000"
+ 599      5469636B 
+ 599      49737200 
+ 600 001e A6000000 		.4byte	0xa6
+ 601 0022 4953525F 		.ascii	"ISR_PassengerIsr\000"
+ 601      50617373 
+ 601      656E6765 
+ 601      72497372 
+ 601      00
+ 602 0033 BA000000 		.4byte	0xba
+ 603 0037 4953525F 		.ascii	"ISR_IrqIsr\000"
+ 603      49727149 
+ 603      737200
+ 604 0042 F1000000 		.4byte	0xf1
+ 605 0046 4953525F 		.ascii	"ISR_PassengerIntLock\000"
+ 605      50617373 
+ 605      656E6765 
+ 605      72496E74 
+ 605      4C6F636B 
+ 606 005b 05010000 		.4byte	0x105
+ 607 005f 4953525F 		.ascii	"ISR_PassengerIntUnlock\000"
+ 607      50617373 
+ 607      656E6765 
+ 607      72496E74 
+ 607      556E6C6F 
+ 608 0076 00000000 		.4byte	0x0
+ 609              		.section	.debug_pubtypes,"",%progbits
+ 610 0000 25000000 		.4byte	0x25
+ 611 0004 0200     		.2byte	0x2
+ 612 0006 00000000 		.4byte	.Ldebug_info0
+ 613 000a 68010000 		.4byte	0x168
+ 614 000e 41000000 		.4byte	0x41
+ 615 0012 55333200 		.ascii	"U32\000"
+ 616 0016 61000000 		.4byte	0x61
+ 617 001a 63726F73 		.ascii	"crossstate\000"
+ 617      73737461 
+ 617      746500
+ 618 0025 00000000 		.4byte	0x0
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccdTBE7q.s 			page 14
+
+
+ 619              		.section	.debug_aranges,"",%progbits
+ 620 0000 1C000000 		.4byte	0x1c
+ 621 0004 0200     		.2byte	0x2
+ 622 0006 00000000 		.4byte	.Ldebug_info0
+ 623 000a 04       		.byte	0x4
+ 624 000b 00       		.byte	0x0
+ 625 000c 0000     		.2byte	0x0
+ 626 000e 0000     		.2byte	0x0
+ 627 0010 00000000 		.4byte	.Ltext0
+ 628 0014 C0000000 		.4byte	.Letext0-.Ltext0
+ 629 0018 00000000 		.4byte	0x0
+ 630 001c 00000000 		.4byte	0x0
+ 631              		.section	.debug_ranges,"",%progbits
+ 632              	.Ldebug_ranges0:
+ 633 0000 74000000 		.4byte	.LBB4-.Ltext0
+ 634 0004 7C000000 		.4byte	.LBE4-.Ltext0
+ 635 0008 80000000 		.4byte	.LBB7-.Ltext0
+ 636 000c 88000000 		.4byte	.LBE7-.Ltext0
+ 637 0010 00000000 		.4byte	0x0
+ 638 0014 00000000 		.4byte	0x0
+ 639              		.section	.debug_str,"MS",%progbits,1
+ 640              	.LASF17:
+ 641 0000 474E5520 		.ascii	"GNU C 4.5.2\000"
+ 641      4320342E 
+ 641      352E3200 
+ 642              	.LASF14:
+ 643 000c 67756953 		.ascii	"guiSystemTick\000"
+ 643      79737465 
+ 643      6D546963 
+ 643      6B00
+ 644              	.LASF22:
+ 645 001a 4953525F 		.ascii	"ISR_IrqIsr\000"
+ 645      49727149 
+ 645      737200
+ 646              	.LASF11:
+ 647 0025 4953525F 		.ascii	"ISR_PassengerIsr\000"
+ 647      50617373 
+ 647      656E6765 
+ 647      72497372 
+ 647      00
+ 648              	.LASF2:
+ 649 0036 756E7369 		.ascii	"unsigned char\000"
+ 649      676E6564 
+ 649      20636861 
+ 649      7200
+ 650              	.LASF0:
+ 651 0044 6C6F6E67 		.ascii	"long unsigned int\000"
+ 651      20756E73 
+ 651      69676E65 
+ 651      6420696E 
+ 651      7400
+ 652              	.LASF3:
+ 653 0056 73686F72 		.ascii	"short unsigned int\000"
+ 653      7420756E 
+ 653      7369676E 
+ 653      65642069 
+ 653      6E7400
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccdTBE7q.s 			page 15
+
+
+ 654              	.LASF23:
+ 655 0069 75694972 		.ascii	"uiIrqStatus\000"
+ 655      71537461 
+ 655      74757300 
+ 656              	.LASF21:
+ 657 0075 4953525F 		.ascii	"ISR_TickIsr\000"
+ 657      5469636B 
+ 657      49737200 
+ 658              	.LASF5:
+ 659 0081 73686F72 		.ascii	"short int\000"
+ 659      7420696E 
+ 659      7400
+ 660              	.LASF10:
+ 661 008b 43524F53 		.ascii	"CROSSSTATENUM\000"
+ 661      53535441 
+ 661      54454E55 
+ 661      4D00
+ 662              	.LASF15:
+ 663 0099 67756943 		.ascii	"guiCurSta\000"
+ 663      75725374 
+ 663      6100
+ 664              	.LASF16:
+ 665 00a3 67756953 		.ascii	"guiStaChange\000"
+ 665      74614368 
+ 665      616E6765 
+ 665      00
+ 666              	.LASF18:
+ 667 00b0 2E2E2F73 		.ascii	"../srccode/interrupt.c\000"
+ 667      7263636F 
+ 667      64652F69 
+ 667      6E746572 
+ 667      72757074 
+ 668              	.LASF1:
+ 669 00c7 756E7369 		.ascii	"unsigned int\000"
+ 669      676E6564 
+ 669      20696E74 
+ 669      00
+ 670              	.LASF12:
+ 671 00d4 4953525F 		.ascii	"ISR_PassengerIntLock\000"
+ 671      50617373 
+ 671      656E6765 
+ 671      72496E74 
+ 671      4C6F636B 
+ 672              	.LASF4:
+ 673 00e9 63686172 		.ascii	"char\000"
+ 673      00
+ 674              	.LASF20:
+ 675 00ee 63726F73 		.ascii	"crossstate\000"
+ 675      73737461 
+ 675      746500
+ 676              	.LASF13:
+ 677 00f9 4953525F 		.ascii	"ISR_PassengerIntUnlock\000"
+ 677      50617373 
+ 677      656E6765 
+ 677      72496E74 
+ 677      556E6C6F 
+ 678              	.LASF19:
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccdTBE7q.s 			page 16
+
+
+ 679 0110 463A5C77 		.ascii	"F:\\workdir\\RTOS_Wanlix\\project\000"
+ 679      6F726B64 
+ 679      69725C52 
+ 679      544F535F 
+ 679      57616E6C 
+ 680              	.LASF6:
+ 681 012f 43524F53 		.ascii	"CROSSSTATE1\000"
+ 681      53535441 
+ 681      54453100 
+ 682              	.LASF7:
+ 683 013b 43524F53 		.ascii	"CROSSSTATE2\000"
+ 683      53535441 
+ 683      54453200 
+ 684              	.LASF8:
+ 685 0147 43524F53 		.ascii	"CROSSSTATE3\000"
+ 685      53535441 
+ 685      54453300 
+ 686              	.LASF9:
+ 687 0153 43524F53 		.ascii	"CROSSSTATE4\000"
+ 687      53535441 
+ 687      54453400 
+ 688              		.ident	"GCC: (Sourcery G++ Lite 2011.03-41) 4.5.2"
+ 689              		.section	.note.GNU-stack,"",%progbits
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccdTBE7q.s 			page 17
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 interrupt.c
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccdTBE7q.s:21     .text:00000000 $a
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccdTBE7q.s:24     .text:00000000 ISR_TickIsr
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccdTBE7q.s:44     .text:00000014 $d
+                       .ARM.exidx:00000000 $d
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccdTBE7q.s:49     .text:00000018 $a
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccdTBE7q.s:52     .text:00000018 ISR_PassengerIsr
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccdTBE7q.s:88     .text:0000005c $d
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccdTBE7q.s:94     .text:00000064 $a
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccdTBE7q.s:97     .text:00000064 ISR_IrqIsr
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccdTBE7q.s:142    .text:00000094 $d
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccdTBE7q.s:147    .text:00000098 $a
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccdTBE7q.s:150    .text:00000098 ISR_PassengerIntLock
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccdTBE7q.s:173    .text:000000ac ISR_PassengerIntUnlock
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+guiSystemTick
+__aeabi_unwind_cpp_pr0
+guiCurSta
+guiStaChange

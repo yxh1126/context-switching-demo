@@ -1,0 +1,1 @@
+-T ../others/ADuC702X.ld -mcpu=arm7tdmi -Wl,-Map="../outfile/wanlix.map" -o ../outfile/wanlix.elf "../outfile/wlx_core_a.o" "../outfile/wlx_core_c.o" "../outfile/wlx_userboot.o" "../outfile/device.o" "../outfile/test.o" "../outfile/unoptimize.o" "../outfile/startup.o" -nostartfiles -lm

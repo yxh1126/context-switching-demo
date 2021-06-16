@@ -1,0 +1,96 @@
+ARM GAS  ../wanlix/wlx_core_a.asm 			page 1
+
+
+   1              	
+   2              	    .include "wlx_core_a.h"
+   1              	
+   2              	#ifndef  WLX_CORE_A_H
+   3              	#define  WLX_CORE_A_H
+   4              	
+   5              	
+   6              	/*********************************** 变量声明 *************************************/
+   7              	.extern guiNextTaskSp
+   8              	.extern gpuiCurTaskSpAddr
+   9              	
+  10              	
+  11              	/*********************************** 函数声明 *************************************/
+  12              	.global WLX_ContextSwitch
+  13              	.global WLX_SwitchToTask
+  14              	
+  15              	
+  16              	#endif
+  17              	
+   3              	
+   4              	
+   5              	    .text
+   6              	    .arm
+   7              	
+   8              	    @函数功能: 实现任务切换功能, 将寄存器备份到当前任务堆栈中, 从将要运行任务堆栈中
+   9              	    @          取出寄存器保存值并跳转到将要运行任务执行.
+  10              	    @入口参数: none.
+  11              	    @返 回 值: none.
+  12              	    .func WLX_ContextSwitch
+  13              	WLX_ContextSwitch:
+  14              	
+  15              	    @保存当前任务的堆栈信息
+  16 0000 FF7F0DE9 	    STMDB  R13, {R0-R14}
+  17 0004 3CD04DE2 	    SUB    R13, R13, #0x3C
+  18 0008 00000FE1 	    MRS    R0, CPSR
+  19 000c 04002DE5 	    STMDB  R13!, {R0}
+  20              	
+  21              	    @保存当前任务的指针值
+  22 0010 34009FE5 	    LDR    R0, =gpuiCurTaskSpAddr
+  23 0014 001090E5 	    LDR    R1, [R0]
+  24 0018 00D081E5 	    STR    R13, [R1]
+  25              	
+  26              	    @获取将要运行任务的指针
+  27 001c 2C009FE5 	    LDR    R0, =guiNextTaskSp
+  28 0020 00D090E5 	    LDR    R13, [R0]
+  29              	
+  30              	    @获取将要运行任务的堆栈信息并运行新任务
+  31 0024 04009DE4 	    LDMIA  R13!, {R0}
+  32 0028 00F029E1 	    MSR    CPSR, R0
+  33 002c FF7F9DE8 	    LDMIA  R13, {R0-R14}
+  34 0030 1EFF2FE1 	    BX     R14
+  35              	
+  36              	    .endfunc
+  37              	
+  38              	
+  39              	    @函数功能: 实现从无操作系统状态切换到操作系统状态, 从Root任务堆栈中取出寄存器保
+  40              	    @          存值并跳转到Root任务执行.
+ARM GAS  ../wanlix/wlx_core_a.asm 			page 2
+
+
+  41              	    @入口参数: none.
+  42              	    @返 回 值: none.
+  43              	    .func WLX_SwitchToTask
+  44              	WLX_SwitchToTask:
+  45              	
+  46              	    @获取将要运行任务的指针
+  47 0034 14009FE5 	    LDR    R0, =guiNextTaskSp
+  48 0038 00D090E5 	    LDR    R13, [R0]
+  49              	
+  50              	    @获取将要运行任务的堆栈信息并运行新任务
+  51 003c 04009DE4 	    LDMIA  R13!, {R0}
+  52 0040 00F029E1 	    MSR    CPSR, R0
+  53 0044 FF7F9DE8 	    LDMIA  R13, {R0-R14}
+  54 0048 1EFF2FE1 	    BX     R14
+  55              	
+  56              	    .endfunc
+  57              	
+  58              	
+  59 004c 00000000 	    .end
+  59      00000000 
+ARM GAS  ../wanlix/wlx_core_a.asm 			page 3
+
+
+DEFINED SYMBOLS
+../wanlix/wlx_core_a.asm:13     .text:00000000 WLX_ContextSwitch
+../wanlix/wlx_core_a.asm:44     .text:00000034 WLX_SwitchToTask
+../wanlix/wlx_core_a.asm:16     .text:00000000 $a
+../wanlix/wlx_core_a.asm:59     .text:0000004c $d
+                   .debug_aranges:0000000c $d
+
+UNDEFINED SYMBOLS
+gpuiCurTaskSpAddr
+guiNextTaskSp

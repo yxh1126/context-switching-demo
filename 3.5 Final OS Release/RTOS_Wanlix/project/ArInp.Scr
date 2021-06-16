@@ -1,0 +1,6 @@
+CREATE ../outfile/libwanlix.a
+ADDMOD ../outfile/wlx_core_a.o
+ADDMOD ../outfile/wlx_core_c.o
+ADDMOD ../outfile/wlx_userboot.o
+SAVE
+END

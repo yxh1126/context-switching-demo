@@ -1,0 +1,942 @@
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cczBgWvl.s 			page 1
+
+
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 2
+   9              		.eabi_attribute 30, 2
+  10              		.eabi_attribute 18, 4
+  11              		.file	"test.c"
+  12              		.section	.debug_abbrev,"",%progbits
+  13              	.Ldebug_abbrev0:
+  14              		.section	.debug_info,"",%progbits
+  15              	.Ldebug_info0:
+  16              		.section	.debug_line,"",%progbits
+  17              	.Ldebug_line0:
+  18 0000 92000000 		.text
+  18      02004A00 
+  18      00000201 
+  18      FB0E0D00 
+  18      01010101 
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              		.align	2
+  22              		.global	TEST_TestTask1
+  23              		.type	TEST_TestTask1, %function
+  24              	TEST_TestTask1:
+  25              		.fnstart
+  26              	.LFB0:
+  27              		.file 1 "../srccode/test.c"
+   1:../srccode/test.c **** 
+   2:../srccode/test.c **** #include "test.h"
+   3:../srccode/test.c **** 
+   4:../srccode/test.c **** U8 gaucTask1Stack[TASKSTACK];       /* 任务1的堆栈 */
+   5:../srccode/test.c **** U8 gaucTask2Stack[TASKSTACK];       /* 任务2的堆栈 */
+   6:../srccode/test.c **** U8 gaucTask3Stack[TASKSTACK];       /* 任务3的堆栈 */
+   7:../srccode/test.c **** 
+   8:../srccode/test.c **** W_TCB* gpstrTask1Tcb;               /* 任务1的TCB指针 */
+   9:../srccode/test.c **** W_TCB* gpstrTask2Tcb;               /* 任务2的TCB指针 */
+  10:../srccode/test.c **** W_TCB* gpstrTask3Tcb;               /* 任务3的TCB指针 */
+  11:../srccode/test.c **** 
+  12:../srccode/test.c **** 
+  13:../srccode/test.c **** 
+  14:../srccode/test.c **** /***********************************************************************************
+  15:../srccode/test.c **** 函数功能: 测试任务切换函数1, 向串口打印字符串.
+  16:../srccode/test.c **** 入口参数: none.
+  17:../srccode/test.c **** 返 回 值: none.
+  18:../srccode/test.c **** ***********************************************************************************/
+  19:../srccode/test.c **** void TEST_TestTask1(void)
+  20:../srccode/test.c **** {
+  28              		.loc 1 20 0
+  29              		.cfi_startproc
+  30              		@ Function supports interworking.
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 1, uses_anonymous_args = 0
+  33              		.movsp ip
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cczBgWvl.s 			page 2
+
+
+  34 0000 0DC0A0E1 		mov	ip, sp
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_register 12
+  37 0004 18D82DE9 		stmfd	sp!, {r3, r4, fp, ip, lr, pc}
+  38              		.pad #4
+  39              		.save {r3, r4, fp, ip, lr}
+  40 0008 1C409FE5 		ldr	r4, .L4
+  41              		.cfi_offset 14, -8
+  42              		.cfi_offset 13, -12
+  43              		.cfi_offset 11, -16
+  44              		.cfi_offset 4, -20
+  45              		.cfi_offset 3, -24
+  46              		.setfp fp, ip, #-4
+  47 000c 04B04CE2 		sub	fp, ip, #4
+  48              	.LCFI1:
+  49              		.cfi_def_cfa 11, 4
+  50              	.L2:
+  21:../srccode/test.c ****     while(1)
+  22:../srccode/test.c ****     {
+  23:../srccode/test.c ****         DEV_PutString((U8*)"\r\nTask1 is running!");
+  51              		.loc 1 23 0 discriminator 1
+  52 0010 18009FE5 		ldr	r0, .L4+4
+  53 0014 FEFFFFEB 		bl	DEV_PutString
+  24:../srccode/test.c **** 
+  25:../srccode/test.c ****         DEV_DelayMs(1000);              /* 延迟1s */
+  54              		.loc 1 25 0 discriminator 1
+  55 0018 FA0FA0E3 		mov	r0, #1000
+  56 001c FEFFFFEB 		bl	DEV_DelayMs
+  26:../srccode/test.c **** 
+  27:../srccode/test.c ****         WLX_TaskSwitch(gpstrTask3Tcb);  /* 任务切换 */
+  57              		.loc 1 27 0 discriminator 1
+  58 0020 000094E5 		ldr	r0, [r4, #0]
+  59 0024 FEFFFFEB 		bl	WLX_TaskSwitch
+  60 0028 F8FFFFEA 		b	.L2
+  61              	.L5:
+  62              		.align	2
+  63              	.L4:
+  64 002c 00000000 		.word	gpstrTask3Tcb
+  65 0030 00000000 		.word	.LC0
+  66              		.cfi_endproc
+  67              	.LFE0:
+  68              		.fnend
+  69              		.size	TEST_TestTask1, .-TEST_TestTask1
+  70              		.align	2
+  71              		.global	TEST_TestTask2
+  72              		.type	TEST_TestTask2, %function
+  73              	TEST_TestTask2:
+  74              		.fnstart
+  75              	.LFB1:
+  28:../srccode/test.c ****     }
+  29:../srccode/test.c **** }
+  30:../srccode/test.c **** 
+  31:../srccode/test.c **** /***********************************************************************************
+  32:../srccode/test.c **** 函数功能: 测试任务切换函数2, 向串口打印字符串.
+  33:../srccode/test.c **** 入口参数: none.
+  34:../srccode/test.c **** 返 回 值: none.
+  35:../srccode/test.c **** ***********************************************************************************/
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cczBgWvl.s 			page 3
+
+
+  36:../srccode/test.c **** void TEST_TestTask2(void)
+  37:../srccode/test.c **** {
+  76              		.loc 1 37 0
+  77              		.cfi_startproc
+  78              		@ Function supports interworking.
+  79              		@ args = 0, pretend = 0, frame = 0
+  80              		@ frame_needed = 1, uses_anonymous_args = 0
+  81              		.movsp ip
+  82 0034 0DC0A0E1 		mov	ip, sp
+  83              	.LCFI2:
+  84              		.cfi_def_cfa_register 12
+  85 0038 18D82DE9 		stmfd	sp!, {r3, r4, fp, ip, lr, pc}
+  86              		.pad #4
+  87              		.save {r3, r4, fp, ip, lr}
+  88 003c 1C409FE5 		ldr	r4, .L8
+  89              		.cfi_offset 14, -8
+  90              		.cfi_offset 13, -12
+  91              		.cfi_offset 11, -16
+  92              		.cfi_offset 4, -20
+  93              		.cfi_offset 3, -24
+  94              		.setfp fp, ip, #-4
+  95 0040 04B04CE2 		sub	fp, ip, #4
+  96              	.LCFI3:
+  97              		.cfi_def_cfa 11, 4
+  98              	.L7:
+  38:../srccode/test.c ****     while(1)
+  39:../srccode/test.c ****     {
+  40:../srccode/test.c ****         DEV_PutString((U8*)"\r\nTask2 is running!");
+  99              		.loc 1 40 0 discriminator 1
+ 100 0044 18009FE5 		ldr	r0, .L8+4
+ 101 0048 FEFFFFEB 		bl	DEV_PutString
+  41:../srccode/test.c **** 
+  42:../srccode/test.c ****         DEV_DelayMs(2000);              /* 延迟2s */
+ 102              		.loc 1 42 0 discriminator 1
+ 103 004c 7D0EA0E3 		mov	r0, #2000
+ 104 0050 FEFFFFEB 		bl	DEV_DelayMs
+  43:../srccode/test.c **** 
+  44:../srccode/test.c ****         WLX_TaskSwitch(gpstrTask1Tcb);  /* 任务切换 */
+ 105              		.loc 1 44 0 discriminator 1
+ 106 0054 000094E5 		ldr	r0, [r4, #0]
+ 107 0058 FEFFFFEB 		bl	WLX_TaskSwitch
+ 108 005c F8FFFFEA 		b	.L7
+ 109              	.L9:
+ 110              		.align	2
+ 111              	.L8:
+ 112 0060 00000000 		.word	gpstrTask1Tcb
+ 113 0064 14000000 		.word	.LC1
+ 114              		.cfi_endproc
+ 115              	.LFE1:
+ 116              		.fnend
+ 117              		.size	TEST_TestTask2, .-TEST_TestTask2
+ 118              		.align	2
+ 119              		.global	TEST_TestTask3
+ 120              		.type	TEST_TestTask3, %function
+ 121              	TEST_TestTask3:
+ 122              		.fnstart
+ 123              	.LFB2:
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cczBgWvl.s 			page 4
+
+
+  45:../srccode/test.c ****     }
+  46:../srccode/test.c **** }
+  47:../srccode/test.c **** 
+  48:../srccode/test.c **** /***********************************************************************************
+  49:../srccode/test.c **** 函数功能: 测试任务切换函数3, 向串口打印字符串.
+  50:../srccode/test.c **** 入口参数: none.
+  51:../srccode/test.c **** 返 回 值: none.
+  52:../srccode/test.c **** ***********************************************************************************/
+  53:../srccode/test.c **** void TEST_TestTask3(void)
+  54:../srccode/test.c **** {
+ 124              		.loc 1 54 0
+ 125              		.cfi_startproc
+ 126              		@ Function supports interworking.
+ 127              		@ args = 0, pretend = 0, frame = 0
+ 128              		@ frame_needed = 1, uses_anonymous_args = 0
+ 129              		.movsp ip
+ 130 0068 0DC0A0E1 		mov	ip, sp
+ 131              	.LCFI4:
+ 132              		.cfi_def_cfa_register 12
+ 133 006c 18D82DE9 		stmfd	sp!, {r3, r4, fp, ip, lr, pc}
+ 134              		.pad #4
+ 135              		.save {r3, r4, fp, ip, lr}
+ 136 0070 1C409FE5 		ldr	r4, .L12
+ 137              		.cfi_offset 14, -8
+ 138              		.cfi_offset 13, -12
+ 139              		.cfi_offset 11, -16
+ 140              		.cfi_offset 4, -20
+ 141              		.cfi_offset 3, -24
+ 142              		.setfp fp, ip, #-4
+ 143 0074 04B04CE2 		sub	fp, ip, #4
+ 144              	.LCFI5:
+ 145              		.cfi_def_cfa 11, 4
+ 146              	.L11:
+  55:../srccode/test.c ****     while(1)
+  56:../srccode/test.c ****     {
+  57:../srccode/test.c ****         DEV_PutString((U8*)"\r\nTask3 is running!");
+ 147              		.loc 1 57 0 discriminator 1
+ 148 0078 18009FE5 		ldr	r0, .L12+4
+ 149 007c FEFFFFEB 		bl	DEV_PutString
+  58:../srccode/test.c **** 
+  59:../srccode/test.c ****         DEV_DelayMs(3000);              /* 延迟3s */
+ 150              		.loc 1 59 0 discriminator 1
+ 151 0080 14009FE5 		ldr	r0, .L12+8
+ 152 0084 FEFFFFEB 		bl	DEV_DelayMs
+  60:../srccode/test.c **** 
+  61:../srccode/test.c ****         WLX_TaskSwitch(gpstrTask2Tcb);  /* 任务切换 */
+ 153              		.loc 1 61 0 discriminator 1
+ 154 0088 000094E5 		ldr	r0, [r4, #0]
+ 155 008c FEFFFFEB 		bl	WLX_TaskSwitch
+ 156 0090 F8FFFFEA 		b	.L11
+ 157              	.L13:
+ 158              		.align	2
+ 159              	.L12:
+ 160 0094 00000000 		.word	gpstrTask2Tcb
+ 161 0098 28000000 		.word	.LC2
+ 162 009c B80B0000 		.word	3000
+ 163              		.cfi_endproc
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cczBgWvl.s 			page 5
+
+
+ 164              	.LFE2:
+ 165              		.fnend
+ 166              		.size	TEST_TestTask3, .-TEST_TestTask3
+ 167              		.comm	gaucTask1Stack,400,4
+ 168              		.comm	gaucTask2Stack,400,4
+ 169              		.comm	gaucTask3Stack,400,4
+ 170              		.comm	gpstrTask1Tcb,4,4
+ 171              		.comm	gpstrTask2Tcb,4,4
+ 172              		.comm	gpstrTask3Tcb,4,4
+ 173              		.section	.rodata.str1.4,"aMS",%progbits,1
+ 174              		.align	2
+ 175              	.LC0:
+ 176 0000 0D0A5461 		.ascii	"\015\012Task1 is running!\000"
+ 176      736B3120 
+ 176      69732072 
+ 176      756E6E69 
+ 176      6E672100 
+ 177              	.LC1:
+ 178 0014 0D0A5461 		.ascii	"\015\012Task2 is running!\000"
+ 178      736B3220 
+ 178      69732072 
+ 178      756E6E69 
+ 178      6E672100 
+ 179              	.LC2:
+ 180 0028 0D0A5461 		.ascii	"\015\012Task3 is running!\000"
+ 180      736B3320 
+ 180      69732072 
+ 180      756E6E69 
+ 180      6E672100 
+ 181              		.text
+ 182              	.Letext0:
+ 183              		.section	.debug_loc,"",%progbits
+ 184              	.Ldebug_loc0:
+ 185              	.LLST0:
+ 186 0000 00000000 		.4byte	.LFB0-.Ltext0
+ 187 0004 04000000 		.4byte	.LCFI0-.Ltext0
+ 188 0008 0200     		.2byte	0x2
+ 189 000a 7D       		.byte	0x7d
+ 190 000b 00       		.sleb128 0
+ 191 000c 04000000 		.4byte	.LCFI0-.Ltext0
+ 192 0010 10000000 		.4byte	.LCFI1-.Ltext0
+ 193 0014 0200     		.2byte	0x2
+ 194 0016 7C       		.byte	0x7c
+ 195 0017 00       		.sleb128 0
+ 196 0018 10000000 		.4byte	.LCFI1-.Ltext0
+ 197 001c 34000000 		.4byte	.LFE0-.Ltext0
+ 198 0020 0200     		.2byte	0x2
+ 199 0022 7B       		.byte	0x7b
+ 200 0023 04       		.sleb128 4
+ 201 0024 00000000 		.4byte	0x0
+ 202 0028 00000000 		.4byte	0x0
+ 203              	.LLST1:
+ 204 002c 34000000 		.4byte	.LFB1-.Ltext0
+ 205 0030 38000000 		.4byte	.LCFI2-.Ltext0
+ 206 0034 0200     		.2byte	0x2
+ 207 0036 7D       		.byte	0x7d
+ 208 0037 00       		.sleb128 0
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cczBgWvl.s 			page 6
+
+
+ 209 0038 38000000 		.4byte	.LCFI2-.Ltext0
+ 210 003c 44000000 		.4byte	.LCFI3-.Ltext0
+ 211 0040 0200     		.2byte	0x2
+ 212 0042 7C       		.byte	0x7c
+ 213 0043 00       		.sleb128 0
+ 214 0044 44000000 		.4byte	.LCFI3-.Ltext0
+ 215 0048 68000000 		.4byte	.LFE1-.Ltext0
+ 216 004c 0200     		.2byte	0x2
+ 217 004e 7B       		.byte	0x7b
+ 218 004f 04       		.sleb128 4
+ 219 0050 00000000 		.4byte	0x0
+ 220 0054 00000000 		.4byte	0x0
+ 221              	.LLST2:
+ 222 0058 68000000 		.4byte	.LFB2-.Ltext0
+ 223 005c 6C000000 		.4byte	.LCFI4-.Ltext0
+ 224 0060 0200     		.2byte	0x2
+ 225 0062 7D       		.byte	0x7d
+ 226 0063 00       		.sleb128 0
+ 227 0064 6C000000 		.4byte	.LCFI4-.Ltext0
+ 228 0068 78000000 		.4byte	.LCFI5-.Ltext0
+ 229 006c 0200     		.2byte	0x2
+ 230 006e 7C       		.byte	0x7c
+ 231 006f 00       		.sleb128 0
+ 232 0070 78000000 		.4byte	.LCFI5-.Ltext0
+ 233 0074 A0000000 		.4byte	.LFE2-.Ltext0
+ 234 0078 0200     		.2byte	0x2
+ 235 007a 7B       		.byte	0x7b
+ 236 007b 04       		.sleb128 4
+ 237 007c 00000000 		.4byte	0x0
+ 238 0080 00000000 		.4byte	0x0
+ 239              		.file 2 "../wanlix/wanlix.h"
+ 240              		.file 3 "../srccode/global.h"
+ 241              		.section	.debug_info
+ 242 0000 77010000 		.4byte	0x177
+ 243 0004 0200     		.2byte	0x2
+ 244 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 245 000a 04       		.byte	0x4
+ 246 000b 01       		.uleb128 0x1
+ 247 000c 00000000 		.4byte	.LASF16
+ 248 0010 01       		.byte	0x1
+ 249 0011 46000000 		.4byte	.LASF17
+ 250 0015 19000000 		.4byte	.LASF18
+ 251 0019 00000000 		.4byte	.Ltext0
+ 252 001d A0000000 		.4byte	.Letext0
+ 253 0021 00000000 		.4byte	.Ldebug_line0
+ 254 0025 02       		.uleb128 0x2
+ 255 0026 04       		.byte	0x4
+ 256 0027 07       		.byte	0x7
+ 257 0028 58000000 		.4byte	.LASF0
+ 258 002c 02       		.uleb128 0x2
+ 259 002d 04       		.byte	0x4
+ 260 002e 07       		.byte	0x7
+ 261 002f 0C000000 		.4byte	.LASF1
+ 262 0033 03       		.uleb128 0x3
+ 263 0034 553800   		.ascii	"U8\000"
+ 264 0037 02       		.byte	0x2
+ 265 0038 07       		.byte	0x7
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cczBgWvl.s 			page 7
+
+
+ 266 0039 3D000000 		.4byte	0x3d
+ 267 003d 02       		.uleb128 0x2
+ 268 003e 01       		.byte	0x1
+ 269 003f 08       		.byte	0x8
+ 270 0040 8B000000 		.4byte	.LASF2
+ 271 0044 02       		.uleb128 0x2
+ 272 0045 02       		.byte	0x2
+ 273 0046 07       		.byte	0x7
+ 274 0047 AC000000 		.4byte	.LASF3
+ 275 004b 03       		.uleb128 0x3
+ 276 004c 55333200 		.ascii	"U32\000"
+ 277 0050 02       		.byte	0x2
+ 278 0051 09       		.byte	0x9
+ 279 0052 2C000000 		.4byte	0x2c
+ 280 0056 02       		.uleb128 0x2
+ 281 0057 01       		.byte	0x1
+ 282 0058 08       		.byte	0x8
+ 283 0059 99000000 		.4byte	.LASF4
+ 284 005d 02       		.uleb128 0x2
+ 285 005e 02       		.byte	0x2
+ 286 005f 05       		.byte	0x5
+ 287 0060 09010000 		.4byte	.LASF5
+ 288 0064 04       		.uleb128 0x4
+ 289 0065 04       		.byte	0x4
+ 290 0066 05       		.byte	0x5
+ 291 0067 696E7400 		.ascii	"int\000"
+ 292 006b 05       		.uleb128 0x5
+ 293 006c 13010000 		.4byte	.LASF19
+ 294 0070 04       		.byte	0x4
+ 295 0071 02       		.byte	0x2
+ 296 0072 22       		.byte	0x22
+ 297 0073 86000000 		.4byte	0x86
+ 298 0077 06       		.uleb128 0x6
+ 299 0078 6A000000 		.4byte	.LASF20
+ 300 007c 02       		.byte	0x2
+ 301 007d 24       		.byte	0x24
+ 302 007e 4B000000 		.4byte	0x4b
+ 303 0082 02       		.byte	0x2
+ 304 0083 23       		.byte	0x23
+ 305 0084 00       		.uleb128 0x0
+ 306 0085 00       		.byte	0x0
+ 307 0086 07       		.uleb128 0x7
+ 308 0087 85000000 		.4byte	.LASF6
+ 309 008b 02       		.byte	0x2
+ 310 008c 25       		.byte	0x25
+ 311 008d 6B000000 		.4byte	0x6b
+ 312 0091 08       		.uleb128 0x8
+ 313 0092 01       		.byte	0x1
+ 314 0093 DC000000 		.4byte	.LASF7
+ 315 0097 01       		.byte	0x1
+ 316 0098 13       		.byte	0x13
+ 317 0099 01       		.byte	0x1
+ 318 009a 00000000 		.4byte	.LFB0
+ 319 009e 34000000 		.4byte	.LFE0
+ 320 00a2 00000000 		.4byte	.LLST0
+ 321 00a6 08       		.uleb128 0x8
+ 322 00a7 01       		.byte	0x1
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cczBgWvl.s 			page 8
+
+
+ 323 00a8 EB000000 		.4byte	.LASF8
+ 324 00ac 01       		.byte	0x1
+ 325 00ad 24       		.byte	0x24
+ 326 00ae 01       		.byte	0x1
+ 327 00af 34000000 		.4byte	.LFB1
+ 328 00b3 68000000 		.4byte	.LFE1
+ 329 00b7 2C000000 		.4byte	.LLST1
+ 330 00bb 08       		.uleb128 0x8
+ 331 00bc 01       		.byte	0x1
+ 332 00bd FA000000 		.4byte	.LASF9
+ 333 00c1 01       		.byte	0x1
+ 334 00c2 35       		.byte	0x35
+ 335 00c3 01       		.byte	0x1
+ 336 00c4 68000000 		.4byte	.LFB2
+ 337 00c8 A0000000 		.4byte	.LFE2
+ 338 00cc 58000000 		.4byte	.LLST2
+ 339 00d0 09       		.uleb128 0x9
+ 340 00d1 9E000000 		.4byte	.LASF10
+ 341 00d5 03       		.byte	0x3
+ 342 00d6 12       		.byte	0x12
+ 343 00d7 DD000000 		.4byte	0xdd
+ 344 00db 01       		.byte	0x1
+ 345 00dc 01       		.byte	0x1
+ 346 00dd 0A       		.uleb128 0xa
+ 347 00de 04       		.byte	0x4
+ 348 00df 86000000 		.4byte	0x86
+ 349 00e3 09       		.uleb128 0x9
+ 350 00e4 38000000 		.4byte	.LASF11
+ 351 00e8 03       		.byte	0x3
+ 352 00e9 13       		.byte	0x13
+ 353 00ea DD000000 		.4byte	0xdd
+ 354 00ee 01       		.byte	0x1
+ 355 00ef 01       		.byte	0x1
+ 356 00f0 09       		.uleb128 0x9
+ 357 00f1 BF000000 		.4byte	.LASF12
+ 358 00f5 03       		.byte	0x3
+ 359 00f6 14       		.byte	0x14
+ 360 00f7 DD000000 		.4byte	0xdd
+ 361 00fb 01       		.byte	0x1
+ 362 00fc 01       		.byte	0x1
+ 363 00fd 0B       		.uleb128 0xb
+ 364 00fe 33000000 		.4byte	0x33
+ 365 0102 0E010000 		.4byte	0x10e
+ 366 0106 0C       		.uleb128 0xc
+ 367 0107 2C000000 		.4byte	0x2c
+ 368 010b 8F01     		.2byte	0x18f
+ 369 010d 00       		.byte	0x0
+ 370 010e 0D       		.uleb128 0xd
+ 371 010f 76000000 		.4byte	.LASF13
+ 372 0113 01       		.byte	0x1
+ 373 0114 04       		.byte	0x4
+ 374 0115 FD000000 		.4byte	0xfd
+ 375 0119 01       		.byte	0x1
+ 376 011a 05       		.byte	0x5
+ 377 011b 03       		.byte	0x3
+ 378 011c 00000000 		.4byte	gaucTask1Stack
+ 379 0120 0D       		.uleb128 0xd
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cczBgWvl.s 			page 9
+
+
+ 380 0121 CD000000 		.4byte	.LASF14
+ 381 0125 01       		.byte	0x1
+ 382 0126 05       		.byte	0x5
+ 383 0127 FD000000 		.4byte	0xfd
+ 384 012b 01       		.byte	0x1
+ 385 012c 05       		.byte	0x5
+ 386 012d 03       		.byte	0x3
+ 387 012e 00000000 		.4byte	gaucTask2Stack
+ 388 0132 0D       		.uleb128 0xd
+ 389 0133 19010000 		.4byte	.LASF15
+ 390 0137 01       		.byte	0x1
+ 391 0138 06       		.byte	0x6
+ 392 0139 FD000000 		.4byte	0xfd
+ 393 013d 01       		.byte	0x1
+ 394 013e 05       		.byte	0x5
+ 395 013f 03       		.byte	0x3
+ 396 0140 00000000 		.4byte	gaucTask3Stack
+ 397 0144 0D       		.uleb128 0xd
+ 398 0145 9E000000 		.4byte	.LASF10
+ 399 0149 01       		.byte	0x1
+ 400 014a 08       		.byte	0x8
+ 401 014b DD000000 		.4byte	0xdd
+ 402 014f 01       		.byte	0x1
+ 403 0150 05       		.byte	0x5
+ 404 0151 03       		.byte	0x3
+ 405 0152 00000000 		.4byte	gpstrTask1Tcb
+ 406 0156 0D       		.uleb128 0xd
+ 407 0157 38000000 		.4byte	.LASF11
+ 408 015b 01       		.byte	0x1
+ 409 015c 09       		.byte	0x9
+ 410 015d DD000000 		.4byte	0xdd
+ 411 0161 01       		.byte	0x1
+ 412 0162 05       		.byte	0x5
+ 413 0163 03       		.byte	0x3
+ 414 0164 00000000 		.4byte	gpstrTask2Tcb
+ 415 0168 0D       		.uleb128 0xd
+ 416 0169 BF000000 		.4byte	.LASF12
+ 417 016d 01       		.byte	0x1
+ 418 016e 0A       		.byte	0xa
+ 419 016f DD000000 		.4byte	0xdd
+ 420 0173 01       		.byte	0x1
+ 421 0174 05       		.byte	0x5
+ 422 0175 03       		.byte	0x3
+ 423 0176 00000000 		.4byte	gpstrTask3Tcb
+ 424 017a 00       		.byte	0x0
+ 425              		.section	.debug_abbrev
+ 426 0000 01       		.uleb128 0x1
+ 427 0001 11       		.uleb128 0x11
+ 428 0002 01       		.byte	0x1
+ 429 0003 25       		.uleb128 0x25
+ 430 0004 0E       		.uleb128 0xe
+ 431 0005 13       		.uleb128 0x13
+ 432 0006 0B       		.uleb128 0xb
+ 433 0007 03       		.uleb128 0x3
+ 434 0008 0E       		.uleb128 0xe
+ 435 0009 1B       		.uleb128 0x1b
+ 436 000a 0E       		.uleb128 0xe
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cczBgWvl.s 			page 10
+
+
+ 437 000b 11       		.uleb128 0x11
+ 438 000c 01       		.uleb128 0x1
+ 439 000d 12       		.uleb128 0x12
+ 440 000e 01       		.uleb128 0x1
+ 441 000f 10       		.uleb128 0x10
+ 442 0010 06       		.uleb128 0x6
+ 443 0011 00       		.byte	0x0
+ 444 0012 00       		.byte	0x0
+ 445 0013 02       		.uleb128 0x2
+ 446 0014 24       		.uleb128 0x24
+ 447 0015 00       		.byte	0x0
+ 448 0016 0B       		.uleb128 0xb
+ 449 0017 0B       		.uleb128 0xb
+ 450 0018 3E       		.uleb128 0x3e
+ 451 0019 0B       		.uleb128 0xb
+ 452 001a 03       		.uleb128 0x3
+ 453 001b 0E       		.uleb128 0xe
+ 454 001c 00       		.byte	0x0
+ 455 001d 00       		.byte	0x0
+ 456 001e 03       		.uleb128 0x3
+ 457 001f 16       		.uleb128 0x16
+ 458 0020 00       		.byte	0x0
+ 459 0021 03       		.uleb128 0x3
+ 460 0022 08       		.uleb128 0x8
+ 461 0023 3A       		.uleb128 0x3a
+ 462 0024 0B       		.uleb128 0xb
+ 463 0025 3B       		.uleb128 0x3b
+ 464 0026 0B       		.uleb128 0xb
+ 465 0027 49       		.uleb128 0x49
+ 466 0028 13       		.uleb128 0x13
+ 467 0029 00       		.byte	0x0
+ 468 002a 00       		.byte	0x0
+ 469 002b 04       		.uleb128 0x4
+ 470 002c 24       		.uleb128 0x24
+ 471 002d 00       		.byte	0x0
+ 472 002e 0B       		.uleb128 0xb
+ 473 002f 0B       		.uleb128 0xb
+ 474 0030 3E       		.uleb128 0x3e
+ 475 0031 0B       		.uleb128 0xb
+ 476 0032 03       		.uleb128 0x3
+ 477 0033 08       		.uleb128 0x8
+ 478 0034 00       		.byte	0x0
+ 479 0035 00       		.byte	0x0
+ 480 0036 05       		.uleb128 0x5
+ 481 0037 13       		.uleb128 0x13
+ 482 0038 01       		.byte	0x1
+ 483 0039 03       		.uleb128 0x3
+ 484 003a 0E       		.uleb128 0xe
+ 485 003b 0B       		.uleb128 0xb
+ 486 003c 0B       		.uleb128 0xb
+ 487 003d 3A       		.uleb128 0x3a
+ 488 003e 0B       		.uleb128 0xb
+ 489 003f 3B       		.uleb128 0x3b
+ 490 0040 0B       		.uleb128 0xb
+ 491 0041 01       		.uleb128 0x1
+ 492 0042 13       		.uleb128 0x13
+ 493 0043 00       		.byte	0x0
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cczBgWvl.s 			page 11
+
+
+ 494 0044 00       		.byte	0x0
+ 495 0045 06       		.uleb128 0x6
+ 496 0046 0D       		.uleb128 0xd
+ 497 0047 00       		.byte	0x0
+ 498 0048 03       		.uleb128 0x3
+ 499 0049 0E       		.uleb128 0xe
+ 500 004a 3A       		.uleb128 0x3a
+ 501 004b 0B       		.uleb128 0xb
+ 502 004c 3B       		.uleb128 0x3b
+ 503 004d 0B       		.uleb128 0xb
+ 504 004e 49       		.uleb128 0x49
+ 505 004f 13       		.uleb128 0x13
+ 506 0050 38       		.uleb128 0x38
+ 507 0051 0A       		.uleb128 0xa
+ 508 0052 00       		.byte	0x0
+ 509 0053 00       		.byte	0x0
+ 510 0054 07       		.uleb128 0x7
+ 511 0055 16       		.uleb128 0x16
+ 512 0056 00       		.byte	0x0
+ 513 0057 03       		.uleb128 0x3
+ 514 0058 0E       		.uleb128 0xe
+ 515 0059 3A       		.uleb128 0x3a
+ 516 005a 0B       		.uleb128 0xb
+ 517 005b 3B       		.uleb128 0x3b
+ 518 005c 0B       		.uleb128 0xb
+ 519 005d 49       		.uleb128 0x49
+ 520 005e 13       		.uleb128 0x13
+ 521 005f 00       		.byte	0x0
+ 522 0060 00       		.byte	0x0
+ 523 0061 08       		.uleb128 0x8
+ 524 0062 2E       		.uleb128 0x2e
+ 525 0063 00       		.byte	0x0
+ 526 0064 3F       		.uleb128 0x3f
+ 527 0065 0C       		.uleb128 0xc
+ 528 0066 03       		.uleb128 0x3
+ 529 0067 0E       		.uleb128 0xe
+ 530 0068 3A       		.uleb128 0x3a
+ 531 0069 0B       		.uleb128 0xb
+ 532 006a 3B       		.uleb128 0x3b
+ 533 006b 0B       		.uleb128 0xb
+ 534 006c 27       		.uleb128 0x27
+ 535 006d 0C       		.uleb128 0xc
+ 536 006e 11       		.uleb128 0x11
+ 537 006f 01       		.uleb128 0x1
+ 538 0070 12       		.uleb128 0x12
+ 539 0071 01       		.uleb128 0x1
+ 540 0072 40       		.uleb128 0x40
+ 541 0073 06       		.uleb128 0x6
+ 542 0074 00       		.byte	0x0
+ 543 0075 00       		.byte	0x0
+ 544 0076 09       		.uleb128 0x9
+ 545 0077 34       		.uleb128 0x34
+ 546 0078 00       		.byte	0x0
+ 547 0079 03       		.uleb128 0x3
+ 548 007a 0E       		.uleb128 0xe
+ 549 007b 3A       		.uleb128 0x3a
+ 550 007c 0B       		.uleb128 0xb
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cczBgWvl.s 			page 12
+
+
+ 551 007d 3B       		.uleb128 0x3b
+ 552 007e 0B       		.uleb128 0xb
+ 553 007f 49       		.uleb128 0x49
+ 554 0080 13       		.uleb128 0x13
+ 555 0081 3F       		.uleb128 0x3f
+ 556 0082 0C       		.uleb128 0xc
+ 557 0083 3C       		.uleb128 0x3c
+ 558 0084 0C       		.uleb128 0xc
+ 559 0085 00       		.byte	0x0
+ 560 0086 00       		.byte	0x0
+ 561 0087 0A       		.uleb128 0xa
+ 562 0088 0F       		.uleb128 0xf
+ 563 0089 00       		.byte	0x0
+ 564 008a 0B       		.uleb128 0xb
+ 565 008b 0B       		.uleb128 0xb
+ 566 008c 49       		.uleb128 0x49
+ 567 008d 13       		.uleb128 0x13
+ 568 008e 00       		.byte	0x0
+ 569 008f 00       		.byte	0x0
+ 570 0090 0B       		.uleb128 0xb
+ 571 0091 01       		.uleb128 0x1
+ 572 0092 01       		.byte	0x1
+ 573 0093 49       		.uleb128 0x49
+ 574 0094 13       		.uleb128 0x13
+ 575 0095 01       		.uleb128 0x1
+ 576 0096 13       		.uleb128 0x13
+ 577 0097 00       		.byte	0x0
+ 578 0098 00       		.byte	0x0
+ 579 0099 0C       		.uleb128 0xc
+ 580 009a 21       		.uleb128 0x21
+ 581 009b 00       		.byte	0x0
+ 582 009c 49       		.uleb128 0x49
+ 583 009d 13       		.uleb128 0x13
+ 584 009e 2F       		.uleb128 0x2f
+ 585 009f 05       		.uleb128 0x5
+ 586 00a0 00       		.byte	0x0
+ 587 00a1 00       		.byte	0x0
+ 588 00a2 0D       		.uleb128 0xd
+ 589 00a3 34       		.uleb128 0x34
+ 590 00a4 00       		.byte	0x0
+ 591 00a5 03       		.uleb128 0x3
+ 592 00a6 0E       		.uleb128 0xe
+ 593 00a7 3A       		.uleb128 0x3a
+ 594 00a8 0B       		.uleb128 0xb
+ 595 00a9 3B       		.uleb128 0x3b
+ 596 00aa 0B       		.uleb128 0xb
+ 597 00ab 49       		.uleb128 0x49
+ 598 00ac 13       		.uleb128 0x13
+ 599 00ad 3F       		.uleb128 0x3f
+ 600 00ae 0C       		.uleb128 0xc
+ 601 00af 02       		.uleb128 0x2
+ 602 00b0 0A       		.uleb128 0xa
+ 603 00b1 00       		.byte	0x0
+ 604 00b2 00       		.byte	0x0
+ 605 00b3 00       		.byte	0x0
+ 606              		.section	.debug_pubnames,"",%progbits
+ 607 0000 B6000000 		.4byte	0xb6
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cczBgWvl.s 			page 13
+
+
+ 608 0004 0200     		.2byte	0x2
+ 609 0006 00000000 		.4byte	.Ldebug_info0
+ 610 000a 7B010000 		.4byte	0x17b
+ 611 000e 91000000 		.4byte	0x91
+ 612 0012 54455354 		.ascii	"TEST_TestTask1\000"
+ 612      5F546573 
+ 612      74546173 
+ 612      6B3100
+ 613 0021 A6000000 		.4byte	0xa6
+ 614 0025 54455354 		.ascii	"TEST_TestTask2\000"
+ 614      5F546573 
+ 614      74546173 
+ 614      6B3200
+ 615 0034 BB000000 		.4byte	0xbb
+ 616 0038 54455354 		.ascii	"TEST_TestTask3\000"
+ 616      5F546573 
+ 616      74546173 
+ 616      6B3300
+ 617 0047 0E010000 		.4byte	0x10e
+ 618 004b 67617563 		.ascii	"gaucTask1Stack\000"
+ 618      5461736B 
+ 618      31537461 
+ 618      636B00
+ 619 005a 20010000 		.4byte	0x120
+ 620 005e 67617563 		.ascii	"gaucTask2Stack\000"
+ 620      5461736B 
+ 620      32537461 
+ 620      636B00
+ 621 006d 32010000 		.4byte	0x132
+ 622 0071 67617563 		.ascii	"gaucTask3Stack\000"
+ 622      5461736B 
+ 622      33537461 
+ 622      636B00
+ 623 0080 44010000 		.4byte	0x144
+ 624 0084 67707374 		.ascii	"gpstrTask1Tcb\000"
+ 624      72546173 
+ 624      6B315463 
+ 624      6200
+ 625 0092 56010000 		.4byte	0x156
+ 626 0096 67707374 		.ascii	"gpstrTask2Tcb\000"
+ 626      72546173 
+ 626      6B325463 
+ 626      6200
+ 627 00a4 68010000 		.4byte	0x168
+ 628 00a8 67707374 		.ascii	"gpstrTask3Tcb\000"
+ 628      72546173 
+ 628      6B335463 
+ 628      6200
+ 629 00b6 00000000 		.4byte	0x0
+ 630              		.section	.debug_pubtypes,"",%progbits
+ 631 0000 31000000 		.4byte	0x31
+ 632 0004 0200     		.2byte	0x2
+ 633 0006 00000000 		.4byte	.Ldebug_info0
+ 634 000a 7B010000 		.4byte	0x17b
+ 635 000e 33000000 		.4byte	0x33
+ 636 0012 553800   		.ascii	"U8\000"
+ 637 0015 4B000000 		.4byte	0x4b
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cczBgWvl.s 			page 14
+
+
+ 638 0019 55333200 		.ascii	"U32\000"
+ 639 001d 6B000000 		.4byte	0x6b
+ 640 0021 775F7463 		.ascii	"w_tcb\000"
+ 640      6200
+ 641 0027 86000000 		.4byte	0x86
+ 642 002b 575F5443 		.ascii	"W_TCB\000"
+ 642      4200
+ 643 0031 00000000 		.4byte	0x0
+ 644              		.section	.debug_aranges,"",%progbits
+ 645 0000 1C000000 		.4byte	0x1c
+ 646 0004 0200     		.2byte	0x2
+ 647 0006 00000000 		.4byte	.Ldebug_info0
+ 648 000a 04       		.byte	0x4
+ 649 000b 00       		.byte	0x0
+ 650 000c 0000     		.2byte	0x0
+ 651 000e 0000     		.2byte	0x0
+ 652 0010 00000000 		.4byte	.Ltext0
+ 653 0014 A0000000 		.4byte	.Letext0-.Ltext0
+ 654 0018 00000000 		.4byte	0x0
+ 655 001c 00000000 		.4byte	0x0
+ 656              		.section	.debug_str,"MS",%progbits,1
+ 657              	.LASF16:
+ 658 0000 474E5520 		.ascii	"GNU C 4.5.2\000"
+ 658      4320342E 
+ 658      352E3200 
+ 659              	.LASF1:
+ 660 000c 756E7369 		.ascii	"unsigned int\000"
+ 660      676E6564 
+ 660      20696E74 
+ 660      00
+ 661              	.LASF18:
+ 662 0019 463A5C77 		.ascii	"F:\\workdir\\RTOS_Wanlix\\project\000"
+ 662      6F726B64 
+ 662      69725C52 
+ 662      544F535F 
+ 662      57616E6C 
+ 663              	.LASF11:
+ 664 0038 67707374 		.ascii	"gpstrTask2Tcb\000"
+ 664      72546173 
+ 664      6B325463 
+ 664      6200
+ 665              	.LASF17:
+ 666 0046 2E2E2F73 		.ascii	"../srccode/test.c\000"
+ 666      7263636F 
+ 666      64652F74 
+ 666      6573742E 
+ 666      6300
+ 667              	.LASF0:
+ 668 0058 6C6F6E67 		.ascii	"long unsigned int\000"
+ 668      20756E73 
+ 668      69676E65 
+ 668      6420696E 
+ 668      7400
+ 669              	.LASF20:
+ 670 006a 75695461 		.ascii	"uiTaskCurSp\000"
+ 670      736B4375 
+ 670      72537000 
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cczBgWvl.s 			page 15
+
+
+ 671              	.LASF13:
+ 672 0076 67617563 		.ascii	"gaucTask1Stack\000"
+ 672      5461736B 
+ 672      31537461 
+ 672      636B00
+ 673              	.LASF6:
+ 674 0085 575F5443 		.ascii	"W_TCB\000"
+ 674      4200
+ 675              	.LASF2:
+ 676 008b 756E7369 		.ascii	"unsigned char\000"
+ 676      676E6564 
+ 676      20636861 
+ 676      7200
+ 677              	.LASF4:
+ 678 0099 63686172 		.ascii	"char\000"
+ 678      00
+ 679              	.LASF10:
+ 680 009e 67707374 		.ascii	"gpstrTask1Tcb\000"
+ 680      72546173 
+ 680      6B315463 
+ 680      6200
+ 681              	.LASF3:
+ 682 00ac 73686F72 		.ascii	"short unsigned int\000"
+ 682      7420756E 
+ 682      7369676E 
+ 682      65642069 
+ 682      6E7400
+ 683              	.LASF12:
+ 684 00bf 67707374 		.ascii	"gpstrTask3Tcb\000"
+ 684      72546173 
+ 684      6B335463 
+ 684      6200
+ 685              	.LASF14:
+ 686 00cd 67617563 		.ascii	"gaucTask2Stack\000"
+ 686      5461736B 
+ 686      32537461 
+ 686      636B00
+ 687              	.LASF7:
+ 688 00dc 54455354 		.ascii	"TEST_TestTask1\000"
+ 688      5F546573 
+ 688      74546173 
+ 688      6B3100
+ 689              	.LASF8:
+ 690 00eb 54455354 		.ascii	"TEST_TestTask2\000"
+ 690      5F546573 
+ 690      74546173 
+ 690      6B3200
+ 691              	.LASF9:
+ 692 00fa 54455354 		.ascii	"TEST_TestTask3\000"
+ 692      5F546573 
+ 692      74546173 
+ 692      6B3300
+ 693              	.LASF5:
+ 694 0109 73686F72 		.ascii	"short int\000"
+ 694      7420696E 
+ 694      7400
+ 695              	.LASF19:
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cczBgWvl.s 			page 16
+
+
+ 696 0113 775F7463 		.ascii	"w_tcb\000"
+ 696      6200
+ 697              	.LASF15:
+ 698 0119 67617563 		.ascii	"gaucTask3Stack\000"
+ 698      5461736B 
+ 698      33537461 
+ 698      636B00
+ 699              		.ident	"GCC: (Sourcery G++ Lite 2011.03-41) 4.5.2"
+ 700              		.section	.note.GNU-stack,"",%progbits
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cczBgWvl.s 			page 17
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 test.c
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cczBgWvl.s:21     .text:00000000 $a
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cczBgWvl.s:24     .text:00000000 TEST_TestTask1
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cczBgWvl.s:64     .text:0000002c $d
+                            *COM*:00000004 gpstrTask3Tcb
+                       .ARM.extab:00000000 $d
+                       .ARM.exidx:00000000 $d
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cczBgWvl.s:70     .text:00000034 $a
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cczBgWvl.s:73     .text:00000034 TEST_TestTask2
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cczBgWvl.s:112    .text:00000060 $d
+                            *COM*:00000004 gpstrTask1Tcb
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cczBgWvl.s:118    .text:00000068 $a
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cczBgWvl.s:121    .text:00000068 TEST_TestTask3
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cczBgWvl.s:160    .text:00000094 $d
+                            *COM*:00000004 gpstrTask2Tcb
+                            *COM*:00000190 gaucTask1Stack
+                            *COM*:00000190 gaucTask2Stack
+                            *COM*:00000190 gaucTask3Stack
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cczBgWvl.s:174    .rodata.str1.4:00000000 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+DEV_PutString
+DEV_DelayMs
+WLX_TaskSwitch
+__aeabi_unwind_cpp_pr1

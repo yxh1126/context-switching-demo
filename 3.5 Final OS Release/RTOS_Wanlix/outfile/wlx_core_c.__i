@@ -1,0 +1,1 @@
+-c -mcpu=arm7tdmi -gdwarf-2 -MD -Wall -O2 -mapcs-frame -I../srccode -I../wanlix -IC:/Keil/ARM/CMSIS/Include/ -IC:/Keil/ARM/INC/ADI/ -Wa,-alhms="../outfile/wlx_core_c.lst" -o ../outfile/wlx_core_c.o "../wanlix/wlx_core_c.c"

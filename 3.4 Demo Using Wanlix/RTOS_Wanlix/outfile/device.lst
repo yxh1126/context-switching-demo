@@ -1,0 +1,1872 @@
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s 			page 1
+
+
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 2
+   9              		.eabi_attribute 30, 2
+  10              		.eabi_attribute 18, 4
+  11              		.file	"device.c"
+  12              		.section	.debug_abbrev,"",%progbits
+  13              	.Ldebug_abbrev0:
+  14              		.section	.debug_info,"",%progbits
+  15              	.Ldebug_info0:
+  16              		.section	.debug_line,"",%progbits
+  17              	.Ldebug_line0:
+  18 0000 11010000 		.text
+  18      02006200 
+  18      00000201 
+  18      FB0E0D00 
+  18      01010101 
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              		.align	2
+  22              		.global	DEV_SoftwareInit
+  23              		.type	DEV_SoftwareInit, %function
+  24              	DEV_SoftwareInit:
+  25              		.fnstart
+  26              	.LFB0:
+  27              		.file 1 "../srccode/device.c"
+   1:../srccode/device.c **** 
+   2:../srccode/device.c **** #include "device.h"
+   3:../srccode/device.c **** 
+   4:../srccode/device.c **** 
+   5:../srccode/device.c **** U32 guiSystemTick;      /* 系统Tick */
+   6:../srccode/device.c **** 
+   7:../srccode/device.c **** 
+   8:../srccode/device.c **** /***********************************************************************************
+   9:../srccode/device.c **** 函数功能: 初始化软件.
+  10:../srccode/device.c **** 入口参数: none.
+  11:../srccode/device.c **** 返 回 值: none.
+  12:../srccode/device.c **** ***********************************************************************************/
+  13:../srccode/device.c **** void DEV_SoftwareInit(void)
+  14:../srccode/device.c **** {
+  28              		.loc 1 14 0
+  29              		.cfi_startproc
+  30              		@ Function supports interworking.
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 1, uses_anonymous_args = 0
+  33              		.movsp ip
+  34 0000 0DC0A0E1 		mov	ip, sp
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_register 12
+  37 0004 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+  38              		.pad #4
+  39              		.save {fp, ip, lr}
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s 			page 2
+
+
+  40              		.setfp fp, ip, #-4
+  41 0008 04B04CE2 		sub	fp, ip, #4
+  42              		.cfi_offset 14, -8
+  43              		.cfi_offset 13, -12
+  44              		.cfi_offset 11, -16
+  45              	.LCFI1:
+  46              		.cfi_def_cfa 11, 4
+  15:../srccode/device.c ****     /* 初始化十字路口变量 */
+  16:../srccode/device.c ****     TEST_CrossVarInit();
+  47              		.loc 1 16 0
+  48 000c FEFFFFEB 		bl	TEST_CrossVarInit
+  17:../srccode/device.c **** }
+  49              		.loc 1 17 0
+  50 0010 0CD04BE2 		sub	sp, fp, #12
+  51 0014 00689DE8 		ldmfd	sp, {fp, sp, lr}
+  52 0018 1EFF2FE1 		bx	lr
+  53              		.cfi_endproc
+  54              	.LFE0:
+  55              		.fnend
+  56              		.size	DEV_SoftwareInit, .-DEV_SoftwareInit
+  57              		.align	2
+  58              		.global	DEV_IsrInit
+  59              		.type	DEV_IsrInit, %function
+  60              	DEV_IsrInit:
+  61              		.fnstart
+  62              	.LFB2:
+  18:../srccode/device.c **** 
+  19:../srccode/device.c **** /***********************************************************************************
+  20:../srccode/device.c **** 函数功能: 初始化硬件.
+  21:../srccode/device.c **** 入口参数: none.
+  22:../srccode/device.c **** 返 回 值: none.
+  23:../srccode/device.c **** ***********************************************************************************/
+  24:../srccode/device.c **** void DEV_HardwareInit(void)
+  25:../srccode/device.c **** {
+  26:../srccode/device.c ****     /* 设置GPIO管脚模式 */
+  27:../srccode/device.c ****     DEV_SetGpioMode();
+  28:../srccode/device.c **** 
+  29:../srccode/device.c ****     /* 设置Led所连接的IO为输出模式, 输出默认为低电平 */
+  30:../srccode/device.c ****     DEV_SetGpioDir(GPIOPORT3, GPIO_MR | GPIO_MY | GPIO_MG | GPIO_SR | GPIO_SG,
+  31:../srccode/device.c ****                    GPIO_MR | GPIO_MY | GPIO_MG | GPIO_SR | GPIO_SG,
+  32:../srccode/device.c ****                    (U8)(~(GPIO_MR | GPIO_MY | GPIO_MG | GPIO_SR | GPIO_SG)));
+  33:../srccode/device.c **** 
+  34:../srccode/device.c ****     DEV_TimerInit();
+  35:../srccode/device.c **** 
+  36:../srccode/device.c ****     DEV_IsrInit();
+  37:../srccode/device.c **** }
+  38:../srccode/device.c **** 
+  39:../srccode/device.c **** /***********************************************************************************
+  40:../srccode/device.c **** 函数功能: 初始化中断.
+  41:../srccode/device.c **** 入口参数: none.
+  42:../srccode/device.c **** 返 回 值: none.
+  43:../srccode/device.c **** ***********************************************************************************/
+  44:../srccode/device.c **** void DEV_IsrInit(void)
+  45:../srccode/device.c **** {
+  63              		.loc 1 45 0
+  64              		.cfi_startproc
+  65              		@ Function supports interworking.
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s 			page 3
+
+
+  66              		@ args = 0, pretend = 0, frame = 0
+  67              		@ frame_needed = 0, uses_anonymous_args = 0
+  68              		@ link register save eliminated.
+  46:../srccode/device.c ****     /* 挂接Tick中断处理函数 */
+  47:../srccode/device.c ****     IRQ = ISR_IrqIsr;
+  69              		.loc 1 47 0
+  70 001c 14009FE5 		ldr	r0, .L3
+  71 0020 14109FE5 		ldr	r1, .L3+4
+  48:../srccode/device.c **** 
+  49:../srccode/device.c ****     /* 使能中断 */
+  50:../srccode/device.c ****     IRQEN = TIME1INTMASK | EXTIRQ0INTMASK;
+  72              		.loc 1 50 0
+  73 0024 14209FE5 		ldr	r2, .L3+8
+  74 0028 0F3AE0E3 		mvn	r3, #61440
+  47:../srccode/device.c ****     IRQ = ISR_IrqIsr;
+  75              		.loc 1 47 0
+  76 002c 000081E5 		str	r0, [r1, #0]
+  77              		.loc 1 50 0
+  78 0030 F72F03E5 		str	r2, [r3, #-4087]
+  51:../srccode/device.c **** }
+  79              		.loc 1 51 0
+  80 0034 1EFF2FE1 		bx	lr
+  81              	.L4:
+  82              		.align	2
+  83              	.L3:
+  84 0038 00000000 		.word	ISR_IrqIsr
+  85 003c 00000000 		.word	IRQ
+  86 0040 08800000 		.word	32776
+  87              		.cfi_endproc
+  88              	.LFE2:
+  89              		.fnend
+  90              		.size	DEV_IsrInit, .-DEV_IsrInit
+  91              		.align	2
+  92              		.global	DEV_TimerInit
+  93              		.type	DEV_TimerInit, %function
+  94              	DEV_TimerInit:
+  95              		.fnstart
+  96              	.LFB3:
+  52:../srccode/device.c **** 
+  53:../srccode/device.c **** /***********************************************************************************
+  54:../srccode/device.c **** 函数功能: 初始化定时器.
+  55:../srccode/device.c **** 入口参数: none.
+  56:../srccode/device.c **** 返 回 值: none.
+  57:../srccode/device.c **** ***********************************************************************************/
+  58:../srccode/device.c **** void DEV_TimerInit(void)
+  59:../srccode/device.c **** {
+  97              		.loc 1 59 0
+  98              		.cfi_startproc
+  99              		@ Function supports interworking.
+ 100              		@ args = 0, pretend = 0, frame = 0
+ 101              		@ frame_needed = 0, uses_anonymous_args = 0
+ 102              		@ link register save eliminated.
+  60:../srccode/device.c ****     /* 设置Timer1, Timer1作为系统的tick时钟 */
+  61:../srccode/device.c ****     T1LD = TICK * CORECLOCKPMS; /* 设置tick时间 */
+ 103              		.loc 1 61 0
+ 104 0044 10009FE5 		ldr	r0, .L6
+ 105 0048 0F3AE0E3 		mvn	r3, #61440
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s 			page 4
+
+
+  62:../srccode/device.c ****     T1CON = 0xC0;               /* 使能定时器1, 时钟频率41.78M, 周期循环向下计数  */
+ 106              		.loc 1 62 0
+ 107 004c C020A0E3 		mov	r2, #192
+  61:../srccode/device.c ****     T1LD = TICK * CORECLOCKPMS; /* 设置tick时间 */
+ 108              		.loc 1 61 0
+ 109 0050 DF0C03E5 		str	r0, [r3, #-3295]
+ 110              		.loc 1 62 0
+ 111 0054 D72C03E5 		str	r2, [r3, #-3287]
+  63:../srccode/device.c **** }
+ 112              		.loc 1 63 0
+ 113 0058 1EFF2FE1 		bx	lr
+ 114              	.L7:
+ 115              		.align	2
+ 116              	.L6:
+ 117 005c 50C03F00 		.word	4178000
+ 118              		.cfi_endproc
+ 119              	.LFE3:
+ 120              		.fnend
+ 121              		.size	DEV_TimerInit, .-DEV_TimerInit
+ 122              		.align	2
+ 123              		.global	DEV_SetGpioMode
+ 124              		.type	DEV_SetGpioMode, %function
+ 125              	DEV_SetGpioMode:
+ 126              		.fnstart
+ 127              	.LFB4:
+  64:../srccode/device.c **** 
+  65:../srccode/device.c **** /***********************************************************************************
+  66:../srccode/device.c **** 函数功能: 设置各个GPIO的工作模式.
+  67:../srccode/device.c **** 入口参数: none.
+  68:../srccode/device.c **** 返 回 值: none.
+  69:../srccode/device.c **** ***********************************************************************************/
+  70:../srccode/device.c **** void DEV_SetGpioMode(void)
+  71:../srccode/device.c **** {
+ 128              		.loc 1 71 0
+ 129              		.cfi_startproc
+ 130              		@ Function supports interworking.
+ 131              		@ args = 0, pretend = 0, frame = 0
+ 132              		@ frame_needed = 0, uses_anonymous_args = 0
+ 133              		@ link register save eliminated.
+  72:../srccode/device.c ****     /* 所有管脚默认为GPIO模式 */
+  73:../srccode/device.c ****     GP3CON = 0x00000000;
+ 134              		.loc 1 73 0
+ 135 0060 0020A0E3 		mov	r2, #0
+ 136 0064 0030E0E3 		mvn	r3, #0
+ 137 0068 F32B03E5 		str	r2, [r3, #-3059]
+  74:../srccode/device.c **** }
+ 138              		.loc 1 74 0
+ 139 006c 1EFF2FE1 		bx	lr
+ 140              		.cfi_endproc
+ 141              	.LFE4:
+ 142              		.fnend
+ 143              		.size	DEV_SetGpioMode, .-DEV_SetGpioMode
+ 144              		.align	2
+ 145              		.global	DEV_SetGpioDir
+ 146              		.type	DEV_SetGpioDir, %function
+ 147              	DEV_SetGpioDir:
+ 148              		.fnstart
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s 			page 5
+
+
+ 149              	.LFB5:
+  75:../srccode/device.c **** 
+  76:../srccode/device.c **** /***********************************************************************************
+  77:../srccode/device.c **** 函数功能: 设置GPIO方向.
+  78:../srccode/device.c **** 入口参数: ucPort: GPIO所在的端口: 0~4.
+  79:../srccode/device.c ****           ucDir: GPIO输入/输出方向, 0进1出, 每个bit对应一个pin.
+  80:../srccode/device.c ****           ucPin: GPIO管脚, 需要设置的bit为1, 否则为0, 每个bit对应一个pin.
+  81:../srccode/device.c ****           ucOutPut: 配置为输出模式时的初始值, 每个bit对应一个pin.
+  82:../srccode/device.c **** 返 回 值: none.
+  83:../srccode/device.c **** ***********************************************************************************/
+  84:../srccode/device.c **** void DEV_SetGpioDir(U8 ucPort, U8 ucDir, U8 ucPin, U8 ucOutPut)
+  85:../srccode/device.c **** {
+ 150              		.loc 1 85 0
+ 151              		.cfi_startproc
+ 152              		@ Function supports interworking.
+ 153              		@ args = 0, pretend = 0, frame = 0
+ 154              		@ frame_needed = 0, uses_anonymous_args = 0
+ 155              		@ link register save eliminated.
+ 156              	.LVL0:
+  86:../srccode/device.c ****     U32 uiGpioValue;
+  87:../srccode/device.c **** 
+  88:../srccode/device.c ****     if(GPIOPORT0 == ucPort)
+ 157              		.loc 1 88 0
+ 158 0070 000050E3 		cmp	r0, #0
+ 159              	.LVL1:
+  85:../srccode/device.c **** {
+ 160              		.loc 1 85 0
+ 161 0074 04402DE5 		str	r4, [sp, #-4]!
+ 162              		.save {r4}
+ 163              	.LCFI2:
+ 164              		.cfi_def_cfa_offset 4
+ 165              		.loc 1 88 0
+ 166 0078 1200000A 		beq	.L16
+ 167              		.cfi_offset 4, -4
+  89:../srccode/device.c ****     {
+  90:../srccode/device.c ****         uiGpioValue = GP0DAT;
+  91:../srccode/device.c ****         uiGpioValue &= (~(((U32)ucPin << 24) | ((U32)ucOutPut << 16)));
+  92:../srccode/device.c ****         uiGpioValue |= (((U32)(ucDir & ucPin) << 24)
+  93:../srccode/device.c ****                         | ((U32)(ucOutPut & ucPin) << 16));
+  94:../srccode/device.c ****         GP0DAT = uiGpioValue;
+  95:../srccode/device.c ****     }
+  96:../srccode/device.c ****     else if(GPIOPORT1 == ucPort)
+ 168              		.loc 1 96 0
+ 169 007c 010050E3 		cmp	r0, #1
+ 170 0080 1C00000A 		beq	.L17
+  97:../srccode/device.c ****     {
+  98:../srccode/device.c ****         uiGpioValue = GP1DAT;
+  99:../srccode/device.c ****         uiGpioValue &= (~(((U32)ucPin << 24) | ((U32)ucOutPut << 16)));
+ 100:../srccode/device.c ****         uiGpioValue |= (((U32)(ucDir & ucPin) << 24)
+ 101:../srccode/device.c ****                         | ((U32)(ucOutPut & ucPin) << 16));
+ 102:../srccode/device.c ****         GP1DAT = uiGpioValue;
+ 103:../srccode/device.c ****     }
+ 104:../srccode/device.c ****     else if(GPIOPORT2 == ucPort)
+ 171              		.loc 1 104 0
+ 172 0084 020050E3 		cmp	r0, #2
+ 173 0088 2600000A 		beq	.L18
+ 105:../srccode/device.c ****     {
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s 			page 6
+
+
+ 106:../srccode/device.c ****         uiGpioValue = GP2DAT;
+ 107:../srccode/device.c ****         uiGpioValue &= (~(((U32)ucPin << 24) | ((U32)ucOutPut << 16)));
+ 108:../srccode/device.c ****         uiGpioValue |= (((U32)(ucDir & ucPin) << 24)
+ 109:../srccode/device.c ****                         | ((U32)(ucOutPut & ucPin) << 16));
+ 110:../srccode/device.c ****         GP2DAT = uiGpioValue;
+ 111:../srccode/device.c ****     }
+ 112:../srccode/device.c ****     else if(GPIOPORT3 == ucPort)
+ 174              		.loc 1 112 0
+ 175 008c 030050E3 		cmp	r0, #3
+ 176 0090 3000000A 		beq	.L19
+ 113:../srccode/device.c ****     {
+ 114:../srccode/device.c ****         uiGpioValue = GP3DAT;
+ 115:../srccode/device.c ****         uiGpioValue &= (~(((U32)ucPin << 24) | ((U32)ucOutPut << 16)));
+ 116:../srccode/device.c ****         uiGpioValue |= (((U32)(ucDir & ucPin) << 24)
+ 117:../srccode/device.c ****                         | ((U32)(ucOutPut & ucPin) << 16));
+ 118:../srccode/device.c ****         GP3DAT = uiGpioValue;
+ 119:../srccode/device.c ****     }
+ 120:../srccode/device.c ****     else //if(GPIOPORT4 == ucPort)
+ 121:../srccode/device.c ****     {
+ 122:../srccode/device.c ****         uiGpioValue = GP4DAT;
+ 177              		.loc 1 122 0
+ 178 0094 0000E0E3 		mvn	r0, #0
+ 179 0098 9F4B10E5 		ldr	r4, [r0, #-2975]
+ 180              	.LVL2:
+ 123:../srccode/device.c ****         uiGpioValue &= (~(((U32)ucPin << 24) | ((U32)ucOutPut << 16)));
+ 181              		.loc 1 123 0
+ 182 009c 02CCA0E1 		mov	ip, r2, asl #24
+ 124:../srccode/device.c ****         uiGpioValue |= (((U32)(ucDir & ucPin) << 24)
+ 183              		.loc 1 124 0
+ 184 00a0 011002E0 		and	r1, r2, r1
+ 185              	.LVL3:
+ 123:../srccode/device.c ****         uiGpioValue &= (~(((U32)ucPin << 24) | ((U32)ucOutPut << 16)));
+ 186              		.loc 1 123 0
+ 187 00a4 03C88CE1 		orr	ip, ip, r3, asl #16
+ 188              		.loc 1 124 0
+ 189 00a8 011CA0E1 		mov	r1, r1, asl #24
+ 125:../srccode/device.c ****                         | ((U32)(ucOutPut & ucPin) << 16));
+ 190              		.loc 1 125 0
+ 191 00ac 023003E0 		and	r3, r3, r2
+ 192              	.LVL4:
+ 123:../srccode/device.c ****         uiGpioValue &= (~(((U32)ucPin << 24) | ((U32)ucOutPut << 16)));
+ 193              		.loc 1 123 0
+ 194 00b0 0CC0C4E1 		bic	ip, r4, ip
+ 195              	.LVL5:
+ 196              		.loc 1 125 0
+ 197 00b4 032881E1 		orr	r2, r1, r3, asl #16
+ 198              	.LVL6:
+ 124:../srccode/device.c ****         uiGpioValue |= (((U32)(ucDir & ucPin) << 24)
+ 199              		.loc 1 124 0
+ 200 00b8 0C3082E1 		orr	r3, r2, ip
+ 201              	.LVL7:
+ 126:../srccode/device.c ****         GP4DAT = uiGpioValue;
+ 202              		.loc 1 126 0
+ 203 00bc 9F3B00E5 		str	r3, [r0, #-2975]
+ 204              	.LVL8:
+ 205              	.L9:
+ 127:../srccode/device.c ****     }
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s 			page 7
+
+
+ 128:../srccode/device.c **** }
+ 206              		.loc 1 128 0
+ 207 00c0 04409DE4 		ldmfd	sp!, {r4}
+ 208 00c4 1EFF2FE1 		bx	lr
+ 209              	.LVL9:
+ 210              	.L16:
+  90:../srccode/device.c ****         uiGpioValue = GP0DAT;
+ 211              		.loc 1 90 0
+ 212 00c8 0000E0E3 		mvn	r0, #0
+  92:../srccode/device.c ****         uiGpioValue |= (((U32)(ucDir & ucPin) << 24)
+ 213              		.loc 1 92 0
+ 214 00cc 011002E0 		and	r1, r2, r1
+ 215              	.LVL10:
+  90:../srccode/device.c ****         uiGpioValue = GP0DAT;
+ 216              		.loc 1 90 0
+ 217 00d0 DF4B10E5 		ldr	r4, [r0, #-3039]
+ 218              	.LVL11:
+  91:../srccode/device.c ****         uiGpioValue &= (~(((U32)ucPin << 24) | ((U32)ucOutPut << 16)));
+ 219              		.loc 1 91 0
+ 220 00d4 02CCA0E1 		mov	ip, r2, asl #24
+ 221 00d8 03C88CE1 		orr	ip, ip, r3, asl #16
+  93:../srccode/device.c ****                         | ((U32)(ucOutPut & ucPin) << 16));
+ 222              		.loc 1 93 0
+ 223 00dc 022003E0 		and	r2, r3, r2
+ 224              	.LVL12:
+  92:../srccode/device.c ****         uiGpioValue |= (((U32)(ucDir & ucPin) << 24)
+ 225              		.loc 1 92 0
+ 226 00e0 013CA0E1 		mov	r3, r1, asl #24
+ 227              	.LVL13:
+  91:../srccode/device.c ****         uiGpioValue &= (~(((U32)ucPin << 24) | ((U32)ucOutPut << 16)));
+ 228              		.loc 1 91 0
+ 229 00e4 0CC0C4E1 		bic	ip, r4, ip
+ 230              	.LVL14:
+  93:../srccode/device.c ****                         | ((U32)(ucOutPut & ucPin) << 16));
+ 231              		.loc 1 93 0
+ 232 00e8 021883E1 		orr	r1, r3, r2, asl #16
+  92:../srccode/device.c ****         uiGpioValue |= (((U32)(ucDir & ucPin) << 24)
+ 233              		.loc 1 92 0
+ 234 00ec 0C3081E1 		orr	r3, r1, ip
+ 235              	.LVL15:
+  94:../srccode/device.c ****         GP0DAT = uiGpioValue;
+ 236              		.loc 1 94 0
+ 237 00f0 DF3B00E5 		str	r3, [r0, #-3039]
+ 238 00f4 F1FFFFEA 		b	.L9
+ 239              	.LVL16:
+ 240              	.L17:
+  98:../srccode/device.c ****         uiGpioValue = GP1DAT;
+ 241              		.loc 1 98 0
+ 242 00f8 0000E0E3 		mvn	r0, #0
+ 243 00fc CF4B10E5 		ldr	r4, [r0, #-3023]
+ 244              	.LVL17:
+  99:../srccode/device.c ****         uiGpioValue &= (~(((U32)ucPin << 24) | ((U32)ucOutPut << 16)));
+ 245              		.loc 1 99 0
+ 246 0100 02CCA0E1 		mov	ip, r2, asl #24
+ 100:../srccode/device.c ****         uiGpioValue |= (((U32)(ucDir & ucPin) << 24)
+ 247              		.loc 1 100 0
+ 248 0104 011002E0 		and	r1, r2, r1
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s 			page 8
+
+
+ 249              	.LVL18:
+  99:../srccode/device.c ****         uiGpioValue &= (~(((U32)ucPin << 24) | ((U32)ucOutPut << 16)));
+ 250              		.loc 1 99 0
+ 251 0108 03C88CE1 		orr	ip, ip, r3, asl #16
+ 101:../srccode/device.c ****                         | ((U32)(ucOutPut & ucPin) << 16));
+ 252              		.loc 1 101 0
+ 253 010c 022003E0 		and	r2, r3, r2
+ 254              	.LVL19:
+ 100:../srccode/device.c ****         uiGpioValue |= (((U32)(ucDir & ucPin) << 24)
+ 255              		.loc 1 100 0
+ 256 0110 011CA0E1 		mov	r1, r1, asl #24
+  99:../srccode/device.c ****         uiGpioValue &= (~(((U32)ucPin << 24) | ((U32)ucOutPut << 16)));
+ 257              		.loc 1 99 0
+ 258 0114 0CC0C4E1 		bic	ip, r4, ip
+ 259              	.LVL20:
+ 101:../srccode/device.c ****                         | ((U32)(ucOutPut & ucPin) << 16));
+ 260              		.loc 1 101 0
+ 261 0118 023881E1 		orr	r3, r1, r2, asl #16
+ 262              	.LVL21:
+ 100:../srccode/device.c ****         uiGpioValue |= (((U32)(ucDir & ucPin) << 24)
+ 263              		.loc 1 100 0
+ 264 011c 0C2083E1 		orr	r2, r3, ip
+ 265              	.LVL22:
+ 102:../srccode/device.c ****         GP1DAT = uiGpioValue;
+ 266              		.loc 1 102 0
+ 267 0120 CF2B00E5 		str	r2, [r0, #-3023]
+ 268 0124 E5FFFFEA 		b	.L9
+ 269              	.LVL23:
+ 270              	.L18:
+ 106:../srccode/device.c ****         uiGpioValue = GP2DAT;
+ 271              		.loc 1 106 0
+ 272 0128 0000E0E3 		mvn	r0, #0
+ 273 012c BF4B10E5 		ldr	r4, [r0, #-3007]
+ 274              	.LVL24:
+ 107:../srccode/device.c ****         uiGpioValue &= (~(((U32)ucPin << 24) | ((U32)ucOutPut << 16)));
+ 275              		.loc 1 107 0
+ 276 0130 02CCA0E1 		mov	ip, r2, asl #24
+ 108:../srccode/device.c ****         uiGpioValue |= (((U32)(ucDir & ucPin) << 24)
+ 277              		.loc 1 108 0
+ 278 0134 011002E0 		and	r1, r2, r1
+ 279              	.LVL25:
+ 107:../srccode/device.c ****         uiGpioValue &= (~(((U32)ucPin << 24) | ((U32)ucOutPut << 16)));
+ 280              		.loc 1 107 0
+ 281 0138 03C88CE1 		orr	ip, ip, r3, asl #16
+ 108:../srccode/device.c ****         uiGpioValue |= (((U32)(ucDir & ucPin) << 24)
+ 282              		.loc 1 108 0
+ 283 013c 011CA0E1 		mov	r1, r1, asl #24
+ 109:../srccode/device.c ****                         | ((U32)(ucOutPut & ucPin) << 16));
+ 284              		.loc 1 109 0
+ 285 0140 023003E0 		and	r3, r3, r2
+ 286              	.LVL26:
+ 107:../srccode/device.c ****         uiGpioValue &= (~(((U32)ucPin << 24) | ((U32)ucOutPut << 16)));
+ 287              		.loc 1 107 0
+ 288 0144 0CC0C4E1 		bic	ip, r4, ip
+ 289              	.LVL27:
+ 109:../srccode/device.c ****                         | ((U32)(ucOutPut & ucPin) << 16));
+ 290              		.loc 1 109 0
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s 			page 9
+
+
+ 291 0148 032881E1 		orr	r2, r1, r3, asl #16
+ 292              	.LVL28:
+ 108:../srccode/device.c ****         uiGpioValue |= (((U32)(ucDir & ucPin) << 24)
+ 293              		.loc 1 108 0
+ 294 014c 0C3082E1 		orr	r3, r2, ip
+ 295              	.LVL29:
+ 110:../srccode/device.c ****         GP2DAT = uiGpioValue;
+ 296              		.loc 1 110 0
+ 297 0150 BF3B00E5 		str	r3, [r0, #-3007]
+ 298 0154 D9FFFFEA 		b	.L9
+ 299              	.LVL30:
+ 300              	.L19:
+ 114:../srccode/device.c ****         uiGpioValue = GP3DAT;
+ 301              		.loc 1 114 0
+ 302 0158 0000E0E3 		mvn	r0, #0
+ 303 015c AF4B10E5 		ldr	r4, [r0, #-2991]
+ 304              	.LVL31:
+ 115:../srccode/device.c ****         uiGpioValue &= (~(((U32)ucPin << 24) | ((U32)ucOutPut << 16)));
+ 305              		.loc 1 115 0
+ 306 0160 02CCA0E1 		mov	ip, r2, asl #24
+ 116:../srccode/device.c ****         uiGpioValue |= (((U32)(ucDir & ucPin) << 24)
+ 307              		.loc 1 116 0
+ 308 0164 011002E0 		and	r1, r2, r1
+ 309              	.LVL32:
+ 115:../srccode/device.c ****         uiGpioValue &= (~(((U32)ucPin << 24) | ((U32)ucOutPut << 16)));
+ 310              		.loc 1 115 0
+ 311 0168 03C88CE1 		orr	ip, ip, r3, asl #16
+ 117:../srccode/device.c ****                         | ((U32)(ucOutPut & ucPin) << 16));
+ 312              		.loc 1 117 0
+ 313 016c 022003E0 		and	r2, r3, r2
+ 314              	.LVL33:
+ 116:../srccode/device.c ****         uiGpioValue |= (((U32)(ucDir & ucPin) << 24)
+ 315              		.loc 1 116 0
+ 316 0170 011CA0E1 		mov	r1, r1, asl #24
+ 115:../srccode/device.c ****         uiGpioValue &= (~(((U32)ucPin << 24) | ((U32)ucOutPut << 16)));
+ 317              		.loc 1 115 0
+ 318 0174 0CC0C4E1 		bic	ip, r4, ip
+ 319              	.LVL34:
+ 117:../srccode/device.c ****                         | ((U32)(ucOutPut & ucPin) << 16));
+ 320              		.loc 1 117 0
+ 321 0178 023881E1 		orr	r3, r1, r2, asl #16
+ 322              	.LVL35:
+ 116:../srccode/device.c ****         uiGpioValue |= (((U32)(ucDir & ucPin) << 24)
+ 323              		.loc 1 116 0
+ 324 017c 0C2083E1 		orr	r2, r3, ip
+ 325              	.LVL36:
+ 118:../srccode/device.c ****         GP3DAT = uiGpioValue;
+ 326              		.loc 1 118 0
+ 327 0180 AF2B00E5 		str	r2, [r0, #-2991]
+ 328 0184 CDFFFFEA 		b	.L9
+ 329              		.cfi_endproc
+ 330              	.LFE5:
+ 331              		.fnend
+ 332              		.size	DEV_SetGpioDir, .-DEV_SetGpioDir
+ 333              		.align	2
+ 334              		.global	DEV_HardwareInit
+ 335              		.type	DEV_HardwareInit, %function
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s 			page 10
+
+
+ 336              	DEV_HardwareInit:
+ 337              		.fnstart
+ 338              	.LFB1:
+  25:../srccode/device.c **** {
+ 339              		.loc 1 25 0
+ 340              		.cfi_startproc
+ 341              		@ Function supports interworking.
+ 342              		@ args = 0, pretend = 0, frame = 0
+ 343              		@ frame_needed = 1, uses_anonymous_args = 0
+ 344              		.movsp ip
+ 345 0188 0DC0A0E1 		mov	ip, sp
+ 346              	.LCFI3:
+ 347              		.cfi_def_cfa_register 12
+ 348 018c 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 349              		.pad #4
+ 350              		.save {fp, ip, lr}
+  30:../srccode/device.c ****     DEV_SetGpioDir(GPIOPORT3, GPIO_MR | GPIO_MY | GPIO_MG | GPIO_SR | GPIO_SG,
+ 351              		.loc 1 30 0
+ 352 0190 1F10A0E3 		mov	r1, #31
+  25:../srccode/device.c **** {
+ 353              		.loc 1 25 0
+ 354              		.setfp fp, ip, #-4
+ 355 0194 04B04CE2 		sub	fp, ip, #4
+ 356              		.cfi_offset 14, -8
+ 357              		.cfi_offset 13, -12
+ 358              		.cfi_offset 11, -16
+ 359              	.LCFI4:
+ 360              		.cfi_def_cfa 11, 4
+ 361              	.LBB8:
+ 362              	.LBB9:
+  73:../srccode/device.c ****     GP3CON = 0x00000000;
+ 363              		.loc 1 73 0
+ 364 0198 00E0A0E3 		mov	lr, #0
+ 365 019c 00C0E0E3 		mvn	ip, #0
+ 366              	.LBE9:
+ 367              	.LBE8:
+  30:../srccode/device.c ****     DEV_SetGpioDir(GPIOPORT3, GPIO_MR | GPIO_MY | GPIO_MG | GPIO_SR | GPIO_SG,
+ 368              		.loc 1 30 0
+ 369 01a0 0120A0E1 		mov	r2, r1
+ 370 01a4 0300A0E3 		mov	r0, #3
+ 371 01a8 E030A0E3 		mov	r3, #224
+ 372              	.LBB11:
+ 373              	.LBB10:
+  73:../srccode/device.c ****     GP3CON = 0x00000000;
+ 374              		.loc 1 73 0
+ 375 01ac F3EB0CE5 		str	lr, [ip, #-3059]
+ 376              	.LBE10:
+ 377              	.LBE11:
+  30:../srccode/device.c ****     DEV_SetGpioDir(GPIOPORT3, GPIO_MR | GPIO_MY | GPIO_MG | GPIO_SR | GPIO_SG,
+ 378              		.loc 1 30 0
+ 379 01b0 FEFFFFEB 		bl	DEV_SetGpioDir
+ 380              	.LBB12:
+ 381              	.LBB14:
+  61:../srccode/device.c ****     T1LD = TICK * CORECLOCKPMS; /* 设置tick时间 */
+ 382              		.loc 1 61 0
+ 383 01b4 2C209FE5 		ldr	r2, .L21
+ 384 01b8 0F3AE0E3 		mvn	r3, #61440
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s 			page 11
+
+
+ 385 01bc DF2C03E5 		str	r2, [r3, #-3295]
+ 386              	.LBE14:
+ 387              	.LBE12:
+ 388              	.LBB16:
+ 389              	.LBB18:
+  47:../srccode/device.c ****     IRQ = ISR_IrqIsr;
+ 390              		.loc 1 47 0
+ 391 01c0 24109FE5 		ldr	r1, .L21+4
+ 392 01c4 24C09FE5 		ldr	ip, .L21+8
+  50:../srccode/device.c ****     IRQEN = TIME1INTMASK | EXTIRQ0INTMASK;
+ 393              		.loc 1 50 0
+ 394 01c8 24209FE5 		ldr	r2, .L21+12
+ 395              	.LBE18:
+ 396              	.LBE16:
+ 397              	.LBB20:
+ 398              	.LBB13:
+  62:../srccode/device.c ****     T1CON = 0xC0;               /* 使能定时器1, 时钟频率41.78M, 周期循环向下计数  */
+ 399              		.loc 1 62 0
+ 400 01cc C000A0E3 		mov	r0, #192
+ 401              	.LBE13:
+ 402              	.LBE20:
+ 403              	.LBB21:
+ 404              	.LBB17:
+  47:../srccode/device.c ****     IRQ = ISR_IrqIsr;
+ 405              		.loc 1 47 0
+ 406 01d0 00108CE5 		str	r1, [ip, #0]
+ 407              	.LBE17:
+ 408              	.LBE21:
+ 409              	.LBB22:
+ 410              	.LBB15:
+  62:../srccode/device.c ****     T1CON = 0xC0;               /* 使能定时器1, 时钟频率41.78M, 周期循环向下计数  */
+ 411              		.loc 1 62 0
+ 412 01d4 D70C03E5 		str	r0, [r3, #-3287]
+ 413              	.LBE15:
+ 414              	.LBE22:
+ 415              	.LBB23:
+ 416              	.LBB19:
+  50:../srccode/device.c ****     IRQEN = TIME1INTMASK | EXTIRQ0INTMASK;
+ 417              		.loc 1 50 0
+ 418 01d8 F72F03E5 		str	r2, [r3, #-4087]
+ 419              	.LBE19:
+ 420              	.LBE23:
+  37:../srccode/device.c **** }
+ 421              		.loc 1 37 0
+ 422 01dc 0CD04BE2 		sub	sp, fp, #12
+ 423 01e0 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 424 01e4 1EFF2FE1 		bx	lr
+ 425              	.L22:
+ 426              		.align	2
+ 427              	.L21:
+ 428 01e8 50C03F00 		.word	4178000
+ 429 01ec 00000000 		.word	ISR_IrqIsr
+ 430 01f0 00000000 		.word	IRQ
+ 431 01f4 08800000 		.word	32776
+ 432              		.cfi_endproc
+ 433              	.LFE1:
+ 434              		.fnend
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s 			page 12
+
+
+ 435              		.size	DEV_HardwareInit, .-DEV_HardwareInit
+ 436              		.align	2
+ 437              		.global	DEV_SetGpio
+ 438              		.type	DEV_SetGpio, %function
+ 439              	DEV_SetGpio:
+ 440              		.fnstart
+ 441              	.LFB6:
+ 129:../srccode/device.c **** 
+ 130:../srccode/device.c **** /***********************************************************************************
+ 131:../srccode/device.c **** 函数功能: 置GPIO管脚输出为1.
+ 132:../srccode/device.c **** 入口参数: ucPort: GPIO所在的端口: 0~4.
+ 133:../srccode/device.c ****           ucPin: GPIO管脚, 需要设置的bit为1, 否则为0. 为0的bit并不清0而是保持原值.
+ 134:../srccode/device.c **** 返 回 值: none.
+ 135:../srccode/device.c **** ***********************************************************************************/
+ 136:../srccode/device.c **** void DEV_SetGpio(U8 ucPort, U8 ucPin)
+ 137:../srccode/device.c **** {
+ 442              		.loc 1 137 0
+ 443              		.cfi_startproc
+ 444              		@ Function supports interworking.
+ 445              		@ args = 0, pretend = 0, frame = 0
+ 446              		@ frame_needed = 0, uses_anonymous_args = 0
+ 447              		@ link register save eliminated.
+ 448              	.LVL37:
+ 138:../srccode/device.c ****     if(0 == ucPort)
+ 449              		.loc 1 138 0
+ 450 01f8 000050E3 		cmp	r0, #0
+ 451              	.LVL38:
+ 139:../srccode/device.c ****     {
+ 140:../srccode/device.c ****         GP0SET = ((U32)ucPin << 16);
+ 452              		.loc 1 140 0
+ 453 01fc 0118A001 		moveq	r1, r1, asl #16
+ 454              	.LVL39:
+ 455 0200 0030E003 		mvneq	r3, #0
+ 456 0204 DB1B0305 		streq	r1, [r3, #-3035]
+ 138:../srccode/device.c ****     if(0 == ucPort)
+ 457              		.loc 1 138 0
+ 458 0208 1EFF2F01 		bxeq	lr
+ 141:../srccode/device.c ****     }
+ 142:../srccode/device.c ****     else if(1 == ucPort)
+ 459              		.loc 1 142 0
+ 460 020c 010050E3 		cmp	r0, #1
+ 143:../srccode/device.c ****     {
+ 144:../srccode/device.c ****         GP1SET = ((U32)ucPin << 16);
+ 461              		.loc 1 144 0
+ 462 0210 0118A001 		moveq	r1, r1, asl #16
+ 463 0214 0030E003 		mvneq	r3, #0
+ 464 0218 CB1B0305 		streq	r1, [r3, #-3019]
+ 142:../srccode/device.c ****     else if(1 == ucPort)
+ 465              		.loc 1 142 0
+ 466 021c 1EFF2F01 		bxeq	lr
+ 145:../srccode/device.c ****     }
+ 146:../srccode/device.c ****     else if(2 == ucPort)
+ 467              		.loc 1 146 0
+ 468 0220 020050E3 		cmp	r0, #2
+ 147:../srccode/device.c ****     {
+ 148:../srccode/device.c ****         GP2SET = ((U32)ucPin << 16);
+ 469              		.loc 1 148 0
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s 			page 13
+
+
+ 470 0224 0118A001 		moveq	r1, r1, asl #16
+ 471 0228 0030E003 		mvneq	r3, #0
+ 472 022c BB1B0305 		streq	r1, [r3, #-3003]
+ 146:../srccode/device.c ****     else if(2 == ucPort)
+ 473              		.loc 1 146 0
+ 474 0230 1EFF2F01 		bxeq	lr
+ 149:../srccode/device.c ****     }
+ 150:../srccode/device.c ****     else if(3 == ucPort)
+ 475              		.loc 1 150 0
+ 476 0234 030050E3 		cmp	r0, #3
+ 151:../srccode/device.c ****     {
+ 152:../srccode/device.c ****         GP3SET = ((U32)ucPin << 16);
+ 477              		.loc 1 152 0
+ 478 0238 0118A0E1 		mov	r1, r1, asl #16
+ 479 023c 0030E0E3 		mvn	r3, #0
+ 480 0240 AB1B0305 		streq	r1, [r3, #-2987]
+ 153:../srccode/device.c ****     }
+ 154:../srccode/device.c ****     else //if(4 == ucPort)
+ 155:../srccode/device.c ****     {
+ 156:../srccode/device.c ****         GP4SET = ((U32)ucPin << 16);
+ 481              		.loc 1 156 0
+ 482 0244 9B1B0315 		strne	r1, [r3, #-2971]
+ 483 0248 1EFF2FE1 		bx	lr
+ 484              		.cfi_endproc
+ 485              	.LFE6:
+ 486              		.fnend
+ 487              		.size	DEV_SetGpio, .-DEV_SetGpio
+ 488              		.align	2
+ 489              		.global	DEV_ClrGpio
+ 490              		.type	DEV_ClrGpio, %function
+ 491              	DEV_ClrGpio:
+ 492              		.fnstart
+ 493              	.LFB7:
+ 157:../srccode/device.c ****     }
+ 158:../srccode/device.c **** }
+ 159:../srccode/device.c **** 
+ 160:../srccode/device.c **** /***********************************************************************************
+ 161:../srccode/device.c **** 函数功能: 置GPIO管脚输出为0.
+ 162:../srccode/device.c **** 入口参数: ucPort: GPIO所在的端口: 0~4.
+ 163:../srccode/device.c ****           ucPin: GPIO管脚, 需要清除的bit为1, 否则为0. 为0的bit并不清0而是保持原值.
+ 164:../srccode/device.c **** 返 回 值: none.
+ 165:../srccode/device.c **** ***********************************************************************************/
+ 166:../srccode/device.c **** void DEV_ClrGpio(U8 ucPort, U8 ucPin)
+ 167:../srccode/device.c **** {
+ 494              		.loc 1 167 0
+ 495              		.cfi_startproc
+ 496              		@ Function supports interworking.
+ 497              		@ args = 0, pretend = 0, frame = 0
+ 498              		@ frame_needed = 0, uses_anonymous_args = 0
+ 499              		@ link register save eliminated.
+ 500              	.LVL40:
+ 168:../srccode/device.c ****     if(0 == ucPort)
+ 501              		.loc 1 168 0
+ 502 024c 000050E3 		cmp	r0, #0
+ 503              	.LVL41:
+ 169:../srccode/device.c ****     {
+ 170:../srccode/device.c ****         GP0CLR = ((U32)ucPin << 16);
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s 			page 14
+
+
+ 504              		.loc 1 170 0
+ 505 0250 0118A001 		moveq	r1, r1, asl #16
+ 506              	.LVL42:
+ 507 0254 0030E003 		mvneq	r3, #0
+ 508 0258 D71B0305 		streq	r1, [r3, #-3031]
+ 168:../srccode/device.c ****     if(0 == ucPort)
+ 509              		.loc 1 168 0
+ 510 025c 1EFF2F01 		bxeq	lr
+ 171:../srccode/device.c ****     }
+ 172:../srccode/device.c ****     else if(1 == ucPort)
+ 511              		.loc 1 172 0
+ 512 0260 010050E3 		cmp	r0, #1
+ 173:../srccode/device.c ****     {
+ 174:../srccode/device.c ****         GP1CLR = ((U32)ucPin << 16);
+ 513              		.loc 1 174 0
+ 514 0264 0118A001 		moveq	r1, r1, asl #16
+ 515 0268 0030E003 		mvneq	r3, #0
+ 516 026c C71B0305 		streq	r1, [r3, #-3015]
+ 172:../srccode/device.c ****     else if(1 == ucPort)
+ 517              		.loc 1 172 0
+ 518 0270 1EFF2F01 		bxeq	lr
+ 175:../srccode/device.c ****     }
+ 176:../srccode/device.c ****     else if(2 == ucPort)
+ 519              		.loc 1 176 0
+ 520 0274 020050E3 		cmp	r0, #2
+ 177:../srccode/device.c ****     {
+ 178:../srccode/device.c ****         GP2CLR = ((U32)ucPin << 16);
+ 521              		.loc 1 178 0
+ 522 0278 0118A001 		moveq	r1, r1, asl #16
+ 523 027c 0030E003 		mvneq	r3, #0
+ 524 0280 B71B0305 		streq	r1, [r3, #-2999]
+ 176:../srccode/device.c ****     else if(2 == ucPort)
+ 525              		.loc 1 176 0
+ 526 0284 1EFF2F01 		bxeq	lr
+ 179:../srccode/device.c ****     }
+ 180:../srccode/device.c ****     else if(3 == ucPort)
+ 527              		.loc 1 180 0
+ 528 0288 030050E3 		cmp	r0, #3
+ 181:../srccode/device.c ****     {
+ 182:../srccode/device.c ****         GP3CLR = ((U32)ucPin << 16);
+ 529              		.loc 1 182 0
+ 530 028c 0118A0E1 		mov	r1, r1, asl #16
+ 531 0290 0030E0E3 		mvn	r3, #0
+ 532 0294 A71B0305 		streq	r1, [r3, #-2983]
+ 183:../srccode/device.c ****     }
+ 184:../srccode/device.c ****     else //if(4 == ucPort)
+ 185:../srccode/device.c ****     {
+ 186:../srccode/device.c ****         GP4CLR = ((U32)ucPin << 16);
+ 533              		.loc 1 186 0
+ 534 0298 971B0315 		strne	r1, [r3, #-2967]
+ 535 029c 1EFF2FE1 		bx	lr
+ 536              		.cfi_endproc
+ 537              	.LFE7:
+ 538              		.fnend
+ 539              		.size	DEV_ClrGpio, .-DEV_ClrGpio
+ 540              		.comm	guiSystemTick,4,4
+ 541              	.Letext0:
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s 			page 15
+
+
+ 542              		.section	.debug_loc,"",%progbits
+ 543              	.Ldebug_loc0:
+ 544              	.LLST0:
+ 545 0000 00000000 		.4byte	.LFB0-.Ltext0
+ 546 0004 04000000 		.4byte	.LCFI0-.Ltext0
+ 547 0008 0200     		.2byte	0x2
+ 548 000a 7D       		.byte	0x7d
+ 549 000b 00       		.sleb128 0
+ 550 000c 04000000 		.4byte	.LCFI0-.Ltext0
+ 551 0010 0C000000 		.4byte	.LCFI1-.Ltext0
+ 552 0014 0200     		.2byte	0x2
+ 553 0016 7C       		.byte	0x7c
+ 554 0017 00       		.sleb128 0
+ 555 0018 0C000000 		.4byte	.LCFI1-.Ltext0
+ 556 001c 1C000000 		.4byte	.LFE0-.Ltext0
+ 557 0020 0200     		.2byte	0x2
+ 558 0022 7B       		.byte	0x7b
+ 559 0023 04       		.sleb128 4
+ 560 0024 00000000 		.4byte	0x0
+ 561 0028 00000000 		.4byte	0x0
+ 562              	.LLST1:
+ 563 002c 70000000 		.4byte	.LFB5-.Ltext0
+ 564 0030 78000000 		.4byte	.LCFI2-.Ltext0
+ 565 0034 0200     		.2byte	0x2
+ 566 0036 7D       		.byte	0x7d
+ 567 0037 00       		.sleb128 0
+ 568 0038 78000000 		.4byte	.LCFI2-.Ltext0
+ 569 003c 88010000 		.4byte	.LFE5-.Ltext0
+ 570 0040 0200     		.2byte	0x2
+ 571 0042 7D       		.byte	0x7d
+ 572 0043 04       		.sleb128 4
+ 573 0044 00000000 		.4byte	0x0
+ 574 0048 00000000 		.4byte	0x0
+ 575              	.LLST2:
+ 576 004c 70000000 		.4byte	.LVL0-.Ltext0
+ 577 0050 74000000 		.4byte	.LVL1-.Ltext0
+ 578 0054 0100     		.2byte	0x1
+ 579 0056 50       		.byte	0x50
+ 580 0057 00000000 		.4byte	0x0
+ 581 005b 00000000 		.4byte	0x0
+ 582              	.LLST3:
+ 583 005f 70000000 		.4byte	.LVL0-.Ltext0
+ 584 0063 A4000000 		.4byte	.LVL3-.Ltext0
+ 585 0067 0100     		.2byte	0x1
+ 586 0069 51       		.byte	0x51
+ 587 006a C8000000 		.4byte	.LVL9-.Ltext0
+ 588 006e D0000000 		.4byte	.LVL10-.Ltext0
+ 589 0072 0100     		.2byte	0x1
+ 590 0074 51       		.byte	0x51
+ 591 0075 F8000000 		.4byte	.LVL16-.Ltext0
+ 592 0079 08010000 		.4byte	.LVL18-.Ltext0
+ 593 007d 0100     		.2byte	0x1
+ 594 007f 51       		.byte	0x51
+ 595 0080 28010000 		.4byte	.LVL23-.Ltext0
+ 596 0084 38010000 		.4byte	.LVL25-.Ltext0
+ 597 0088 0100     		.2byte	0x1
+ 598 008a 51       		.byte	0x51
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s 			page 16
+
+
+ 599 008b 58010000 		.4byte	.LVL30-.Ltext0
+ 600 008f 68010000 		.4byte	.LVL32-.Ltext0
+ 601 0093 0100     		.2byte	0x1
+ 602 0095 51       		.byte	0x51
+ 603 0096 00000000 		.4byte	0x0
+ 604 009a 00000000 		.4byte	0x0
+ 605              	.LLST4:
+ 606 009e 70000000 		.4byte	.LVL0-.Ltext0
+ 607 00a2 B8000000 		.4byte	.LVL6-.Ltext0
+ 608 00a6 0100     		.2byte	0x1
+ 609 00a8 52       		.byte	0x52
+ 610 00a9 C8000000 		.4byte	.LVL9-.Ltext0
+ 611 00ad E0000000 		.4byte	.LVL12-.Ltext0
+ 612 00b1 0100     		.2byte	0x1
+ 613 00b3 52       		.byte	0x52
+ 614 00b4 F8000000 		.4byte	.LVL16-.Ltext0
+ 615 00b8 10010000 		.4byte	.LVL19-.Ltext0
+ 616 00bc 0100     		.2byte	0x1
+ 617 00be 52       		.byte	0x52
+ 618 00bf 28010000 		.4byte	.LVL23-.Ltext0
+ 619 00c3 4C010000 		.4byte	.LVL28-.Ltext0
+ 620 00c7 0100     		.2byte	0x1
+ 621 00c9 52       		.byte	0x52
+ 622 00ca 58010000 		.4byte	.LVL30-.Ltext0
+ 623 00ce 70010000 		.4byte	.LVL33-.Ltext0
+ 624 00d2 0100     		.2byte	0x1
+ 625 00d4 52       		.byte	0x52
+ 626 00d5 00000000 		.4byte	0x0
+ 627 00d9 00000000 		.4byte	0x0
+ 628              	.LLST5:
+ 629 00dd 70000000 		.4byte	.LVL0-.Ltext0
+ 630 00e1 B0000000 		.4byte	.LVL4-.Ltext0
+ 631 00e5 0100     		.2byte	0x1
+ 632 00e7 53       		.byte	0x53
+ 633 00e8 C8000000 		.4byte	.LVL9-.Ltext0
+ 634 00ec E4000000 		.4byte	.LVL13-.Ltext0
+ 635 00f0 0100     		.2byte	0x1
+ 636 00f2 53       		.byte	0x53
+ 637 00f3 F8000000 		.4byte	.LVL16-.Ltext0
+ 638 00f7 1C010000 		.4byte	.LVL21-.Ltext0
+ 639 00fb 0100     		.2byte	0x1
+ 640 00fd 53       		.byte	0x53
+ 641 00fe 28010000 		.4byte	.LVL23-.Ltext0
+ 642 0102 44010000 		.4byte	.LVL26-.Ltext0
+ 643 0106 0100     		.2byte	0x1
+ 644 0108 53       		.byte	0x53
+ 645 0109 58010000 		.4byte	.LVL30-.Ltext0
+ 646 010d 7C010000 		.4byte	.LVL35-.Ltext0
+ 647 0111 0100     		.2byte	0x1
+ 648 0113 53       		.byte	0x53
+ 649 0114 00000000 		.4byte	0x0
+ 650 0118 00000000 		.4byte	0x0
+ 651              	.LLST6:
+ 652 011c 9C000000 		.4byte	.LVL2-.Ltext0
+ 653 0120 B4000000 		.4byte	.LVL5-.Ltext0
+ 654 0124 0100     		.2byte	0x1
+ 655 0126 54       		.byte	0x54
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s 			page 17
+
+
+ 656 0127 B4000000 		.4byte	.LVL5-.Ltext0
+ 657 012b BC000000 		.4byte	.LVL7-.Ltext0
+ 658 012f 0100     		.2byte	0x1
+ 659 0131 5C       		.byte	0x5c
+ 660 0132 BC000000 		.4byte	.LVL7-.Ltext0
+ 661 0136 C0000000 		.4byte	.LVL8-.Ltext0
+ 662 013a 0100     		.2byte	0x1
+ 663 013c 53       		.byte	0x53
+ 664 013d D4000000 		.4byte	.LVL11-.Ltext0
+ 665 0141 E8000000 		.4byte	.LVL14-.Ltext0
+ 666 0145 0100     		.2byte	0x1
+ 667 0147 54       		.byte	0x54
+ 668 0148 E8000000 		.4byte	.LVL14-.Ltext0
+ 669 014c F0000000 		.4byte	.LVL15-.Ltext0
+ 670 0150 0100     		.2byte	0x1
+ 671 0152 5C       		.byte	0x5c
+ 672 0153 F0000000 		.4byte	.LVL15-.Ltext0
+ 673 0157 F8000000 		.4byte	.LVL16-.Ltext0
+ 674 015b 0100     		.2byte	0x1
+ 675 015d 53       		.byte	0x53
+ 676 015e 00010000 		.4byte	.LVL17-.Ltext0
+ 677 0162 18010000 		.4byte	.LVL20-.Ltext0
+ 678 0166 0100     		.2byte	0x1
+ 679 0168 54       		.byte	0x54
+ 680 0169 18010000 		.4byte	.LVL20-.Ltext0
+ 681 016d 20010000 		.4byte	.LVL22-.Ltext0
+ 682 0171 0100     		.2byte	0x1
+ 683 0173 5C       		.byte	0x5c
+ 684 0174 20010000 		.4byte	.LVL22-.Ltext0
+ 685 0178 28010000 		.4byte	.LVL23-.Ltext0
+ 686 017c 0100     		.2byte	0x1
+ 687 017e 52       		.byte	0x52
+ 688 017f 30010000 		.4byte	.LVL24-.Ltext0
+ 689 0183 48010000 		.4byte	.LVL27-.Ltext0
+ 690 0187 0100     		.2byte	0x1
+ 691 0189 54       		.byte	0x54
+ 692 018a 48010000 		.4byte	.LVL27-.Ltext0
+ 693 018e 50010000 		.4byte	.LVL29-.Ltext0
+ 694 0192 0100     		.2byte	0x1
+ 695 0194 5C       		.byte	0x5c
+ 696 0195 50010000 		.4byte	.LVL29-.Ltext0
+ 697 0199 58010000 		.4byte	.LVL30-.Ltext0
+ 698 019d 0100     		.2byte	0x1
+ 699 019f 53       		.byte	0x53
+ 700 01a0 60010000 		.4byte	.LVL31-.Ltext0
+ 701 01a4 78010000 		.4byte	.LVL34-.Ltext0
+ 702 01a8 0100     		.2byte	0x1
+ 703 01aa 54       		.byte	0x54
+ 704 01ab 78010000 		.4byte	.LVL34-.Ltext0
+ 705 01af 80010000 		.4byte	.LVL36-.Ltext0
+ 706 01b3 0100     		.2byte	0x1
+ 707 01b5 5C       		.byte	0x5c
+ 708 01b6 80010000 		.4byte	.LVL36-.Ltext0
+ 709 01ba 88010000 		.4byte	.LFE5-.Ltext0
+ 710 01be 0100     		.2byte	0x1
+ 711 01c0 52       		.byte	0x52
+ 712 01c1 00000000 		.4byte	0x0
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s 			page 18
+
+
+ 713 01c5 00000000 		.4byte	0x0
+ 714              	.LLST7:
+ 715 01c9 88010000 		.4byte	.LFB1-.Ltext0
+ 716 01cd 8C010000 		.4byte	.LCFI3-.Ltext0
+ 717 01d1 0200     		.2byte	0x2
+ 718 01d3 7D       		.byte	0x7d
+ 719 01d4 00       		.sleb128 0
+ 720 01d5 8C010000 		.4byte	.LCFI3-.Ltext0
+ 721 01d9 98010000 		.4byte	.LCFI4-.Ltext0
+ 722 01dd 0200     		.2byte	0x2
+ 723 01df 7C       		.byte	0x7c
+ 724 01e0 00       		.sleb128 0
+ 725 01e1 98010000 		.4byte	.LCFI4-.Ltext0
+ 726 01e5 F8010000 		.4byte	.LFE1-.Ltext0
+ 727 01e9 0200     		.2byte	0x2
+ 728 01eb 7B       		.byte	0x7b
+ 729 01ec 04       		.sleb128 4
+ 730 01ed 00000000 		.4byte	0x0
+ 731 01f1 00000000 		.4byte	0x0
+ 732              	.LLST8:
+ 733 01f5 F8010000 		.4byte	.LVL37-.Ltext0
+ 734 01f9 FC010000 		.4byte	.LVL38-.Ltext0
+ 735 01fd 0100     		.2byte	0x1
+ 736 01ff 50       		.byte	0x50
+ 737 0200 00000000 		.4byte	0x0
+ 738 0204 00000000 		.4byte	0x0
+ 739              	.LLST9:
+ 740 0208 F8010000 		.4byte	.LVL37-.Ltext0
+ 741 020c 00020000 		.4byte	.LVL39-.Ltext0
+ 742 0210 0100     		.2byte	0x1
+ 743 0212 51       		.byte	0x51
+ 744 0213 00000000 		.4byte	0x0
+ 745 0217 00000000 		.4byte	0x0
+ 746              	.LLST10:
+ 747 021b 4C020000 		.4byte	.LVL40-.Ltext0
+ 748 021f 50020000 		.4byte	.LVL41-.Ltext0
+ 749 0223 0100     		.2byte	0x1
+ 750 0225 50       		.byte	0x50
+ 751 0226 00000000 		.4byte	0x0
+ 752 022a 00000000 		.4byte	0x0
+ 753              	.LLST11:
+ 754 022e 4C020000 		.4byte	.LVL40-.Ltext0
+ 755 0232 54020000 		.4byte	.LVL42-.Ltext0
+ 756 0236 0100     		.2byte	0x1
+ 757 0238 51       		.byte	0x51
+ 758 0239 00000000 		.4byte	0x0
+ 759 023d 00000000 		.4byte	0x0
+ 760              		.file 2 "../wanlix/wanlix.h"
+ 761              		.file 3 "C:/Keil/ARM/INC/ADI/ADuC7024.h"
+ 762              		.section	.debug_info
+ 763 0000 24020000 		.4byte	0x224
+ 764 0004 0200     		.2byte	0x2
+ 765 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 766 000a 04       		.byte	0x4
+ 767 000b 01       		.uleb128 0x1
+ 768 000c 00000000 		.4byte	.LASF19
+ 769 0010 01       		.byte	0x1
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s 			page 19
+
+
+ 770 0011 8F000000 		.4byte	.LASF20
+ 771 0015 F8000000 		.4byte	.LASF21
+ 772 0019 00000000 		.4byte	.Ltext0
+ 773 001d A0020000 		.4byte	.Letext0
+ 774 0021 00000000 		.4byte	.Ldebug_line0
+ 775 0025 02       		.uleb128 0x2
+ 776 0026 04       		.byte	0x4
+ 777 0027 07       		.byte	0x7
+ 778 0028 3C000000 		.4byte	.LASF0
+ 779 002c 02       		.uleb128 0x2
+ 780 002d 04       		.byte	0x4
+ 781 002e 07       		.byte	0x7
+ 782 002f B3000000 		.4byte	.LASF1
+ 783 0033 03       		.uleb128 0x3
+ 784 0034 ED000000 		.4byte	.LASF2
+ 785 0038 03       		.byte	0x3
+ 786 0039 4E       		.byte	0x4e
+ 787 003a 3E000000 		.4byte	0x3e
+ 788 003e 04       		.uleb128 0x4
+ 789 003f 04       		.byte	0x4
+ 790 0040 44000000 		.4byte	0x44
+ 791 0044 05       		.uleb128 0x5
+ 792 0045 01       		.byte	0x1
+ 793 0046 06       		.uleb128 0x6
+ 794 0047 553800   		.ascii	"U8\000"
+ 795 004a 02       		.byte	0x2
+ 796 004b 07       		.byte	0x7
+ 797 004c 50000000 		.4byte	0x50
+ 798 0050 02       		.uleb128 0x2
+ 799 0051 01       		.byte	0x1
+ 800 0052 08       		.byte	0x8
+ 801 0053 28000000 		.4byte	.LASF3
+ 802 0057 02       		.uleb128 0x2
+ 803 0058 02       		.byte	0x2
+ 804 0059 07       		.byte	0x7
+ 805 005a 5D000000 		.4byte	.LASF4
+ 806 005e 06       		.uleb128 0x6
+ 807 005f 55333200 		.ascii	"U32\000"
+ 808 0063 02       		.byte	0x2
+ 809 0064 09       		.byte	0x9
+ 810 0065 2C000000 		.4byte	0x2c
+ 811 0069 02       		.uleb128 0x2
+ 812 006a 01       		.byte	0x1
+ 813 006b 08       		.byte	0x8
+ 814 006c C0000000 		.4byte	.LASF5
+ 815 0070 02       		.uleb128 0x2
+ 816 0071 02       		.byte	0x2
+ 817 0072 05       		.byte	0x5
+ 818 0073 18000000 		.4byte	.LASF6
+ 819 0077 07       		.uleb128 0x7
+ 820 0078 04       		.byte	0x4
+ 821 0079 05       		.byte	0x5
+ 822 007a 696E7400 		.ascii	"int\000"
+ 823 007e 08       		.uleb128 0x8
+ 824 007f 01       		.byte	0x1
+ 825 0080 A3000000 		.4byte	.LASF7
+ 826 0084 01       		.byte	0x1
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s 			page 20
+
+
+ 827 0085 46       		.byte	0x46
+ 828 0086 01       		.byte	0x1
+ 829 0087 01       		.byte	0x1
+ 830 0088 08       		.uleb128 0x8
+ 831 0089 01       		.byte	0x1
+ 832 008a 81000000 		.4byte	.LASF8
+ 833 008e 01       		.byte	0x1
+ 834 008f 3A       		.byte	0x3a
+ 835 0090 01       		.byte	0x1
+ 836 0091 01       		.byte	0x1
+ 837 0092 08       		.uleb128 0x8
+ 838 0093 01       		.byte	0x1
+ 839 0094 C5000000 		.4byte	.LASF9
+ 840 0098 01       		.byte	0x1
+ 841 0099 2C       		.byte	0x2c
+ 842 009a 01       		.byte	0x1
+ 843 009b 01       		.byte	0x1
+ 844 009c 09       		.uleb128 0x9
+ 845 009d 01       		.byte	0x1
+ 846 009e 17010000 		.4byte	.LASF22
+ 847 00a2 01       		.byte	0x1
+ 848 00a3 0D       		.byte	0xd
+ 849 00a4 01       		.byte	0x1
+ 850 00a5 00000000 		.4byte	.LFB0
+ 851 00a9 1C000000 		.4byte	.LFE0
+ 852 00ad 00000000 		.4byte	.LLST0
+ 853 00b1 0A       		.uleb128 0xa
+ 854 00b2 92000000 		.4byte	0x92
+ 855 00b6 1C000000 		.4byte	.LFB2
+ 856 00ba 44000000 		.4byte	.LFE2
+ 857 00be 02       		.byte	0x2
+ 858 00bf 7D       		.byte	0x7d
+ 859 00c0 00       		.sleb128 0
+ 860 00c1 0A       		.uleb128 0xa
+ 861 00c2 88000000 		.4byte	0x88
+ 862 00c6 44000000 		.4byte	.LFB3
+ 863 00ca 60000000 		.4byte	.LFE3
+ 864 00ce 02       		.byte	0x2
+ 865 00cf 7D       		.byte	0x7d
+ 866 00d0 00       		.sleb128 0
+ 867 00d1 0A       		.uleb128 0xa
+ 868 00d2 7E000000 		.4byte	0x7e
+ 869 00d6 60000000 		.4byte	.LFB4
+ 870 00da 70000000 		.4byte	.LFE4
+ 871 00de 02       		.byte	0x2
+ 872 00df 7D       		.byte	0x7d
+ 873 00e0 00       		.sleb128 0
+ 874 00e1 0B       		.uleb128 0xb
+ 875 00e2 01       		.byte	0x1
+ 876 00e3 4E000000 		.4byte	.LASF14
+ 877 00e7 01       		.byte	0x1
+ 878 00e8 54       		.byte	0x54
+ 879 00e9 01       		.byte	0x1
+ 880 00ea 70000000 		.4byte	.LFB5
+ 881 00ee 88010000 		.4byte	.LFE5
+ 882 00f2 2C000000 		.4byte	.LLST1
+ 883 00f6 46010000 		.4byte	0x146
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s 			page 21
+
+
+ 884 00fa 0C       		.uleb128 0xc
+ 885 00fb D1000000 		.4byte	.LASF10
+ 886 00ff 01       		.byte	0x1
+ 887 0100 54       		.byte	0x54
+ 888 0101 46000000 		.4byte	0x46
+ 889 0105 4C000000 		.4byte	.LLST2
+ 890 0109 0C       		.uleb128 0xc
+ 891 010a 22000000 		.4byte	.LASF11
+ 892 010e 01       		.byte	0x1
+ 893 010f 54       		.byte	0x54
+ 894 0110 46000000 		.4byte	0x46
+ 895 0114 5F000000 		.4byte	.LLST3
+ 896 0118 0C       		.uleb128 0xc
+ 897 0119 36000000 		.4byte	.LASF12
+ 898 011d 01       		.byte	0x1
+ 899 011e 54       		.byte	0x54
+ 900 011f 46000000 		.4byte	0x46
+ 901 0123 9E000000 		.4byte	.LLST4
+ 902 0127 0C       		.uleb128 0xc
+ 903 0128 E4000000 		.4byte	.LASF13
+ 904 012c 01       		.byte	0x1
+ 905 012d 54       		.byte	0x54
+ 906 012e 46000000 		.4byte	0x46
+ 907 0132 DD000000 		.4byte	.LLST5
+ 908 0136 0D       		.uleb128 0xd
+ 909 0137 28010000 		.4byte	.LASF23
+ 910 013b 01       		.byte	0x1
+ 911 013c 56       		.byte	0x56
+ 912 013d 5E000000 		.4byte	0x5e
+ 913 0141 1C010000 		.4byte	.LLST6
+ 914 0145 00       		.byte	0x0
+ 915 0146 0B       		.uleb128 0xb
+ 916 0147 01       		.byte	0x1
+ 917 0148 70000000 		.4byte	.LASF15
+ 918 014c 01       		.byte	0x1
+ 919 014d 18       		.byte	0x18
+ 920 014e 01       		.byte	0x1
+ 921 014f 88010000 		.4byte	.LFB1
+ 922 0153 F8010000 		.4byte	.LFE1
+ 923 0157 C9010000 		.4byte	.LLST7
+ 924 015b 8D010000 		.4byte	0x18d
+ 925 015f 0E       		.uleb128 0xe
+ 926 0160 7E000000 		.4byte	0x7e
+ 927 0164 98010000 		.4byte	.LBB8
+ 928 0168 00000000 		.4byte	.Ldebug_ranges0+0x0
+ 929 016c 01       		.byte	0x1
+ 930 016d 1B       		.byte	0x1b
+ 931 016e 0E       		.uleb128 0xe
+ 932 016f 88000000 		.4byte	0x88
+ 933 0173 B4010000 		.4byte	.LBB12
+ 934 0177 18000000 		.4byte	.Ldebug_ranges0+0x18
+ 935 017b 01       		.byte	0x1
+ 936 017c 22       		.byte	0x22
+ 937 017d 0E       		.uleb128 0xe
+ 938 017e 92000000 		.4byte	0x92
+ 939 0182 C0010000 		.4byte	.LBB16
+ 940 0186 38000000 		.4byte	.Ldebug_ranges0+0x38
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s 			page 22
+
+
+ 941 018a 01       		.byte	0x1
+ 942 018b 24       		.byte	0x24
+ 943 018c 00       		.byte	0x0
+ 944 018d 0F       		.uleb128 0xf
+ 945 018e 01       		.byte	0x1
+ 946 018f D8000000 		.4byte	.LASF16
+ 947 0193 01       		.byte	0x1
+ 948 0194 88       		.byte	0x88
+ 949 0195 01       		.byte	0x1
+ 950 0196 F8010000 		.4byte	.LFB6
+ 951 019a 4C020000 		.4byte	.LFE6
+ 952 019e 02       		.byte	0x2
+ 953 019f 7D       		.byte	0x7d
+ 954 01a0 00       		.sleb128 0
+ 955 01a1 C4010000 		.4byte	0x1c4
+ 956 01a5 0C       		.uleb128 0xc
+ 957 01a6 D1000000 		.4byte	.LASF10
+ 958 01aa 01       		.byte	0x1
+ 959 01ab 88       		.byte	0x88
+ 960 01ac 46000000 		.4byte	0x46
+ 961 01b0 F5010000 		.4byte	.LLST8
+ 962 01b4 0C       		.uleb128 0xc
+ 963 01b5 36000000 		.4byte	.LASF12
+ 964 01b9 01       		.byte	0x1
+ 965 01ba 88       		.byte	0x88
+ 966 01bb 46000000 		.4byte	0x46
+ 967 01bf 08020000 		.4byte	.LLST9
+ 968 01c3 00       		.byte	0x0
+ 969 01c4 0F       		.uleb128 0xf
+ 970 01c5 01       		.byte	0x1
+ 971 01c6 0C000000 		.4byte	.LASF17
+ 972 01ca 01       		.byte	0x1
+ 973 01cb A6       		.byte	0xa6
+ 974 01cc 01       		.byte	0x1
+ 975 01cd 4C020000 		.4byte	.LFB7
+ 976 01d1 A0020000 		.4byte	.LFE7
+ 977 01d5 02       		.byte	0x2
+ 978 01d6 7D       		.byte	0x7d
+ 979 01d7 00       		.sleb128 0
+ 980 01d8 FB010000 		.4byte	0x1fb
+ 981 01dc 0C       		.uleb128 0xc
+ 982 01dd D1000000 		.4byte	.LASF10
+ 983 01e1 01       		.byte	0x1
+ 984 01e2 A6       		.byte	0xa6
+ 985 01e3 46000000 		.4byte	0x46
+ 986 01e7 1B020000 		.4byte	.LLST10
+ 987 01eb 0C       		.uleb128 0xc
+ 988 01ec 36000000 		.4byte	.LASF12
+ 989 01f0 01       		.byte	0x1
+ 990 01f1 A6       		.byte	0xa6
+ 991 01f2 46000000 		.4byte	0x46
+ 992 01f6 2E020000 		.4byte	.LLST11
+ 993 01fa 00       		.byte	0x0
+ 994 01fb 10       		.uleb128 0x10
+ 995 01fc 49525100 		.ascii	"IRQ\000"
+ 996 0200 03       		.byte	0x3
+ 997 0201 50       		.byte	0x50
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s 			page 23
+
+
+ 998 0202 33000000 		.4byte	0x33
+ 999 0206 01       		.byte	0x1
+ 1000 0207 01       		.byte	0x1
+ 1001 0208 10       		.uleb128 0x10
+ 1002 0209 49525100 		.ascii	"IRQ\000"
+ 1003 020d 03       		.byte	0x3
+ 1004 020e 50       		.byte	0x50
+ 1005 020f 33000000 		.4byte	0x33
+ 1006 0213 01       		.byte	0x1
+ 1007 0214 01       		.byte	0x1
+ 1008 0215 11       		.uleb128 0x11
+ 1009 0216 34010000 		.4byte	.LASF18
+ 1010 021a 01       		.byte	0x1
+ 1011 021b 05       		.byte	0x5
+ 1012 021c 5E000000 		.4byte	0x5e
+ 1013 0220 01       		.byte	0x1
+ 1014 0221 05       		.byte	0x5
+ 1015 0222 03       		.byte	0x3
+ 1016 0223 00000000 		.4byte	guiSystemTick
+ 1017 0227 00       		.byte	0x0
+ 1018              		.section	.debug_abbrev
+ 1019 0000 01       		.uleb128 0x1
+ 1020 0001 11       		.uleb128 0x11
+ 1021 0002 01       		.byte	0x1
+ 1022 0003 25       		.uleb128 0x25
+ 1023 0004 0E       		.uleb128 0xe
+ 1024 0005 13       		.uleb128 0x13
+ 1025 0006 0B       		.uleb128 0xb
+ 1026 0007 03       		.uleb128 0x3
+ 1027 0008 0E       		.uleb128 0xe
+ 1028 0009 1B       		.uleb128 0x1b
+ 1029 000a 0E       		.uleb128 0xe
+ 1030 000b 11       		.uleb128 0x11
+ 1031 000c 01       		.uleb128 0x1
+ 1032 000d 12       		.uleb128 0x12
+ 1033 000e 01       		.uleb128 0x1
+ 1034 000f 10       		.uleb128 0x10
+ 1035 0010 06       		.uleb128 0x6
+ 1036 0011 00       		.byte	0x0
+ 1037 0012 00       		.byte	0x0
+ 1038 0013 02       		.uleb128 0x2
+ 1039 0014 24       		.uleb128 0x24
+ 1040 0015 00       		.byte	0x0
+ 1041 0016 0B       		.uleb128 0xb
+ 1042 0017 0B       		.uleb128 0xb
+ 1043 0018 3E       		.uleb128 0x3e
+ 1044 0019 0B       		.uleb128 0xb
+ 1045 001a 03       		.uleb128 0x3
+ 1046 001b 0E       		.uleb128 0xe
+ 1047 001c 00       		.byte	0x0
+ 1048 001d 00       		.byte	0x0
+ 1049 001e 03       		.uleb128 0x3
+ 1050 001f 16       		.uleb128 0x16
+ 1051 0020 00       		.byte	0x0
+ 1052 0021 03       		.uleb128 0x3
+ 1053 0022 0E       		.uleb128 0xe
+ 1054 0023 3A       		.uleb128 0x3a
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s 			page 24
+
+
+ 1055 0024 0B       		.uleb128 0xb
+ 1056 0025 3B       		.uleb128 0x3b
+ 1057 0026 0B       		.uleb128 0xb
+ 1058 0027 49       		.uleb128 0x49
+ 1059 0028 13       		.uleb128 0x13
+ 1060 0029 00       		.byte	0x0
+ 1061 002a 00       		.byte	0x0
+ 1062 002b 04       		.uleb128 0x4
+ 1063 002c 0F       		.uleb128 0xf
+ 1064 002d 00       		.byte	0x0
+ 1065 002e 0B       		.uleb128 0xb
+ 1066 002f 0B       		.uleb128 0xb
+ 1067 0030 49       		.uleb128 0x49
+ 1068 0031 13       		.uleb128 0x13
+ 1069 0032 00       		.byte	0x0
+ 1070 0033 00       		.byte	0x0
+ 1071 0034 05       		.uleb128 0x5
+ 1072 0035 15       		.uleb128 0x15
+ 1073 0036 00       		.byte	0x0
+ 1074 0037 27       		.uleb128 0x27
+ 1075 0038 0C       		.uleb128 0xc
+ 1076 0039 00       		.byte	0x0
+ 1077 003a 00       		.byte	0x0
+ 1078 003b 06       		.uleb128 0x6
+ 1079 003c 16       		.uleb128 0x16
+ 1080 003d 00       		.byte	0x0
+ 1081 003e 03       		.uleb128 0x3
+ 1082 003f 08       		.uleb128 0x8
+ 1083 0040 3A       		.uleb128 0x3a
+ 1084 0041 0B       		.uleb128 0xb
+ 1085 0042 3B       		.uleb128 0x3b
+ 1086 0043 0B       		.uleb128 0xb
+ 1087 0044 49       		.uleb128 0x49
+ 1088 0045 13       		.uleb128 0x13
+ 1089 0046 00       		.byte	0x0
+ 1090 0047 00       		.byte	0x0
+ 1091 0048 07       		.uleb128 0x7
+ 1092 0049 24       		.uleb128 0x24
+ 1093 004a 00       		.byte	0x0
+ 1094 004b 0B       		.uleb128 0xb
+ 1095 004c 0B       		.uleb128 0xb
+ 1096 004d 3E       		.uleb128 0x3e
+ 1097 004e 0B       		.uleb128 0xb
+ 1098 004f 03       		.uleb128 0x3
+ 1099 0050 08       		.uleb128 0x8
+ 1100 0051 00       		.byte	0x0
+ 1101 0052 00       		.byte	0x0
+ 1102 0053 08       		.uleb128 0x8
+ 1103 0054 2E       		.uleb128 0x2e
+ 1104 0055 00       		.byte	0x0
+ 1105 0056 3F       		.uleb128 0x3f
+ 1106 0057 0C       		.uleb128 0xc
+ 1107 0058 03       		.uleb128 0x3
+ 1108 0059 0E       		.uleb128 0xe
+ 1109 005a 3A       		.uleb128 0x3a
+ 1110 005b 0B       		.uleb128 0xb
+ 1111 005c 3B       		.uleb128 0x3b
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s 			page 25
+
+
+ 1112 005d 0B       		.uleb128 0xb
+ 1113 005e 27       		.uleb128 0x27
+ 1114 005f 0C       		.uleb128 0xc
+ 1115 0060 20       		.uleb128 0x20
+ 1116 0061 0B       		.uleb128 0xb
+ 1117 0062 00       		.byte	0x0
+ 1118 0063 00       		.byte	0x0
+ 1119 0064 09       		.uleb128 0x9
+ 1120 0065 2E       		.uleb128 0x2e
+ 1121 0066 00       		.byte	0x0
+ 1122 0067 3F       		.uleb128 0x3f
+ 1123 0068 0C       		.uleb128 0xc
+ 1124 0069 03       		.uleb128 0x3
+ 1125 006a 0E       		.uleb128 0xe
+ 1126 006b 3A       		.uleb128 0x3a
+ 1127 006c 0B       		.uleb128 0xb
+ 1128 006d 3B       		.uleb128 0x3b
+ 1129 006e 0B       		.uleb128 0xb
+ 1130 006f 27       		.uleb128 0x27
+ 1131 0070 0C       		.uleb128 0xc
+ 1132 0071 11       		.uleb128 0x11
+ 1133 0072 01       		.uleb128 0x1
+ 1134 0073 12       		.uleb128 0x12
+ 1135 0074 01       		.uleb128 0x1
+ 1136 0075 40       		.uleb128 0x40
+ 1137 0076 06       		.uleb128 0x6
+ 1138 0077 00       		.byte	0x0
+ 1139 0078 00       		.byte	0x0
+ 1140 0079 0A       		.uleb128 0xa
+ 1141 007a 2E       		.uleb128 0x2e
+ 1142 007b 00       		.byte	0x0
+ 1143 007c 31       		.uleb128 0x31
+ 1144 007d 13       		.uleb128 0x13
+ 1145 007e 11       		.uleb128 0x11
+ 1146 007f 01       		.uleb128 0x1
+ 1147 0080 12       		.uleb128 0x12
+ 1148 0081 01       		.uleb128 0x1
+ 1149 0082 40       		.uleb128 0x40
+ 1150 0083 0A       		.uleb128 0xa
+ 1151 0084 00       		.byte	0x0
+ 1152 0085 00       		.byte	0x0
+ 1153 0086 0B       		.uleb128 0xb
+ 1154 0087 2E       		.uleb128 0x2e
+ 1155 0088 01       		.byte	0x1
+ 1156 0089 3F       		.uleb128 0x3f
+ 1157 008a 0C       		.uleb128 0xc
+ 1158 008b 03       		.uleb128 0x3
+ 1159 008c 0E       		.uleb128 0xe
+ 1160 008d 3A       		.uleb128 0x3a
+ 1161 008e 0B       		.uleb128 0xb
+ 1162 008f 3B       		.uleb128 0x3b
+ 1163 0090 0B       		.uleb128 0xb
+ 1164 0091 27       		.uleb128 0x27
+ 1165 0092 0C       		.uleb128 0xc
+ 1166 0093 11       		.uleb128 0x11
+ 1167 0094 01       		.uleb128 0x1
+ 1168 0095 12       		.uleb128 0x12
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s 			page 26
+
+
+ 1169 0096 01       		.uleb128 0x1
+ 1170 0097 40       		.uleb128 0x40
+ 1171 0098 06       		.uleb128 0x6
+ 1172 0099 01       		.uleb128 0x1
+ 1173 009a 13       		.uleb128 0x13
+ 1174 009b 00       		.byte	0x0
+ 1175 009c 00       		.byte	0x0
+ 1176 009d 0C       		.uleb128 0xc
+ 1177 009e 05       		.uleb128 0x5
+ 1178 009f 00       		.byte	0x0
+ 1179 00a0 03       		.uleb128 0x3
+ 1180 00a1 0E       		.uleb128 0xe
+ 1181 00a2 3A       		.uleb128 0x3a
+ 1182 00a3 0B       		.uleb128 0xb
+ 1183 00a4 3B       		.uleb128 0x3b
+ 1184 00a5 0B       		.uleb128 0xb
+ 1185 00a6 49       		.uleb128 0x49
+ 1186 00a7 13       		.uleb128 0x13
+ 1187 00a8 02       		.uleb128 0x2
+ 1188 00a9 06       		.uleb128 0x6
+ 1189 00aa 00       		.byte	0x0
+ 1190 00ab 00       		.byte	0x0
+ 1191 00ac 0D       		.uleb128 0xd
+ 1192 00ad 34       		.uleb128 0x34
+ 1193 00ae 00       		.byte	0x0
+ 1194 00af 03       		.uleb128 0x3
+ 1195 00b0 0E       		.uleb128 0xe
+ 1196 00b1 3A       		.uleb128 0x3a
+ 1197 00b2 0B       		.uleb128 0xb
+ 1198 00b3 3B       		.uleb128 0x3b
+ 1199 00b4 0B       		.uleb128 0xb
+ 1200 00b5 49       		.uleb128 0x49
+ 1201 00b6 13       		.uleb128 0x13
+ 1202 00b7 02       		.uleb128 0x2
+ 1203 00b8 06       		.uleb128 0x6
+ 1204 00b9 00       		.byte	0x0
+ 1205 00ba 00       		.byte	0x0
+ 1206 00bb 0E       		.uleb128 0xe
+ 1207 00bc 1D       		.uleb128 0x1d
+ 1208 00bd 00       		.byte	0x0
+ 1209 00be 31       		.uleb128 0x31
+ 1210 00bf 13       		.uleb128 0x13
+ 1211 00c0 52       		.uleb128 0x52
+ 1212 00c1 01       		.uleb128 0x1
+ 1213 00c2 55       		.uleb128 0x55
+ 1214 00c3 06       		.uleb128 0x6
+ 1215 00c4 58       		.uleb128 0x58
+ 1216 00c5 0B       		.uleb128 0xb
+ 1217 00c6 59       		.uleb128 0x59
+ 1218 00c7 0B       		.uleb128 0xb
+ 1219 00c8 00       		.byte	0x0
+ 1220 00c9 00       		.byte	0x0
+ 1221 00ca 0F       		.uleb128 0xf
+ 1222 00cb 2E       		.uleb128 0x2e
+ 1223 00cc 01       		.byte	0x1
+ 1224 00cd 3F       		.uleb128 0x3f
+ 1225 00ce 0C       		.uleb128 0xc
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s 			page 27
+
+
+ 1226 00cf 03       		.uleb128 0x3
+ 1227 00d0 0E       		.uleb128 0xe
+ 1228 00d1 3A       		.uleb128 0x3a
+ 1229 00d2 0B       		.uleb128 0xb
+ 1230 00d3 3B       		.uleb128 0x3b
+ 1231 00d4 0B       		.uleb128 0xb
+ 1232 00d5 27       		.uleb128 0x27
+ 1233 00d6 0C       		.uleb128 0xc
+ 1234 00d7 11       		.uleb128 0x11
+ 1235 00d8 01       		.uleb128 0x1
+ 1236 00d9 12       		.uleb128 0x12
+ 1237 00da 01       		.uleb128 0x1
+ 1238 00db 40       		.uleb128 0x40
+ 1239 00dc 0A       		.uleb128 0xa
+ 1240 00dd 01       		.uleb128 0x1
+ 1241 00de 13       		.uleb128 0x13
+ 1242 00df 00       		.byte	0x0
+ 1243 00e0 00       		.byte	0x0
+ 1244 00e1 10       		.uleb128 0x10
+ 1245 00e2 34       		.uleb128 0x34
+ 1246 00e3 00       		.byte	0x0
+ 1247 00e4 03       		.uleb128 0x3
+ 1248 00e5 08       		.uleb128 0x8
+ 1249 00e6 3A       		.uleb128 0x3a
+ 1250 00e7 0B       		.uleb128 0xb
+ 1251 00e8 3B       		.uleb128 0x3b
+ 1252 00e9 0B       		.uleb128 0xb
+ 1253 00ea 49       		.uleb128 0x49
+ 1254 00eb 13       		.uleb128 0x13
+ 1255 00ec 3F       		.uleb128 0x3f
+ 1256 00ed 0C       		.uleb128 0xc
+ 1257 00ee 3C       		.uleb128 0x3c
+ 1258 00ef 0C       		.uleb128 0xc
+ 1259 00f0 00       		.byte	0x0
+ 1260 00f1 00       		.byte	0x0
+ 1261 00f2 11       		.uleb128 0x11
+ 1262 00f3 34       		.uleb128 0x34
+ 1263 00f4 00       		.byte	0x0
+ 1264 00f5 03       		.uleb128 0x3
+ 1265 00f6 0E       		.uleb128 0xe
+ 1266 00f7 3A       		.uleb128 0x3a
+ 1267 00f8 0B       		.uleb128 0xb
+ 1268 00f9 3B       		.uleb128 0x3b
+ 1269 00fa 0B       		.uleb128 0xb
+ 1270 00fb 49       		.uleb128 0x49
+ 1271 00fc 13       		.uleb128 0x13
+ 1272 00fd 3F       		.uleb128 0x3f
+ 1273 00fe 0C       		.uleb128 0xc
+ 1274 00ff 02       		.uleb128 0x2
+ 1275 0100 0A       		.uleb128 0xa
+ 1276 0101 00       		.byte	0x0
+ 1277 0102 00       		.byte	0x0
+ 1278 0103 00       		.byte	0x0
+ 1279              		.section	.debug_pubnames,"",%progbits
+ 1280 0000 B3000000 		.4byte	0xb3
+ 1281 0004 0200     		.2byte	0x2
+ 1282 0006 00000000 		.4byte	.Ldebug_info0
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s 			page 28
+
+
+ 1283 000a 28020000 		.4byte	0x228
+ 1284 000e 9C000000 		.4byte	0x9c
+ 1285 0012 4445565F 		.ascii	"DEV_SoftwareInit\000"
+ 1285      536F6674 
+ 1285      77617265 
+ 1285      496E6974 
+ 1285      00
+ 1286 0023 B1000000 		.4byte	0xb1
+ 1287 0027 4445565F 		.ascii	"DEV_IsrInit\000"
+ 1287      49737249 
+ 1287      6E697400 
+ 1288 0033 C1000000 		.4byte	0xc1
+ 1289 0037 4445565F 		.ascii	"DEV_TimerInit\000"
+ 1289      54696D65 
+ 1289      72496E69 
+ 1289      7400
+ 1290 0045 D1000000 		.4byte	0xd1
+ 1291 0049 4445565F 		.ascii	"DEV_SetGpioMode\000"
+ 1291      53657447 
+ 1291      70696F4D 
+ 1291      6F646500 
+ 1292 0059 E1000000 		.4byte	0xe1
+ 1293 005d 4445565F 		.ascii	"DEV_SetGpioDir\000"
+ 1293      53657447 
+ 1293      70696F44 
+ 1293      697200
+ 1294 006c 46010000 		.4byte	0x146
+ 1295 0070 4445565F 		.ascii	"DEV_HardwareInit\000"
+ 1295      48617264 
+ 1295      77617265 
+ 1295      496E6974 
+ 1295      00
+ 1296 0081 8D010000 		.4byte	0x18d
+ 1297 0085 4445565F 		.ascii	"DEV_SetGpio\000"
+ 1297      53657447 
+ 1297      70696F00 
+ 1298 0091 C4010000 		.4byte	0x1c4
+ 1299 0095 4445565F 		.ascii	"DEV_ClrGpio\000"
+ 1299      436C7247 
+ 1299      70696F00 
+ 1300 00a1 15020000 		.4byte	0x215
+ 1301 00a5 67756953 		.ascii	"guiSystemTick\000"
+ 1301      79737465 
+ 1301      6D546963 
+ 1301      6B00
+ 1302 00b3 00000000 		.4byte	0x0
+ 1303              		.section	.debug_pubtypes,"",%progbits
+ 1304 0000 2C000000 		.4byte	0x2c
+ 1305 0004 0200     		.2byte	0x2
+ 1306 0006 00000000 		.4byte	.Ldebug_info0
+ 1307 000a 28020000 		.4byte	0x228
+ 1308 000e 33000000 		.4byte	0x33
+ 1309 0012 74795663 		.ascii	"tyVctHndlr\000"
+ 1309      74486E64 
+ 1309      6C7200
+ 1310 001d 46000000 		.4byte	0x46
+ 1311 0021 553800   		.ascii	"U8\000"
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s 			page 29
+
+
+ 1312 0024 5E000000 		.4byte	0x5e
+ 1313 0028 55333200 		.ascii	"U32\000"
+ 1314 002c 00000000 		.4byte	0x0
+ 1315              		.section	.debug_aranges,"",%progbits
+ 1316 0000 1C000000 		.4byte	0x1c
+ 1317 0004 0200     		.2byte	0x2
+ 1318 0006 00000000 		.4byte	.Ldebug_info0
+ 1319 000a 04       		.byte	0x4
+ 1320 000b 00       		.byte	0x0
+ 1321 000c 0000     		.2byte	0x0
+ 1322 000e 0000     		.2byte	0x0
+ 1323 0010 00000000 		.4byte	.Ltext0
+ 1324 0014 A0020000 		.4byte	.Letext0-.Ltext0
+ 1325 0018 00000000 		.4byte	0x0
+ 1326 001c 00000000 		.4byte	0x0
+ 1327              		.section	.debug_ranges,"",%progbits
+ 1328              	.Ldebug_ranges0:
+ 1329 0000 98010000 		.4byte	.LBB8-.Ltext0
+ 1330 0004 A0010000 		.4byte	.LBE8-.Ltext0
+ 1331 0008 AC010000 		.4byte	.LBB11-.Ltext0
+ 1332 000c B0010000 		.4byte	.LBE11-.Ltext0
+ 1333 0010 00000000 		.4byte	0x0
+ 1334 0014 00000000 		.4byte	0x0
+ 1335 0018 B4010000 		.4byte	.LBB12-.Ltext0
+ 1336 001c C0010000 		.4byte	.LBE12-.Ltext0
+ 1337 0020 D4010000 		.4byte	.LBB22-.Ltext0
+ 1338 0024 D8010000 		.4byte	.LBE22-.Ltext0
+ 1339 0028 CC010000 		.4byte	.LBB20-.Ltext0
+ 1340 002c D0010000 		.4byte	.LBE20-.Ltext0
+ 1341 0030 00000000 		.4byte	0x0
+ 1342 0034 00000000 		.4byte	0x0
+ 1343 0038 C0010000 		.4byte	.LBB16-.Ltext0
+ 1344 003c CC010000 		.4byte	.LBE16-.Ltext0
+ 1345 0040 D8010000 		.4byte	.LBB23-.Ltext0
+ 1346 0044 DC010000 		.4byte	.LBE23-.Ltext0
+ 1347 0048 D0010000 		.4byte	.LBB21-.Ltext0
+ 1348 004c D4010000 		.4byte	.LBE21-.Ltext0
+ 1349 0050 00000000 		.4byte	0x0
+ 1350 0054 00000000 		.4byte	0x0
+ 1351              		.section	.debug_str,"MS",%progbits,1
+ 1352              	.LASF19:
+ 1353 0000 474E5520 		.ascii	"GNU C 4.5.2\000"
+ 1353      4320342E 
+ 1353      352E3200 
+ 1354              	.LASF17:
+ 1355 000c 4445565F 		.ascii	"DEV_ClrGpio\000"
+ 1355      436C7247 
+ 1355      70696F00 
+ 1356              	.LASF6:
+ 1357 0018 73686F72 		.ascii	"short int\000"
+ 1357      7420696E 
+ 1357      7400
+ 1358              	.LASF11:
+ 1359 0022 75634469 		.ascii	"ucDir\000"
+ 1359      7200
+ 1360              	.LASF3:
+ 1361 0028 756E7369 		.ascii	"unsigned char\000"
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s 			page 30
+
+
+ 1361      676E6564 
+ 1361      20636861 
+ 1361      7200
+ 1362              	.LASF12:
+ 1363 0036 75635069 		.ascii	"ucPin\000"
+ 1363      6E00
+ 1364              	.LASF0:
+ 1365 003c 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1365      20756E73 
+ 1365      69676E65 
+ 1365      6420696E 
+ 1365      7400
+ 1366              	.LASF14:
+ 1367 004e 4445565F 		.ascii	"DEV_SetGpioDir\000"
+ 1367      53657447 
+ 1367      70696F44 
+ 1367      697200
+ 1368              	.LASF4:
+ 1369 005d 73686F72 		.ascii	"short unsigned int\000"
+ 1369      7420756E 
+ 1369      7369676E 
+ 1369      65642069 
+ 1369      6E7400
+ 1370              	.LASF15:
+ 1371 0070 4445565F 		.ascii	"DEV_HardwareInit\000"
+ 1371      48617264 
+ 1371      77617265 
+ 1371      496E6974 
+ 1371      00
+ 1372              	.LASF8:
+ 1373 0081 4445565F 		.ascii	"DEV_TimerInit\000"
+ 1373      54696D65 
+ 1373      72496E69 
+ 1373      7400
+ 1374              	.LASF20:
+ 1375 008f 2E2E2F73 		.ascii	"../srccode/device.c\000"
+ 1375      7263636F 
+ 1375      64652F64 
+ 1375      65766963 
+ 1375      652E6300 
+ 1376              	.LASF7:
+ 1377 00a3 4445565F 		.ascii	"DEV_SetGpioMode\000"
+ 1377      53657447 
+ 1377      70696F4D 
+ 1377      6F646500 
+ 1378              	.LASF1:
+ 1379 00b3 756E7369 		.ascii	"unsigned int\000"
+ 1379      676E6564 
+ 1379      20696E74 
+ 1379      00
+ 1380              	.LASF5:
+ 1381 00c0 63686172 		.ascii	"char\000"
+ 1381      00
+ 1382              	.LASF9:
+ 1383 00c5 4445565F 		.ascii	"DEV_IsrInit\000"
+ 1383      49737249 
+ 1383      6E697400 
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s 			page 31
+
+
+ 1384              	.LASF10:
+ 1385 00d1 7563506F 		.ascii	"ucPort\000"
+ 1385      727400
+ 1386              	.LASF16:
+ 1387 00d8 4445565F 		.ascii	"DEV_SetGpio\000"
+ 1387      53657447 
+ 1387      70696F00 
+ 1388              	.LASF13:
+ 1389 00e4 75634F75 		.ascii	"ucOutPut\000"
+ 1389      74507574 
+ 1389      00
+ 1390              	.LASF2:
+ 1391 00ed 74795663 		.ascii	"tyVctHndlr\000"
+ 1391      74486E64 
+ 1391      6C7200
+ 1392              	.LASF21:
+ 1393 00f8 463A5C77 		.ascii	"F:\\workdir\\RTOS_Wanlix\\project\000"
+ 1393      6F726B64 
+ 1393      69725C52 
+ 1393      544F535F 
+ 1393      57616E6C 
+ 1394              	.LASF22:
+ 1395 0117 4445565F 		.ascii	"DEV_SoftwareInit\000"
+ 1395      536F6674 
+ 1395      77617265 
+ 1395      496E6974 
+ 1395      00
+ 1396              	.LASF23:
+ 1397 0128 75694770 		.ascii	"uiGpioValue\000"
+ 1397      696F5661 
+ 1397      6C756500 
+ 1398              	.LASF18:
+ 1399 0134 67756953 		.ascii	"guiSystemTick\000"
+ 1399      79737465 
+ 1399      6D546963 
+ 1399      6B00
+ 1400              		.ident	"GCC: (Sourcery G++ Lite 2011.03-41) 4.5.2"
+ 1401              		.section	.note.GNU-stack,"",%progbits
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s 			page 32
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 device.c
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s:21     .text:00000000 $a
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s:24     .text:00000000 DEV_SoftwareInit
+                       .ARM.extab:00000000 $d
+                       .ARM.exidx:00000000 $d
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s:60     .text:0000001c DEV_IsrInit
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s:84     .text:00000038 $d
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s:91     .text:00000044 $a
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s:94     .text:00000044 DEV_TimerInit
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s:117    .text:0000005c $d
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s:122    .text:00000060 $a
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s:125    .text:00000060 DEV_SetGpioMode
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s:147    .text:00000070 DEV_SetGpioDir
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s:336    .text:00000188 DEV_HardwareInit
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s:428    .text:000001e8 $d
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s:436    .text:000001f8 $a
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s:439    .text:000001f8 DEV_SetGpio
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccEJdVmL.s:491    .text:0000024c DEV_ClrGpio
+                            *COM*:00000004 guiSystemTick
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+TEST_CrossVarInit
+__aeabi_unwind_cpp_pr1
+ISR_IrqIsr
+IRQ
+__aeabi_unwind_cpp_pr0

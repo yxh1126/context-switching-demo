@@ -1,0 +1,14 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+F:\workdir\RTOS_Wanlix\project\wanlix.uvproj
+Project File Date:  10/01/2011
+
+<h2>Output:</h2>
+Build target 'RTOS_Wanlix'
+compiling wlx_core_c.c...
+creating Library...
+F:\workdir\RTOS_Wanlix\project>arm-none-linux-gnueabi-ar -M 0<ArInp.Scr 
+"../outfile/libwanlix.a" - 0 Error(s), 0 Warning(s).

@@ -1,0 +1,6 @@
+Dependencies for Project 'wanlix', Target 'RTOS_Wanlix': (DO NOT MODIFY !)
+F (../wanlix/wlx_core_a.asm)(0x4E49295E)(-mcpu=arm7tdmi --gdwarf-2 --MD ../outfile/wlx_core_a.d -I../wanlix -IC:/Keil/ARM/CMSIS/Include/ -IC:/Keil/ARM/INC/ADI/ -alhms="../outfile/wlx_core_a.lst" -o ../outfile/wlx_core_a.o)
+F (../wanlix/wlx_core_c.c)(0x4E86B00C)(-c -mcpu=arm7tdmi -gdwarf-2 -MD -Wall -O2 -mapcs-frame -I../srccode -I../wanlix -IC:/Keil/ARM/CMSIS/Include/ -IC:/Keil/ARM/INC/ADI/ -Wa,-alhms="../outfile/wlx_core_c.lst" -o ../outfile/wlx_core_c.o)
+I (F:\workdir\RTOS_Wanlix\WANLIX\WLX_CORE_C.H)(0x4E86A956)
+I (F:\WORKDIR\RTOS_WANLIX\WANLIX\WANLIX.H)(0x4E86AFFE)
+F (../srccode/wlx_userboot.c)(0x4C67520E)(-c -mcpu=arm7tdmi -gdwarf-2 -MD -Wall -O2 -mapcs-frame -I../srccode -I../wanlix -IC:/Keil/ARM/CMSIS/Include/ -IC:/Keil/ARM/INC/ADI/ -Wa,-alhms="../outfile/wlx_userboot.lst" -o ../outfile/wlx_userboot.o)
