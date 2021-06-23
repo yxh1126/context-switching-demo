@@ -1,13 +1,5 @@
 
-#include "os_task.h"
-
-
-// The key idea is here, pay attention!!!
-// Use the global array as the stack for each task using by the OS
-// The global array space is located at global area
-
-U32 gauiTask1Stack[TASKSTACK];      // Task 1 stack
-U32 gauiTask2Stack[TASKSTACK];      // Task 2 stack
+#include "user_task.h"
 
 
 // The sample function for task1
@@ -23,7 +15,7 @@ void TEST_TestTask1(void)
         // TEST_TaskRun(1000);
 
         // Call wlx function here to switch from this task to next
-        WLX_TaskSwitch();
+        WLX_TaskSwitch(gpstrTask3Tcb);
     }
 }
 
@@ -40,21 +32,24 @@ void TEST_TestTask2(void)
         // TEST_TaskRun(2000);
 
         // Call wlx function here to switch from this task to next
-        WLX_TaskSwitch();
+        WLX_TaskSwitch(gpstrTask1Tcb);
     }
 }
 
 
-// Get the task initiate Stack Pointer address
-U32* TEST_GetTaskInitSp(U8 ucTask)
+// The sample function for task3
+void TEST_TestTask3(void)
 {
-    if(1 == ucTask)
+    while(1)
     {
-        return (gauiTask1Stack + TASKSTACK);
-    }
-    else //if(2 == ucTask)
-    {
-        return (gauiTask2Stack + TASKSTACK);
+        // Put your task code here
+        // DEV_TaskPrintMsg("Task 3");
+
+        // Task last for 3s
+        // TEST_TaskRun(3000);
+
+        // Call wlx function here to switch from this task to next
+        WLX_TaskSwitch(gpstrTask2Tcb);
     }
 }
 

@@ -55,14 +55,9 @@ typedef struct w_tcb
 
 
 // Function prototype
-W_TCB* WLX_TaskInit(VFUNC vfFuncPointer, U32* puiTaskStack);
-void WLX_TaskStart(void);
-void WLX_TaskSwitch(void);
-
-
-// Global variable to extern
-extern W_TCB* gpstrTask1Tcb;           // TCB pointer of Task1
-extern W_TCB* gpstrTask2Tcb;           // TCB pointer of Task2
+W_TCB* WLX_TaskCreate(VFUNC vfFuncPointer, U8* pucTaskStack, U32 uiStackSize);
+void WLX_TaskStart(W_TCB* pstrTcb);
+void WLX_TaskSwitch(W_TCB* pstrTcb);
 
 
 #endif

@@ -5,6 +5,9 @@
 
 #include "wanlix.h"
 
+#define ALIGN4MASK   0xfffffffc
+#define ALIGN8MASK   0xfffffff8
+
 // Function implemented in assembly code
 void WLX_SwitchToTask(STACKREG* pstrNextTaskStackRegAddr);
 
