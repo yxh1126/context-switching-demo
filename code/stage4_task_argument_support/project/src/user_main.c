@@ -17,7 +17,7 @@ static U8 gaucRootTaskStack[ROOTTASKSTACK];      // Root Task stack
 S32 main(void)
 {
     // Create root task here
-    gpstrRootTaskTcb = WLX_TaskCreate(WLX_RootTask, gaucRootTaskStack, ROOTTASKSTACK);
+    gpstrRootTaskTcb = WLX_TaskCreate(WLX_RootTask, NULL, gaucRootTaskStack, ROOTTASKSTACK);
 
     // Enter the OS state from here
     // Start to run the root task at the OS managed stack

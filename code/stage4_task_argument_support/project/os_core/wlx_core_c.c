@@ -6,12 +6,12 @@
 static W_TCB* gpstrCurTcb; 
 
 // Static function prototype
-static W_TCB* WLX_TaskTcbInit(VFUNC vfFuncPointer, U8* pucTaskStack, U32 uiStackSize);
-static void WLX_TaskStackInit(W_TCB* pstrTcb, VFUNC vfFuncPointer);
+static W_TCB* WLX_TaskTcbInit(VFUNC vfFuncPointer, void* pvPara, U8* pucTaskStack, U32 uiStackSize);
+static void WLX_TaskStackInit(W_TCB* pstrTcb, VFUNC vfFuncPointer, void* pvPara);
 
 
 // OS create task function for user
-W_TCB* WLX_TaskCreate(VFUNC vfFuncPointer, U8* pucTaskStack, U32 uiStackSize)
+W_TCB* WLX_TaskCreate(VFUNC vfFuncPointer, void* pvPara, U8* pucTaskStack, U32 uiStackSize)
 {
     W_TCB* pstrTcb;
 
@@ -28,7 +28,7 @@ W_TCB* WLX_TaskCreate(VFUNC vfFuncPointer, U8* pucTaskStack, U32 uiStackSize)
     }
 
     // Initialize TCB
-    pstrTcb = WLX_TaskTcbInit(vfFuncPointer, pucTaskStack, uiStackSize);
+    pstrTcb = WLX_TaskTcbInit(vfFuncPointer, pvPara, pucTaskStack, uiStackSize);
 
     return pstrTcb;
 }
@@ -37,7 +37,7 @@ W_TCB* WLX_TaskCreate(VFUNC vfFuncPointer, U8* pucTaskStack, U32 uiStackSize)
 // Initialize the TCB for a task
 // Calc the pointer of the TCB based on the Task Stack pointer
 // Task stack pointer points to the global variable space
-static W_TCB* WLX_TaskTcbInit(VFUNC vfFuncPointer, U8* pucTaskStack, U32 uiStackSize)
+static W_TCB* WLX_TaskTcbInit(VFUNC vfFuncPointer, void* pvPara, U8* pucTaskStack, U32 uiStackSize)
 {
     W_TCB* pstrTcb;
     U32 pucStackBy4;
@@ -53,7 +53,7 @@ static W_TCB* WLX_TaskTcbInit(VFUNC vfFuncPointer, U8* pucTaskStack, U32 uiStack
     pstrTcb = (W_TCB*)((pucStackBy4 - sizeof(W_TCB)) & ALIGN8MASK);
 
     // initialize the task stack
-    WLX_TaskStackInit(pstrTcb, vfFuncPointer);
+    WLX_TaskStackInit(pstrTcb, vfFuncPointer, pvPara);
 
     // Return the TCB pointer
     // Note: The reason can return a pointer here is due to: puiTaskStack is
@@ -64,7 +64,7 @@ static W_TCB* WLX_TaskTcbInit(VFUNC vfFuncPointer, U8* pucTaskStack, U32 uiStack
 
 
 // Initialize the task Stack Register structure
-static void WLX_TaskStackInit(W_TCB* pstrTcb, VFUNC vfFuncPointer)
+static void WLX_TaskStackInit(W_TCB* pstrTcb, VFUNC vfFuncPointer, void* pvPara)
 {
     STACKREG* pstrStackReg;
 
@@ -73,6 +73,7 @@ static void WLX_TaskStackInit(W_TCB* pstrTcb, VFUNC vfFuncPointer)
 
     // Initialize the TCB structure
     pstrStackReg->uiXpsr = MODE_USR;
+    pstrStackReg->uiR0 = (U32)pvPara;
     pstrStackReg->uiR4 = 0;
     pstrStackReg->uiR5 = 0;
     pstrStackReg->uiR6 = 0;

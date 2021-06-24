@@ -15,9 +15,9 @@ extern W_TCB* gpstrTask3Tcb;           // TCB pointer of Task3
 
 
 // Function prototype define here
-void TEST_TestTask1(void);
-void TEST_TestTask2(void);
-void TEST_TestTask3(void);
+void TEST_TestTask1(void* pvPara);
+void TEST_TestTask2(void* pvPara);
+void TEST_TestTask3(void* pvPara);
 
 
 #endif

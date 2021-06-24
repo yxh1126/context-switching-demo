@@ -18,8 +18,12 @@ static U8 gaucTask3Stack[TASKSTACK];      // Task 3 stack
 // The entry point of the test code
 // Based on the hardware do the software and hardware initialization first
 // Then initialize the TCB structure and start the task managed by OS
-void WLX_RootTask(void)
+void WLX_RootTask(void* pvPara)
 {
+    U32 uiRunTime1 = 1000;
+    U32 uiRunTime2 = 2000;
+    U32 uiRunTime3 = 3000;
+
     // Software and hardware init code goes here
     // As a sample here...
 
@@ -27,9 +31,9 @@ void WLX_RootTask(void)
     // DEV_HardwareInit();
 
     // Create user tasks here
-    gpstrTask1Tcb = WLX_TaskCreate(TEST_TestTask1, gaucTask1Stack, TASKSTACK);
-    gpstrTask2Tcb = WLX_TaskCreate(TEST_TestTask2, gaucTask2Stack, TASKSTACK);
-    gpstrTask3Tcb = WLX_TaskCreate(TEST_TestTask3, gaucTask3Stack, TASKSTACK);
+    gpstrTask1Tcb = WLX_TaskCreate(TEST_TestTask1, (void*)&uiRunTime1, gaucTask1Stack, TASKSTACK);
+    gpstrTask2Tcb = WLX_TaskCreate(TEST_TestTask2, (void*)&uiRunTime2, gaucTask2Stack, TASKSTACK);
+    gpstrTask3Tcb = WLX_TaskCreate(TEST_TestTask3, (void*)&uiRunTime3, gaucTask3Stack, TASKSTACK);
 
     // Switch the task from Root Task to user defined task
     WLX_TaskSwitch(gpstrTask1Tcb);

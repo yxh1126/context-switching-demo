@@ -10,7 +10,7 @@ typedef unsigned int        U32;
 typedef char                S8;
 typedef short               S16;
 typedef int                 S32;
-typedef void                (*VFUNC)(void);
+typedef void                (*VFUNC)(void*);
 
 
 // NULL pointer
@@ -22,6 +22,7 @@ typedef void                (*VFUNC)(void);
 // Task stack structure
 typedef struct stackreg
 {
+    U32 uiR0;
     U32 uiR4;
     U32 uiR5;
     U32 uiR6;
@@ -55,7 +56,7 @@ typedef struct w_tcb
 
 
 // Function prototype
-W_TCB* WLX_TaskCreate(VFUNC vfFuncPointer, U8* pucTaskStack, U32 uiStackSize);
+W_TCB* WLX_TaskCreate(VFUNC vfFuncPointer, void* pvPara, U8* pucTaskStack, U32 uiStackSize);
 void WLX_TaskStart(W_TCB* pstrTcb);
 void WLX_TaskSwitch(W_TCB* pstrTcb);
 

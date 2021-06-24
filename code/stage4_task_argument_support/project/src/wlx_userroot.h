@@ -8,7 +8,7 @@
 
 
 // Function prototype define here
-void WLX_RootTask(void);
+void WLX_RootTask(void* pvPara);
 
 #endif
 
